@@ -19,10 +19,10 @@
 .CollapsiblePanel {
 	margin: 0px;
 	padding: 0px;
-	border-left: solid 1px #CCC;
-	border-right: solid 1px #999;
-	border-top: solid 1px #999;
-	border-bottom: solid 1px #CCC;
+	border-left: solid 0px #CCC;
+	border-right: solid 0px #999;
+	border-top: solid 0px #999;
+	border-bottom: solid 0px #CCC;
 }
 
 /* This is the selector for the CollapsiblePanelTab. This container houses
@@ -34,11 +34,11 @@
  * CollapsiblePanel panel tab container.
  */
 .CollapsiblePanelTab {
-	font: bold 0.7em sans-serif;
-	background-color: #DDD;
-	border-bottom: solid 1px #CCC;
+	font: 1em sans-serif;
+	background-color:none;
+	border-bottom: solid 0px #CCC;
 	margin: 0px;
-	padding: 2px;
+	padding: 1px;
 	cursor: pointer;
 	-moz-user-select: none;
 	-khtml-user-select: none;
@@ -73,7 +73,7 @@
  * from panels as the user clicks on the tabs within the CollapsiblePanel.
  */
 .CollapsiblePanelOpen .CollapsiblePanelTab {
-	background-color: #EEE;
+	background-color: none;
 }
 
 /* This is an example of how to change the appearance of the panel tab when the
@@ -90,7 +90,7 @@
  * and removed from panel tab containers as the mouse enters and exits the tab container.
  */
 .CollapsiblePanelTabHover,  .CollapsiblePanelOpen .CollapsiblePanelTabHover {
-	background-color: #CCC;
+	background-color: rgba(213, 213, 213, 0.3);
 }
 
 /* This is an example of how to change the appearance of all the panel tabs when the
