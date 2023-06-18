@@ -1,216 +1,63 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<script language="JavaScript">
-	var password=""
-	password=prompt('请输入密码（本网站需要密码才能进入）:','');
-	if (password!='mima')
-	{alert("密码不正确，无法进入本网页   ！！");
-	window.opener=null; window.close();//密码不正确就关闭
-	window.location.href='about:blank';}//避免有些浏览器不支持关闭，所以请求跳转新页面
-	</script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>电影</title>
-<style type="text/css" >
 
-body {
-	background-color: #fbfbfb;
+<head>
 	
-	background-repeat: no-repeat;
-}
+	<script type="text/javascript">   
+	function password() {   
+	var testV = 1;   
+	var pass1 = prompt('请输入密码:','');   
+	while (testV < 3) {   
+	if (!pass1)    
+	history.go(-1);   
+	if (pass1 == "mima") {//设置密码
+	alert('口令正确，进行跳转');   
+	
+	window.location.href='./dianying.html';//添加你要跳转的页面
+	
+	break;   
+	}    
+	testV+=1;   
+	var pass1 =    
+	prompt('密码错误','');   
+	}   
+	if (pass1!="password" & testV ==3)
+	{alert("无法跳转网页   ！！");
+	window.opener=null; window.close();//密码不正确就关闭
+	window.location.href='about:blank';}//避免有些浏览器不支持关闭，所以请求跳转新页面    
+	history.go(-1);   
+	return " ";   
+	}    
+	document.write(password());   
+	</script>
+	<!-- <meta http-equiv="refresh" content="1;url=./dianying.html"> -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>跳转页</title>
+<style type="text/css" >
 
 #apDiv1 {
 	position: absolute;
 	left: auto;
 	top: auto;
-	width: 931px;
-	height: 124px;
+	width: 200px;
+	height: 400px;
 	z-index: 1;
 }
 body,td,th {
 	font-size: 20px;
 	color: #000000;
 }
-h1 {
-	font-size: 36px;
-	color: #000000;
-}
-h2 {
-	font-size: 30px;
-	font-family:"楷体";
-	color: #0000ff;
-}
-
-h3 {
-	font-size: 15px;
-	font-family:"楷体";
-	color: #0000ff;
-}
-
 </style>
 </head>
 
 <body>
-<div id="apDiv1" style="margin-left: auto;  margin-right: auto;  width: auto; height:auto; padding:0px 0 15px 0">
- <ul style="list-style-type:none;" ><!--去除列表开头的黑点-->
-
-	<blockquote style="margin-left: 0px;  width: 1000px; height:auto; background-color:rgba(170, 255, 248, 0.2);  padding:20px 0 15px 10px">
-	  <h1><strong><b style="margin-left: 130px">-----------&nbsp;&nbsp;&nbsp;&#128151;电影&nbsp;&nbsp;&nbsp;--------- </b></strong>
-	</h1>
-			回到未来（三部曲）
-	  <li>
-		<a href="https://movie.douban.com/subject/1300555/" target="_blank" title="豆瓣"><img src="./film/Back.To.The.Future.1985.BluRay.720p.x264.AC3-WOFEI(1).mkv_20220801_215208.716.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1299092/" target="_blank" title="豆瓣"><img src="./film/Back.To.The.Future.II.1989.BluRay.720p.x264.AC3-WOFEI.mkv_20220801_215443.767.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1296666/" target="_blank" title="豆瓣"><img src="./film/Back.To.The.Future.III.1990.BluRay.720p.x264.AC3-WOFEI.mkv_20220801_215500.525.jpg" style="width: 300px;height: 200px" alt="人"></a>
-	  </li>
-		  <br>黑客帝国（三部曲）
-		<li>
-		  <a href="https://movie.douban.com/subject/1291843/" target="_blank" title="豆瓣"><img src="./film/1.rmvb_20220802_213232.070.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1304141/" target="_blank" title="豆瓣"><img src="./film/2.mkv_20220802_213302.950.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1302467/" target="_blank" title="豆瓣"><img src="./film/3.mkv_20220802_213510.307.jpg" style="width: 300px;height: 200px" alt="人"></a>
-		</li>
-		<br>黑衣人
-		<li>
-		  <a href="https://movie.douban.com/subject/1301445/" target="_blank" title="豆瓣"><img src="./film/黑衣人1.BD1280高清国英双语中英双字.mkv_20220802_213703.142.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1295280/" target="_blank" title="豆瓣"><img src="./film/hei衣人2.BD1280超清国英双语中英双字.mkv_20220802_213732.500.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/3642835/" target="_blank" title="豆瓣"><img src="./film/Men.in.Black.3.2012.hei衣人3.双语字幕.HR-HDTV.AC3.1024X552.mkv_20220802_213832.995.jpg" style="width: 300px;height: 200px" alt="人"></a>
-		</li>
-		<br>冒牌天神
-		<li>
-		  <a href="https://movie.douban.com/subject/1297018/" target="_blank" title="豆瓣"><img src="./film/冒牌天神 中英双字.rmvb_20220802_215823.416.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1867332/" target="_blank" title="豆瓣"><img src="./film/冒牌天神2 中英双字.mkv_20220802_220021.968.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>时间旅行者的妻子
-		<li>
-		  <a href="https://movie.douban.com/subject/30290864/" target="_blank" title="豆瓣"><img src="./film/The.Time.Travelers.Wife.2009.双语字幕.HR-HDTV.AC3.1024X576.x264.mkv_20220803_204248.777.jpg" style="width: 400px;height:auto" alt="人"></a>
-		</li>
-		<br>机器管家
-		<li>
-		  <a href="https://movie.douban.com/subject/1292529/" target="_blank" title="豆瓣"><img src="./film/机器管家.mkv_20220803_205818.284.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>时间机器
-		<li>
-		  <a href="https://movie.douban.com/subject/1306609/" target="_blank" title="豆瓣"><img src="./film/时丨间机器.mp4_20220803_210412.509.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>土拨鼠之日
-		<li>
-		  <a href="https://movie.douban.com/subject/1300613/" target="_blank" title="豆瓣"><img src="./film/土拨鼠之日.mp4_20220803_211950.988.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>旅行到宇宙边缘
-		<li>
-		  <a href="https://movie.douban.com/subject/3595323/" target="_blank" title="豆瓣"><img src="./film/旅行到宇宙边缘.mkv_20220807_212325.123.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>阿甘正传
-		<li>
-		  <a href="https://movie.douban.com/subject/1292720/" target="_blank" title="豆瓣"><img src="./film/阿甘正传BD1280高清中英双字.rmvb_20220803_204501.249.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>昆虫总动员
-		<li>
-		  <a href="https://movie.douban.com/subject/23048775/" target="_blank" title="豆瓣"><img src="./film/昆丨虫总动员.rmvb_20220803_210034.831.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>勇敢者的游戏
-		<li>
-		  <a href="https://movie.douban.com/subject/1294990/" target="_blank" title="豆瓣"><img src="./film/第一部Jumanji.mkv_20220803_193515.290.jpg" style="width: 300px;height:200px" alt="人"></a>
-		  <a href="https://movie.douban.com/subject/1370276/" target="_blank" title="豆瓣"><img src="./film/第二部Zathura.mkv_20220803_193627.228.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>星尘
-		<li>
-		  <a href="https://movie.douban.com/subject/1867335/" target="_blank" title="豆瓣"><img src="./film/Stardust.mkv_20220802_221618.131.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		
-		<br>窈窕淑女
-		<li>
-		  <a href="https://movie.douban.com/subject/1297965/" target="_blank" title="豆瓣"><img src="./film/[窈窕淑女].My.Fair.Lady.1964.SE.DVDRiP.X264.3Audio.AC3-BTPIG.mkv_20220803_200533.850.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>百万英镑
-		<li>
-		  <a href="https://movie.douban.com/subject/1304374/" target="_blank" title="豆瓣"><img src="./film/百万富翁.avi_20220803_204634.151.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>杰克与豆茎
-		<li>
-		  <a href="https://movie.douban.com/subject/1305575/" target="_blank" title="豆瓣"><img src="./film/杰克与豆茎.rm_20220803_205935.030.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>摩登时代
-		<li>
-		  <a href="https://movie.douban.com/subject/1294371/" target="_blank" title="豆瓣"><img src="./film/Modern.Times.1936.m登时代.双语字幕.HR-HDTV.AC3.764X576作.mkv_20220803_202911.608.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>淘金记
-		<li>
-		  <a href="https://movie.douban.com/subject/1298817/" target="_blank" title="豆瓣"><img src="./film/The.Gold.Rush.1942.BluRay.720p.x264.AC3-CnSCG.mkv_20220803_203037.879.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>借东西的小人阿莉埃蒂
-		<li>
-		  <a href="https://movie.douban.com/subject/4202302/" target="_blank" title="豆瓣"><img src="./film/[诸神字幕组][借东西的小人阿莉埃蒂][Karigurashi_no_Arrietty][480P][中日双语字幕][BDRip].rmvb_20220803_202533.078.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>哈尔的移动城堡
-		<li>
-		  <a href="https://movie.douban.com/subject/1308807/" target="_blank" title="豆瓣"><img src="./film/哈尔的移动城堡.mp4_20220803_204657.038.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>天空之城
-		<li>
-		  <a href="https://movie.douban.com/subject/1291583/" target="_blank" title="豆瓣"><img src="./film/天空之城.mkv_20220803_211755.648.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>三傻大闹宝莱坞
-		<li>
-		  <a href="https://movie.douban.com/subject/3793023/" target="_blank" title="豆瓣"><img src="./film/3.Idiots.2009.mkv_20220803_202829.132.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		
-		<br>食神
-		<li>
-		  <a href="https://movie.douban.com/subject/1293351/" target="_blank" title="豆瓣"><img src="./film/The.God.of.Cookery.1996.720p.HDTV.x264.2Audio-HDCTV.mkv_20220803_202934.078.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>少林足球
-		<li>
-		  <a href="https://movie.douban.com/subject/1297747/" target="_blank" title="豆瓣"><img src="./film/少林足球.mkv_20220803_210339.627.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>功夫
-		<li>
-		  <a href="https://movie.douban.com/subject/1291543/" target="_blank" title="豆瓣"><img src="./film/功夫 2004.mkv_20220805_145335.368.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>西虹市首富
-		<li>
-		  <a href="https://movie.douban.com/subject/27605698/" target="_blank" title="豆瓣"><img src="./film/西虹市首富.mp4.mp4_20220803_212223.411.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		<br>流浪地球
-		<li>
-		  <a href="https://movie.douban.com/subject/26266893/" target="_blank" title="豆瓣"><img src="./film/[流浪地球].mp4_20220803_200436.689.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br>一出好戏
-		<li>
-		  <a href="https://movie.douban.com/subject/26985127/" target="_blank" title="豆瓣"><img src="./film/一出好戏（2018）.mp4_20220803_200846.785.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		
-		<br>X战警第一部
-		<li>
-		  <a href="https://movie.douban.com/subject/1295250/" target="_blank" title="豆瓣"><img src="./film/X战警1.mp4_20220803_204355.576.jpg" style="width: 400px;height:200px" alt="人"></a>
-		</li>
-		
-		<br>忠犬八公的故事
-		<li>
-		  <a href="https://movie.douban.com/subject/3011091/" target="_blank" title="豆瓣"><img src="./film/忠QUAN八公的故事BD中英双字.rmvb_20220803_212324.750.jpg" style="width: 300px;height:200px" alt="人"></a>
-		</li>
-		<br><a href="https://www.aliyundrive.com/s/AMpiUEavSUQ" target="_blank">&#128722;全部下载</a>
-		
-		
-	</blockquote>
 	
 
-</ul>
-</div>
-<div id="apDiv1" style="margin-left: 1060px; margin-right: auto;  width: auto; height:auto; padding:0px 0px 0px 0px">
-	<embed src="./item157.html" height=1000px type="image/svg+xml"  pluginspage="http://www.adobe.com/svg/viewer/install/" />
-</div>
-<h3><font face="华文宋体"; font size= "5";><strong><b><em>
 
-  <!-- #BeginDate format:Ch2 -->
-  
-  
-  <!-- #EndDate -->
-  
-  </em></b></strong></font></h3>
-<h3><br />
-</h3>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+	
+
+<div id="apDiv1" style="top: 0px">
+	<blockquote style="margin-left: 0px; width: 200px; height:auto; background-color:rgba(170, 255, 248, 0.2);  padding:20px 0 15px 10px">
+	<a>跳转网页 ！！</a>
+	<!-- <a href="./dianying.html">点击跳转网页   ！！</a> -->
+</div>
 </body>
-</html>
