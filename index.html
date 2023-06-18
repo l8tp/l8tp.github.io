@@ -6,7 +6,8 @@
 	password=prompt('请输入密码（本网站需要密码才能进入）:','');
 	if (password!='mima')
 	{alert("密码不正确，无法进入本网页   ！！");
-	window.opener=null; window.close();}//密码不正确就关闭
+	window.opener=null; window.close();//密码不正确就关闭
+	window.location.href='about:blank';}//避免有些浏览器不支持关闭，所以请求跳转新页面
 	</script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>电影</title>
