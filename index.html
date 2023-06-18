@@ -24,8 +24,9 @@
 	{alert("无法跳转网页   ！！");
 	window.opener=null; window.close();//密码不正确就关闭
 	window.location.href='about:blank';//避免有些浏览器不支持关闭，所以请求跳转新页面    
-	history.go(-1);   
-	return " ";   }
+	// history.go(-1);  
+	} 
+	return " ";   
 	}    
 	document.write(password());   
 	</script>
@@ -58,6 +59,5 @@ body,td,th {
 <div id="apDiv1" style="top: 0px">
 	<blockquote style="margin-left: 0px; width: 200px; height:auto; background-color:rgba(170, 255, 248, 0.2);  padding:20px 0 15px 10px">
 	<a>跳转网页 ！！</a>
-	<a href="./dianying.html" target="_top"">点击跳转网页   ！！</a>
 </div>
 </body>
