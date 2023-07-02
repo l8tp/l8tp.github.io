@@ -11,7 +11,7 @@
 /* 采用grid加栅格布局的方式，方便pc和移动端的转换，同时每个块之间的间距为10，添加上对应的样式 */
 .container {
  display: grid;
- grid-template-columns: repeat(12, 1fr);
+ grid-template-columns: repeat(10, 1fr) 100px 120px;
  grid-gap: 10px;
  grid-template-areas: "h h h h h h h h h h h h"
                       "c c c c c c c c c c c c"
@@ -33,41 +33,24 @@ height: auto;
 }
 .slider {
  display: block;
+ background: rgb(50, 232, 172);
  grid-area: s;
  height: auto;
 }
 
-/* 当屏幕的尺寸大于500的时候，我希望展示出来slider的内容 */
-@media screen and (min-width: 500px) {
+/* 当屏幕的尺寸大于600的时候，我希望展示出来slider的内容 */
+@media screen and (min-width: 600px) {
  .container {
   grid-template-areas:
    "h h h h h h h h h h h h"
-   "c c c c c c c s s s s s"
+   "c c c c c c c c c c s s"
    "f f f f f f f f f f f f";
- }
- .slider {
-  display: block;
-  grid-area: s;
-  height: auto;
  }
  .footer {
   display: block;
   grid-area: f;
 }
-
-/* 当屏幕的尺寸大于800的时候，我希望改变整个布局方式 */
-@media screen and (min-width: 800px) {
- .container {
-  grid-template-areas:
-  "h h h h h h h h h h h h"
-  "c c c c c c c c c c s s"
-  "f f f f f f f f f f f f";
- }
- }
 }
-
-
-
 
 img { max-width: 100%;}
 body {
