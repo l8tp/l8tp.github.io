@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<head>
+	
+	<script type="text/javascript">   
+	function password() {   
+	var testV = 1;   
+	var pass1 = prompt('请输入密码:','');   
+	while (testV < 3) {   
+	if (!pass1)    
+	history.go(-1);   
+	if (pass1 == "mima") {//设置密码
+	alert('口令正确，进行跳转');   
+	
+	window.location.href="conduct.gi97.html";//添加你要跳转的页面
+	
+	break;   
+	}    
+	testV+=1;   
+	var pass1 =    
+	prompt('密码错误','');   
+	}   
+	if (pass1!="password" & testV ==3)
+	{alert("无法跳转网页   ！！");
+	window.opener=null; window.close();//密码不正确就关闭
+	window.location.href='about:blank';//避免有些浏览器不支持关闭，所以请求跳转新页面    
+	// history.go(-1);  
+	} 
+	return " ";   
+	}    
+	document.write(password());   
+	</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>跳转页</title>
+<style type="text/css" >
+
+#apDiv1 {
+	position: absolute;
+	left: auto;
+	top: auto;
+	width: auto;
+	height: 400px;
+	z-index: 1;
+}
+body,td,th {
+	font-size: 20px;
+	color: #000000;
+}
+</style>
+</head>
+
+<body>
+	
+
+
+	
+
+<div id="apDiv1" style="top: 0px">
+	<blockquote style="margin-left: 0px; width: auto; height:auto; background-color:rgba(170, 255, 248, 0.2);  padding:20px 0 15px 10px">
+	<a style="font-size: 10vw";>跳转网页 ！！</a>
+</div>
+</body>
