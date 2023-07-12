@@ -33,10 +33,10 @@
 height: auto;
 }
 .slider {
- display: block;
  background: rgb(50, 232, 172);
  grid-area: s;
  height: auto;
+ display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
 }
 
 /* 当屏幕的尺寸大于600的时候，我希望展示出来slider的内容 */
@@ -50,7 +50,10 @@ height: auto;
  .footer {
   display: block;
   grid-area: f;
-}
+ }
+ .slider {
+  display:block;/* 取消水平和垂直居中 */
+ }
 }
 
 img { max-width: 100%;}
@@ -101,7 +104,7 @@ h3 {
 <div class="container">
  <div class="header"><h1><strong><b>-----------&nbsp;&nbsp;&nbsp;&#128151;电影&nbsp;&nbsp;&nbsp;--------- </b></strong></h1></div>
  
- <div class="slider"><embed src="./item157.html" height="180px" type="image/svg+xml" /></div>
+ <div class="slider"><embed src="./item157.html" height=132px width=220px type="image/svg+xml" /></div>
 
  <div class="content">
 	 <ul style="list-style-type:none; padding:0 0 0 0" ><!--去除列表开头的黑点-->
