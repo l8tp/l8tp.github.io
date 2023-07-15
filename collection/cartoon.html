@@ -45,6 +45,9 @@ height: auto;
  padding:1px 0 15px 15px;
  }
 
+#mulu{ width: 90%; height:70px;
+}
+
 /* 当屏幕的尺寸大于680的时候，我希望展示出来slider的内容 */
 @media screen and (min-width: 680px) {
  .container {
@@ -57,9 +60,9 @@ height: auto;
   display: block;
   grid-area: f;
  }
- .slider {
-  display:block;/* 取消水平和垂直居中 */
- }
+ .slider{	display: block; }
+ #mulu{	height:160px; }
+}
 }
 
 img { max-width: 100%;}
@@ -105,6 +108,7 @@ h3 {
 		border-radius: 50%;
 		display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
 }
+
 </style>
 </head>
 
@@ -112,7 +116,7 @@ h3 {
 	
 <div class="container">
  <div class="header"><h1><strong><b>-&nbsp;&nbsp;&#128151;动漫&nbsp;&nbsp;- </b></strong></h1></div>
- <div class="slider"><embed src="./item157.html" height=135px width=220px type="image/svg+xml" /> </div>
+ <div class="slider"><embed id="mulu" src="./item157.html" type="image/svg+xml"/> </div>
  <div class="content">
 	 <ul style="list-style-type:none; padding:0 0 0 0" ><!--去除列表开头的黑点-->
 
