@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" name="viewport" content="text/html; charset=utf-8; width=device-width; initial-scale=1" />
+<!-- 让元素在小屏幕自动换行 -->
+
+<title>行星地球</title>
+<style type="text/css" >
+
+/* grid布局学习链接：https://zhuanlan.zhihu.com/p/635422766   https://zhuanlan.zhihu.com/p/578736609*/
+/* 采用grid加栅格布局的方式，方便pc和移动端的转换，同时每个块之间的间距为10，添加上对应的样式 */
+.container {
+ display: grid;
+ grid-template-columns: repeat(10, 1fr) 100px 120px;
+ grid-gap: 10px;
+ grid-template-areas: "h h h h h h h h h h h h"
+                      "s s s s s s s s s s s s"
+					  "c c c c c c c c c c c c";
+}
+.header {
+ grid-area: h;
+ background-color: rgba(96, 229, 255, 0.5);
+ height: auto;
+}
+.footer {
+ display: none;
+ height: auto;
+}
+.content {
+ grid-area: c;
+  background: rgba(50, 232, 172,0.1);
+ height: auto;
+}
+.slider {
+ background-image: url(backimg.jpg); background-repeat: round;
+ grid-area: s;
+ height: auto;
+ display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
+}
+
+.BOX {
+ display: inline-block;
+ margin: 10px 5px 10px 5px; 
+ background: rgba(230, 237, 249, 1.0);
+ width: 93%; 
+ min-width: 200px;
+ padding:1px 5px 15px 5px;
+}
+
+#mulu{ width: 90%; height:70px;}
+
+
+/* 当屏幕的尺寸大于600的时候，我希望展示出来slider的内容 */
+@media screen and (min-width: 600px) {
+ .container {
+  grid-template-areas:
+   "h h h h h h h h h h h h"
+   "c c c c c c c c c c s s"
+   "f f f f f f f f f f f f";
+ }
+ .footer {
+  display: block;
+  grid-area: f;
+ }
+ .slider {
+  align-items:flex-start;/* 取消垂直居中 */
+  padding-top: 10px;
+ }
+ .BOX {
+  display: inline-block;
+  margin: 10px 5px 10px 5px; 
+  background: rgba(230, 237, 249, 1.0);
+  width: 260px; 
+  min-width: 200px;
+  padding:1px 5px 15px 5px;
+ }
+ 
+ #mulu{	height:160px; border-radius: 30%; display:block; background: rgba(72, 233, 166, 0.8);}
+}
+
+img { max-width: 100%;}
+body {
+	background-color: #fbfbfb;
+	
+	background-repeat: no-repeat;
+}
+
+#apDiv1 {
+	position: absolute;
+	left: auto;
+	top: auto;
+	width: 931px;
+	height: 124px;
+	z-index: 1;
+}
+body,td,th {
+	font: normal 100% Helvetica, Arial, sans-serif;
+	/* 保证字体自适应 */
+	color: #000000;
+}
+
+h1 {
+	text-align: center;
+	font-size: 5vmin;
+/* 保证字体自适应 */
+	color: #000000;
+}
+h2 {
+	text-align: center;
+	font-size: 30px;
+	font-family:"楷体";
+	color: #000000;
+}
+
+h3 {
+	font-size: 15px;
+	font-family:"楷体";
+	color: #0000ff;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+ <div class="header"><h1><strong><b>-&nbsp;&nbsp;行星地球&nbsp;&nbsp;-</b></strong></h1></div>
+ 
+ <div class="slider"><embed id="mulu" src="../../../item157.html" type="image/svg+xml" /></div>
+
+ <div class="content">
+	
+	<li style="list-style-type:none"><!--去除列表开头的黑点-->
+		<a class="BOX" style=" margin-left:10px">
+			第1集 南极北极
+			<br><img src="bbs.wofei.net@行星地球第1集南极北极1024版.rmvb_20230806_173926.072.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第2集 山脉
+			<br><img src="bbs.wofei.net@行星地球第2集山脉1024版.rmvb_20230806_153403.972.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第3集 淡水
+			<br><img src="bbs.wofei.net@行星地球第3集淡水1024版.rmvb_20230806_154417.535.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第4集 洞穴
+			<br><img src="bbs.wofei.net@行星地球第4集洞穴1024版.rmvb_20230806_155207.062.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第5集 沙漠
+			<br><img src="bbs.wofei.net@行星地球第5集沙漠1024版.rmvb_20230806_160258.128.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第6集冰雪世界
+			<br><img src="bbs.wofei.net@行星地球第6集冰雪世界1024版.rmvb_20230806_160635.696.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第7集 伟大草原
+			<br><img src="bbs.wofei.net@行星地球第7集伟大草原1024版.rmvb_20230806_161646.207.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第8集 热带雨林
+			<br><img src="bbs.wofei.net@行星地球第8集热带雨林1024版.rmvb_20230806_162617.284.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第9集 浅海
+			<br><img src="bbs.wofei.net@行星地球第9集浅海1024版.rmvb_20230806_163130.394.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第10集 季节性森林
+			<br><img src="bbs.wofei.net@行星地球第10集季节性森林1024版.rmvb_20230806_165701.307.jpg" style="width: auto" alt="人">
+		</a>
+		<a class="BOX">
+			第11集 深海
+			<br><img src="bbs.wofei.net@行星地球第11集深海.rmvb_20230806_170117.092.jpg" style="width: auto" alt="人">
+		</a>
+	</li>
+	
+</div>
+ <div class="footer"><h2>到此结束</h2></div>
+
+
+  <!-- #BeginDate format:Ch2 -->
+  
+  
+  <!-- #EndDate -->
+  
+  </em></b></strong></font></h3>
+<h3><br />
+</h3>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>
