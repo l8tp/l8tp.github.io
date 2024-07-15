@@ -1,8 +1,10 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 /* CSS Document */
 body{background:#deceb0; padding:0px; margin:0px; font-size:12px;}
 ul,li,img{margin:0px; padding:0px; border:0px; list-style:none}
 
+#mulu{	width: 100vw; max-width: 100%; height:247px;}
+#sou{	width: 100vw; max-width: 100%; height:500px; position: relative;  }
 
 .clearfix{clear:both}
 
@@ -10,7 +12,10 @@ ul,li,img{margin:0px; padding:0px; border:0px; list-style:none}
 .nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
-.header{width: 100%;  height:212px; position:relative}
+.header{position: absolute; float:right; top: 70px; right: 20px; }
+.header li{background-color: rgba(142, 255, 12, 0.3);border-radius: 40%;width: 90px; height: 30px; text-align:center;}
+.header li a{display: block;font-size: 20px; width: 80px; height: 20px; font-weight:bold;
+background-color: rgba(255, 255, 255, 0.5);border-radius: 40%;text-decoration:none;}
 
 .homeName{ margin:0px auto;color: #8a703e; height:212px;
 background-image:url(../images/headbgn.jpg); height:212px;}
@@ -36,12 +41,19 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .nav2 .selected{ background:url(../images/tabbg.jpg) no-repeat center bottom; width:82px;  font-size:14px; font-weight:bold;}
 .nav2 .selected a{background-color:rgba(0, 0, 0, 0.0);color:#60430d; text-decoration:none;} 
 
-.nb_smt{ background:url(../images/smt_bg.jpg) no-repeat center top; height:35px; margin-top: -3px;}
-.nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; }
+.nb_smt{ background:url(../images/smt_bg.jpg) no-repeat center top; height:auto; margin-top: -3px; overflow: visible;  }
+.nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
-.mainLeft{width:242px; height:500px; float:left}
-.mainRight{width:inherit; float: inherit;}
+.mainLeft{width:180px; height:500px; flex-shrink: 0; display: none;}
+.mainRight{width:100%;  margin: 0 auto;}
+/* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
+@media screen and (min-width: 500px) {
+.mainLeft {display: block;}
+.mainRight{width:auto;  margin: 0 auto;}
+.header{display: none;}
+}
+
 
 .mainLeftTop{width:241px; height:10px; }
 .mainLeftCenter{width:241px; height:auto; }
@@ -53,12 +65,12 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .left-info{width:200px; margin:15px auto}
 .left-info ul li{width:100%; height:26px; line-height:26px; color:#333}
 
-.mainRightTop{width:710px; height:10px; }
+.mainRightTop{width:auto; height:10px; }
 .mainRightCenter{width:100%;}
-.mainRightBottom{width:710px; height:10px;}
+.mainRightBottom{width:auto; height:10px;}
 
-.Rtitle{width:700px; margin-left:10px; line-height:20px; color:#605238}
-.Rrain{ width:100%; margin:0px auto; padding:0px 0px 0px 0px;height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
+.Rtitle{width:auto; margin-left:10px; line-height:20px; color:#605238}
+.Rrain{ width:auto; margin:0px auto; padding:0;height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
 .Rrain p{text-indent:2em; margin:0px; padding:0px; }
 
 .copyRight{width:100vw;max-width: 1004px; height:30px; line-height:30px; font-family:Arial, Helvetica, sans-serif;color:#633; text-align:center; margin:0px auto; color:#aaa;}
@@ -73,7 +85,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .log a{color:#333; text-decoration:none; font-size:14px;}
 .log a:hover{text-decoration:underline}
 
-.ciel1{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; }
+.ciel1{max-width:100%; margin:0px auto; padding:10px 10px;height: auto; }
 .ciel1 h1{margin:0px; padding:0px; font-size:14px; height:30px; line-height:30px; text-indent:1em; background:#dfdacc; font-weight:bold;}
 .ciel1 ul {margin:10px auto; width:100%; 
 display: flex; flex-direction: row;}/*让内部元素横向排列*/

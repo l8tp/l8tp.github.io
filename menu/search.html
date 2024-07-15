@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Example</title>
+    <style>
+        #searchInput {
+            margin-bottom: 10px;
+        }
+
+        .searchResults {
+            position: absolute;
+            top: 60px; /* 调整弹窗的垂直位置 */
+            left: 10px;
+            z-index: 999; /* 确保弹窗在最上层 */
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            display: none;
+        }
+
+
+
+        .searchResults li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<!-- hysousuo -->
+<!-- 搜索框 -->
+ <form>
+ <input type="text" id="searchInput" placeholder="输入搜索词">
+ </form>
+ <!-- 搜索结果 -->
+ <ul class="searchResults">
+     <!-- 搜索结果将会动态加载到这里 -->
+ </ul>
+
+ <!-- JavaScript 代码 -->
+ <script>
+     const searchInput = document.getElementById('searchInput');
+     const searchResultsContainer = document.querySelector('.searchResults');  
+	//const声明常量，但其内部属性和元素可以改变
+     searchInput.addEventListener('input', function () {  //输入事件发生后执行函数
+         const searchKeyword = this.value.toLowerCase();  //输入字符串大写字母转化成小写
+
+         // 清空之前的搜索结果
+         searchResultsContainer.innerHTML = '';
+
+         if (searchKeyword.trim() === '') {  //三个等号是恒等运算符  trim删除前后空白字符
+             // 如果搜索关键字为空，隐藏弹窗并返回
+             searchResultsContainer.style.display = 'none';
+             return;
+         }
+
+         fetch('all-links.xml')
+             .then(response => response.text())  //读取响应文本
+             .then(data => {  //处理解析后的文本数据
+                 const parser = new DOMParser();  //XML字符串解析为DOM树
+                 const xmlDoc = parser.parseFromString(data, 'application/xml');  //解析为DOM树
+                 const links = xmlDoc.querySelectorAll('link');  //选择所有的link标签
+
+                 let hasResults = false;  //设置没有结果
+
+                 links.forEach(link => {  //遍历每一个link
+                     const url = link.querySelector('url').textContent.toLowerCase();  //选择标签内的文本内容
+                     const title = link.querySelector('title').textContent.toLowerCase();
+
+                     if (title.includes(searchKeyword) || url.includes(searchKeyword)) {
+                         const li = document.createElement('li');  //动态创建一个空白列表
+                         li.className = 'aurl';  //设置列表属性
+                         li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"   data-lastfrom="" title="${title}">${title}</a>`;
+						 //设置列表内容。反引号代表模板字符串
+                         searchResultsContainer.appendChild(li);  //选择并添加子节点
+                         hasResults = true;  //设置拥有结果
+                     }
+                 });
+
+                 // 根据搜索结果显示或隐藏弹窗
+                 searchResultsContainer.style.display = hasResults ? 'block' : 'none';  //if else语句缩减版
+             })
+             .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
+     });
+
+     // 监听输入框失去焦点事件，隐藏搜索结果弹窗
+     searchInput.addEventListener('blur', function () {
+         // 使用 setTimeout 确保点击搜索结果时能触发链接
+         setTimeout(() => {
+             searchResultsContainer.style.display = 'none';
+         }, 200);  //200毫秒以后隐藏结果弹窗
+     });
+ </script>
+</body>
+</html>
