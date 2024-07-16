@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 body{background:#deceb0; padding:0px; margin:0px; font-size:12px;}
-ul,li,img{margin:0px; padding:0px; border:0px; list-style:none}
+ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; background-color: rgba(0,0,0,0);}
 
 #mulu{	width: 100vw; max-width: 100%; height:247px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative;  }
@@ -47,8 +47,8 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
-.mainLeft{width:183px; height:500px; flex-shrink: 0; display: none;}
-.mainRight{width:100%;  margin: 0 auto;}
+.mainLeft{width:183px; height:500px; flex-shrink: 0; flex-grow: 0; display: none;}
+.mainRight{width:0;  margin: 0 auto; flex:1}
 /* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
 @media screen and (min-width: 500px) {
 .mainLeft {display: block;}
@@ -79,7 +79,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 
 
 .ciel{width:670px; margin:0px auto; padding:10px 0px;}
-.ciel h1{margin:0px; padding:0px; font-size:14px; height:30px; line-height:30px; text-indent:1em; background:#dfdacc; font-weight:bold;}
+.ciel h1{ font-size:14px; height:30px; line-height:30px;  background:#dfdacc; font-weight:bold;}
 .ciel ul {margin:10px auto; max-width:650px;}
 .ciel ul li{ width:100%; height:30px; line-height:30px; color:#777; font-size:12px;}
 
@@ -88,7 +88,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .log a:hover{text-decoration:underline}
 
 .ciel1{max-width:100%; margin:0px auto; padding:10px 10px;height: auto; }
-.ciel1 h1{margin:0px; padding:0px; font-size:14px; height:30px; line-height:30px; text-indent:1em; background:#dfdacc; font-weight:bold;}
+.ciel1 h1{ font-size:20px; height:30px; line-height:30px;  background:#dfdacc; font-weight:bold;}
 .ciel1 ul {margin:10px auto; width:100%; 
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
 .ciel1 ul li{ line-height:30px; color:#333; font-size:12px; margin-right: 15px;
@@ -96,7 +96,7 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 .ciel1 ul a{margin: 0 0 0 auto; }
 .ciel1 ul a img{height: 100px;}
 .ciel1 li{display: flex;}
-.ciel1 li a{background-color: rgba(0,0,0,0); font-style: italic; color: chocolate;}
+.ciel1 li a{ font-style: italic; color: chocolate;}
 
 .ciel1 ul li{display: none;}
 .ciel1 ul a{margin: 0 auto; }
@@ -104,19 +104,28 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 @media screen and (min-width: 500px) {
 	.ciel1 ul li{display: flex;}
 	.ciel1 ul a{margin: 0 0 0 auto; }
+	.ciel1 h1{font-size:16px;}
 }
 
 
 .ciel2{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; }
-.ciel2 h1{margin:0px; padding:0px; font-size:14px; height:30px; line-height:30px; text-indent:1em; background:#dfdacc; font-weight:bold;}
+.ciel2 h1{ font-size:14px; height:30px; line-height:30px; background:#dfdacc; font-weight:bold;}
+.ciel2 h2{ font-style: italic; color: chocolate; font-size:14px; height:30px; line-height:30px; font-weight:bold;}
 .ciel2 ul {margin:10px auto; width:100%; width: 100%;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
-.ciel2 ul li{ line-height:30px; color:#333; font-size:12px; margin-right: 15px; width: 100%;
+.ciel2 ul li{ line-height:30px; color:#333; font-size:12px; margin-right: 15px; width: 100%; text-indent:1em;  /* 首行缩进 */
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start;}/* 设置水平左对齐和垂直居中 */
 .ciel2 ul a{margin: 0 0 0 auto; }
 .ciel2 ul a img{height: 100px;}
 .ciel2 li{display: flex;}
-.ciel2 li a{background-color: rgba(0,0,0,0); font-style: italic; color: chocolate;}
+.ciel2 li a{ font-style: italic; color: chocolate;}
+/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
+@media screen and (max-width: 500px) {
+	.ciel2 h1{font-size: 30px; height: 40px; line-height: 40px;}  /* 可以使文本垂直居中 */
+	.ciel2 h2{font-size: 18px;}
+	.ciel2 ul li{font-size: 18px;}
+}
+
 
 
 
