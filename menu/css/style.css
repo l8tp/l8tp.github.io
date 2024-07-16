@@ -6,13 +6,15 @@ ul,li,img{margin:0px; padding:0px; border:0px; list-style:none}
 #mulu{	width: 100vw; max-width: 100%; height:247px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative;  }
 
+
+
 .clearfix{clear:both}
 
 .nb_body{ background:url(../images/topbg_1.jpg) #deceb0 repeat-x left -24px; height:auto; }
 .nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
-.header{position: absolute; float:right; top: 70px; right: 20px; }
+.header{position: absolute; float:right; top: 70px; right: 20px; z-index: 998;}
 .header li{background-color: rgba(142, 255, 12, 0.3);border-radius: 40%;width: 90px; height: 30px; text-align:center;}
 .header li a{display: block;font-size: 20px; width: 80px; height: 20px; font-weight:bold;
 background-color: rgba(255, 255, 255, 0.5);border-radius: 40%;text-decoration:none;}
@@ -45,7 +47,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
-.mainLeft{width:180px; height:500px; flex-shrink: 0; display: none;}
+.mainLeft{width:183px; height:500px; flex-shrink: 0; display: none;}
 .mainRight{width:100%;  margin: 0 auto;}
 /* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
 @media screen and (min-width: 500px) {

@@ -5,25 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Example</title>
     <style>
+		body{background:rgba(222, 206, 176, 1.0); padding:0px; margin:0px;}
+		
         #searchInput {
-            margin-bottom: 10px;
+			margin: 40px auto 30px 90px ;
+			background-color: rgba(180, 225, 255, 1.0);
+			border-style: ridge;
+			border-color: rgba(85, 170, 255, 1.0);
+			border-radius: 10px 30px 30px 10px;
+			border-width: 8px;
+			width: 210px;
+			height: 40px;
         }
 
         .searchResults {
             position: absolute;
-            top: 60px; /* 调整弹窗的垂直位置 */
-            left: 10px;
+            top: 90px; /* 调整弹窗的垂直位置 */
+            left: 90px;
             z-index: 999; /* 确保弹窗在最上层 */
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(170, 255, 0, 0.5);
+			border-width: 8px;
+			border-color: rgba(0, 170, 0, 1.0);
+			border-style: outset;
+			border-radius: 20px 20px 20px 20px;
+			font-weight: bold;
             padding: 10px;
             display: none;
         }
-
-
-
         .searchResults li {
             list-style-type: none;
+			font-size: 20px;
+			padding: 5px 5px;
+			
         }
+		.searchResults li a{
+			text-decoration-thickness:1;
+			text-decoration-style: dashed;
+			text-decoration-color: red;
+			}
+/* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
+@media screen and (width: 183px ) {
+  @media screen and (height:500px ) {
+	body{background:rgba(0, 0, 0, 0)}
+	
+	#searchInput {
+			margin: 20px auto 0px 10px ;
+			width: 160px;
+			height: 20px;
+			border-style: solid;
+			border-color: rgba(85, 170, 255, 1.0);
+			border-width: 1px;
+			
+			
+		}
+		
+	.searchResults {
+		position: absolute;
+		top: 30px; /* 调整弹窗的垂直位置 */
+		left: 10px;
+		z-index: 999; /* 确保弹窗在最上层 */
+		background-color: rgba(255, 255, 255, 0.2);
+		border-style: none;
+		padding: 10px;
+		display: none;
+		}
+	.searchResults li {
+		list-style-type: none;
+		font-size: 15px;
+		padding: 5px 0;
+	
+	}
+	}
+}
+
+
+
     </style>
 </head>
 <body>
@@ -70,7 +126,7 @@
                      if (title.includes(searchKeyword) || url.includes(searchKeyword)) {
                          const li = document.createElement('li');  //动态创建一个空白列表
                          li.className = 'aurl';  //设置列表属性
-                         li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"   data-lastfrom="" title="${title}">${title}</a>`;
+                         li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"  data-lastfrom="" title="${title}">${title}</a>`;
 						 //设置列表内容。反引号代表模板字符串
                          searchResultsContainer.appendChild(li);  //选择并添加子节点
                          hasResults = true;  //设置拥有结果
