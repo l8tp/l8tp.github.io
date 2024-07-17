@@ -73,7 +73,8 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 
 .Rtitle{width:auto; margin-left:10px; line-height:20px; color:#605238}
 .Rrain{ width:auto; margin:0px auto; padding:0;height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
-.Rrain p{text-indent:2em; margin:0px; padding:0px; }
+.Rrain p{text-indent:2em; /* 首行缩进 */
+margin:0px; padding:0px; }
 
 .copyRight{width:100vw;max-width: 1004px; height:30px; line-height:30px; font-family:Arial, Helvetica, sans-serif;color:#633; text-align:center; margin:0px auto; color:#aaa;}
 
@@ -91,7 +92,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 40%;
 .ciel1 h1{ font-size:20px; height:30px; line-height:30px;  background:#dfdacc; font-weight:bold;}
 .ciel1 ul {margin:10px auto; width:100%; 
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
-.ciel1 ul li{ line-height:30px; color:#333; font-size:12px; margin-right: 15px;
+.ciel1 ul li{ line-height:30px; color:#333; font-size:12px; 
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start;}/* 设置水平左对齐和垂直居中 */
 .ciel1 ul a{margin: 0 0 0 auto; }
 .ciel1 ul a img{height: 100px;}
@@ -111,9 +112,9 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 .ciel2{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; }
 .ciel2 h1{ font-size:14px; height:30px; line-height:30px; background:#dfdacc; font-weight:bold;}
 .ciel2 h2{ font-style: italic; color: chocolate; font-size:14px; height:30px; line-height:30px; font-weight:bold;}
-.ciel2 ul {margin:10px auto; width:100%; width: 100%;
+.ciel2 ul {margin:10px auto; width:100%;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
-.ciel2 ul li{ line-height:30px; color:#333; font-size:12px; margin-right: 15px; width: 100%; text-indent:1em;  /* 首行缩进 */
+.ciel2 ul li{ line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;  /* 两端对齐 */
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start;}/* 设置水平左对齐和垂直居中 */
 .ciel2 ul a{margin: 0 0 0 auto; }
 .ciel2 ul a img{height: 100px;}
