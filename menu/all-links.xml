@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <links>
-<link><url>calo-meal\bunmeat.html </url><title>把子肉</title></link>
-<link><url>calo-meal\cohocho.html </url><title>冰山熔岩巧克力</title></link>
-<link><url>calo-meal\dapanji.html </url><title>新疆大盘鸡</title></link>
-<link><url>calo-meal\dbcopork.html </url><title>锅包肉</title></link>
-<link><url>calo-meal\stnoodle.html </url><title>河南蒸面条</title></link>
-<link><url>calo-meal\stoblood.html </url><title>毛血旺</title></link>
-<link><url>calo-meal\zhicake.html </url><title>空气炸锅芝麻糊蛋糕</title></link>
-<link><url>side-dish\egarlic.html </url><title>鸡蛋蒜</title></link>
-<link><url>side-dish\mclj.html </url><title>面炒辣椒</title></link>
-<link><url>side-dish\sgarlic.html </url><title>糖蒜</title></link>
-<link><url>side-dish\sjpd.html </url><title>烧椒皮蛋</title></link>
-<link><url>side-dish\zhimayan.html </url><title>芝麻盐</title></link>
-<link><url>slim-dish\cumibeef.html </url><title>孜然牛肉</title></link>
-<link><url>slim-dish\pidantofu.html </url><title>皮蛋豆腐</title></link>
-<link><url>slim-dish\shirchi.html </url><title>虾滑鸡翅</title></link>
-<link><url>slim-dish\silkbean.html </url><title>三丝爆豆</title></link>
-<link><url>slim-dish\soychi.html </url><title>酱油手撕鸡</title></link>
+<link><url>calo-meal\bunmeat.html </url><title>咸</title> <content>把子肉</content> </link>
+<link><url>calo-meal\cohocho.html </url><title>甜</title><content>冰山熔岩巧克力</content></link>
+<link><url>calo-meal\dapanji.html </url><title>咸</title><content>新疆大盘鸡</content></link>
+<link><url>calo-meal\dbcopork.html </url><title>咸</title><content>锅包肉</content></link>
+<link><url>calo-meal\stnoodle.html </url><title>咸</title><content>河南蒸面条</content></link>
+<link><url>calo-meal\stoblood.html </url><title>咸辣</title><content>毛血旺</content></link>
+<link><url>calo-meal\zhicake.html </url><title>甜</title>空气炸锅芝麻糊蛋糕<content></content></link>
+<link><url>calo-meal\tomeat.html </url><title>酸甜</title><content>番茄滑肉汤</content></link>
+<link><url>side-dish\egarlic.html </url><title>咸辣</title><content>鸡蛋蒜</content></link>
+<link><url>side-dish\mclj.html </url><title>咸辣</title><content>面炒辣椒</content></link>
+<link><url>side-dish\sgarlic.html </url><title>甜脆</title><content>糖蒜</content></link>
+<link><url>side-dish\sjpd.html </url><title>咸辣</title><content>烧椒皮蛋</content></link>
+<link><url>side-dish\zhimayan.html </url><title>咸香</title><content>芝麻盐</content></link>
+<link><url>slim-dish\cumibeef.html </url><title>咸</title><content>孜然牛肉</content></link>
+<link><url>slim-dish\pidantofu.html </url><title>咸</title><content>皮蛋豆腐</content></link>
+<link><url>slim-dish\shirchi.html </url><title>咸</title><content>虾滑鸡翅</content></link>
+<link><url>slim-dish\silkbean.html </url><title>咸</title><content>三丝爆豆</content></link>
+<link><url>slim-dish\soychi.html </url><title>咸</title><content>酱油手撕鸡</content></link>
 	
 </links>

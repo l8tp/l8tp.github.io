@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Example</title>
+    <title>搜索</title>
     <style>
 		body{background:rgba(222, 206, 176, 1.0); padding:0px; margin:0px;}
 		
@@ -17,10 +17,32 @@
 			width: 210px;
 			height: 40px;
         }
-
+		.anniu {
+			position: relative;
+			top:30px;
+			left:60px;
+		}
+		.button { /*正常按钮*/
+		  font-size: 20px;
+		  margin: 5px;
+		  width: 50px;
+		  height: 50px;
+		  border-style:outset;
+		  border-width:5px;
+		  border-radius: 7px;
+		  border-color:#ccc;
+		  background-color: #ccc;
+		  color: #000000;
+		  cursor: pointer;
+		}
+		.button:active{
+		  border-color:#767676;
+		  background-color: #767676;
+		}
+		
         .searchResults {
             position: absolute;
-            top: 90px; /* 调整弹窗的垂直位置 */
+            top: 150px; /* 调整弹窗的垂直位置 */
             left: 90px;
             z-index: 999; /* 确保弹窗在最上层 */
             background-color: rgba(170, 255, 0, 0.5);
@@ -50,7 +72,7 @@
 	
 	#searchInput {
 			margin: 20px auto 0px 10px ;
-			width: 160px;
+			width: 150px;
 			height: 20px;
 			border-style: solid;
 			border-color: rgba(85, 170, 255, 1.0);
@@ -58,10 +80,29 @@
 			
 			
 		}
-		
+	.anniu {
+		top:0;
+		left:0;
+		width:155px;
+		margin: 10px auto 10px 10px;
+	}
+	.button { /*正常按钮*/
+	  font-size: 15px;
+	  margin: 2px;
+	  padding: 0;
+	  width: 30px;
+	  height: 30px;
+	  border-width:3px;
+	  border-radius: 5px;
+	  border-color:rgba(200, 200, 200, 0.2);
+	  background-color: rgba(200,200,200,0.2);
+	  
+	  
+	}
+	
 	.searchResults {
 		position: absolute;
-		top: 30px; /* 调整弹窗的垂直位置 */
+		top: 150px; /* 调整弹窗的垂直位置 */
 		left: 10px;
 		z-index: 999; /* 确保弹窗在最上层 */
 		background-color: rgba(255, 255, 255, 0.2);
@@ -83,7 +124,13 @@
     </style>
 </head>
 <body>
-<!-- hysousuo -->
+  <div class="anniu">
+  	<button class="button" onclick="appendToInput('辣')">辣</button>
+  	<button class="button" onclick="appendToInput('咸')">咸</button>
+  	<button class="button" onclick="appendToInput('甜')">甜</button>
+  	<button class="button" onclick="appendToInput('香')">香</button>
+  	<button class="button" onclick="appendToInput('酸')">酸</button>
+  </div>	
 <!-- 搜索框 -->
  <form>
  <input type="text" id="searchInput" placeholder="输入搜索词">
@@ -95,11 +142,19 @@
 
  <!-- JavaScript 代码 -->
  <script>
+	 function appendToInput(taste){
+		 // var taste1 = document.getElementById("searchInput");//获取标签
+		 // taste1.innerHTML = taste ;
+		 document.getElementById("searchInput").value = taste;
+		 sousuo ();
+	 }
+	 
      const searchInput = document.getElementById('searchInput');
      const searchResultsContainer = document.querySelector('.searchResults');  
 	//const声明常量，但其内部属性和元素可以改变
-     searchInput.addEventListener('input', function () {  //输入事件发生后执行函数
-         const searchKeyword = this.value.toLowerCase();  //输入字符串大写字母转化成小写
+	
+	function sousuo () {  //搜索函数
+         const searchKeyword = searchInput.value.toLowerCase();  //输入字符串大写字母转化成小写
 
          // 清空之前的搜索结果
          searchResultsContainer.innerHTML = '';
@@ -122,11 +177,12 @@
                  links.forEach(link => {  //遍历每一个link
                      const url = link.querySelector('url').textContent.toLowerCase();  //选择标签内的文本内容
                      const title = link.querySelector('title').textContent.toLowerCase();
+                     const content = link.querySelector('content').textContent.toLowerCase();
 
-                     if (title.includes(searchKeyword) || url.includes(searchKeyword)) {
+                     if (title.includes(searchKeyword) || url.includes(searchKeyword) || content.includes(searchKeyword)) {
                          const li = document.createElement('li');  //动态创建一个空白列表
                          li.className = 'aurl';  //设置列表属性
-                         li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"  data-lastfrom="" title="${title}">${title}</a>`;
+                         li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"  data-lastfrom="" title="${title}">${content}</a>`;
 						 //设置列表内容。反引号代表模板字符串
                          searchResultsContainer.appendChild(li);  //选择并添加子节点
                          hasResults = true;  //设置拥有结果
@@ -137,7 +193,8 @@
                  searchResultsContainer.style.display = hasResults ? 'block' : 'none';  //if else语句缩减版
              })
              .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
-     });
+     }
+     searchInput.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
 
      // 监听输入框失去焦点事件，隐藏搜索结果弹窗
      searchInput.addEventListener('blur', function () {
