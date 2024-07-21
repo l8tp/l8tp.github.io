@@ -7,8 +7,14 @@
     <style>
 		body{background:rgba(222, 206, 176, 1.0); padding:0px; margin:0px;}
 		
-        #searchInput {
-			margin: 40px auto 30px 90px ;
+        #searchInput {}
+		.leiBie{
+		  margin: 0 0 0 60px;
+		  font-size: 20px;
+		  color: #000000;
+		}
+		.searchys{
+			margin: 5px auto 5px 10px ;
 			background-color: rgba(180, 225, 255, 1.0);
 			border-style: ridge;
 			border-color: rgba(85, 170, 255, 1.0);
@@ -16,11 +22,12 @@
 			border-width: 8px;
 			width: 210px;
 			height: 40px;
-        }
+		}
 		.anniu {
 			position: relative;
 			top:30px;
 			left:60px;
+			margin: 0 0 50px 0;
 		}
 		.button { /*正常按钮*/
 		  font-size: 20px;
@@ -35,6 +42,7 @@
 		  color: #000000;
 		  cursor: pointer;
 		  background-size:cover ;
+		  background-repeat: no-repeat;
 		}
 		.button:active{
 		  border-color:#767676;
@@ -42,9 +50,10 @@
 		}
 		
         .searchResults {
-            position: absolute;
-            top: 150px; /* 调整弹窗的垂直位置 */
-            left: 90px;
+            position: relative;
+            top: 10px; /* 调整弹窗的垂直位置 */
+            left: 110px;
+			width: 200px;
             z-index: 999; /* 确保弹窗在最上层 */
             background-color: rgba(170, 255, 0, 0.5);
 			border-width: 8px;
@@ -57,11 +66,15 @@
         }
         .searchResults li {
             list-style-type: none;
-			font-size: 20px;
 			padding: 5px 5px;
-			
+			font-size: 20px;
+			font-style: italic;
+			color: rgb(255, 0, 0);
         }
 		.searchResults li a{
+			color: #0000ff;
+			font-size: 20px;
+			font-style: normal;
 			text-decoration-thickness:1;
 			text-decoration-style: dashed;
 			text-decoration-color: red;
@@ -70,17 +83,17 @@
 @media screen and (width: 183px ) {
   @media screen and (height:500px ) {
 	body{background:rgba(0, 0, 0, 0)}
+	.leiBie{
+	  font-size: 17px;
+	}
 	
-	#searchInput {
-			margin: 20px auto 0px 10px ;
+	.searchys{
+			margin: 5px auto 5px 10px ;
 			width: 150px;
 			height: 20px;
 			border-style: solid;
-			border-color: rgba(85, 170, 255, 1.0);
 			border-width: 1px;
-			
-			
-		}
+	}
 	.anniu {
 		top:0;
 		left:0;
@@ -97,26 +110,27 @@
 	  border-radius: 5px;
 	  border-color:rgba(200, 200, 200, 0.2);
 	  background-color: rgba(200,200,200,0.2);
-	  text-shadow: 0px 0px 20px rgba(255, 255, 255, 1.0);
 	  
 	}
 	
 	.searchResults {
-		position: absolute;
-		top: 150px; /* 调整弹窗的垂直位置 */
+		top: 0px; /* 调整弹窗的垂直位置 */
 		left: 10px;
+		width: 130px;
 		z-index: 999; /* 确保弹窗在最上层 */
 		background-color: rgba(255, 255, 255, 0.2);
 		border-style: none;
-		padding: 10px;
-		display: none;
+		padding: 0px 5px;
 		}
 	.searchResults li {
-		list-style-type: none;
-		font-size: 15px;
-		padding: 5px 0;
+		margin: 7px 0;
+		padding: 0;
 	
 	}
+	.searchResults li a{
+				font-size: 15px;
+				}
+	
 	}
 }
 
@@ -126,15 +140,16 @@
 </head>
 <body>
   <div class="anniu">
+  	<button class="button" onclick="appendToInput('酸')" style="background-image: url(images/酸.jpg)">酸</button>
+  	<button class="button" onclick="appendToInput('甜')" style="background-image: url(images/甜.jpg)">甜</button>
   	<button class="button" onclick="appendToInput('辣')" style="background-image: url(images/辣.jpg)">辣</button>
   	<button class="button" onclick="appendToInput('咸')" style="background-image: url(images/咸.jpg)">咸</button>
-  	<button class="button" onclick="appendToInput('甜')" style="background-image: url(images/甜.jpg)">甜</button>
   	<button class="button" onclick="appendToInput('香')" style="background-image: url(images/香.jpg)">香</button>
-  	<button class="button" onclick="appendToInput('酸')" style="background-image: url(images/酸.jpg)">酸</button>
   </div>	
 <!-- 搜索框 -->
  <form>
- <input type="text" id="searchInput" placeholder="输入搜索词">
+ <a class="leiBie">菜名</a><input type="text" id="searchInput" class="searchys" placeholder="输入搜索词"><br>
+ <a class="leiBie">口味</a><input type="text" id="searchKwei" class="searchys" placeholder="输入搜索词">
  </form>
  <!-- 搜索结果 -->
  <ul class="searchResults">
@@ -144,23 +159,23 @@
  <!-- JavaScript 代码 -->
  <script>
 	 function appendToInput(taste){
-		 // var taste1 = document.getElementById("searchInput");//获取标签
-		 // taste1.innerHTML = taste ;
-		 document.getElementById("searchInput").value = taste;
+		 document.getElementById("searchKwei").value = taste;
 		 sousuo ();
 	 }
 	 
      const searchInput = document.getElementById('searchInput');
+     const searchKwei = document.getElementById('searchKwei');
      const searchResultsContainer = document.querySelector('.searchResults');  
 	//const声明常量，但其内部属性和元素可以改变
 	
 	function sousuo () {  //搜索函数
          const searchKeyword = searchInput.value.toLowerCase();  //输入字符串大写字母转化成小写
+         const searchKeyword2 = searchKwei.value.toLowerCase();  //输入字符串大写字母转化成小写
 
          // 清空之前的搜索结果
          searchResultsContainer.innerHTML = '';
 
-         if (searchKeyword.trim() === '') {  //三个等号是恒等运算符  trim删除前后空白字符
+         if (searchKeyword.trim() === '' && searchKeyword2.trim() === '') {  //三个等号是恒等运算符  trim删除前后空白字符
              // 如果搜索关键字为空，隐藏弹窗并返回
              searchResultsContainer.style.display = 'none';
              return;
@@ -180,7 +195,7 @@
                      const title = link.querySelector('title').textContent.toLowerCase();
                      const content = link.querySelector('content').textContent.toLowerCase();
 
-                     if (title.includes(searchKeyword) || url.includes(searchKeyword) || content.includes(searchKeyword)) {
+                     if ((url.includes(searchKeyword) || content.includes(searchKeyword)) && title.includes(searchKeyword2)) {
                          const li = document.createElement('li');  //动态创建一个空白列表
                          li.className = 'aurl';  //设置列表属性
                          li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"  data-lastfrom="" title="${title}">${content}</a>`;
@@ -192,10 +207,19 @@
 
                  // 根据搜索结果显示或隐藏弹窗
                  searchResultsContainer.style.display = hasResults ? 'block' : 'none';  //if else语句缩减版
+				 if (hasResults == true){}else{
+				   searchResultsContainer.style.display = 'block'
+				   const li = document.createElement('li');  //动态创建一个空白列表
+				   li.className = 'aurl';  //设置列表属性
+				   li.innerHTML = '没搜到';
+				   //设置列表内容。反引号代表模板字符串
+				   searchResultsContainer.appendChild(li);  //选择并添加子节点
+				 }
              })
              .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
      }
      searchInput.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
+     searchKwei.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
 
      // 监听输入框失去焦点事件，隐藏搜索结果弹窗
      searchInput.addEventListener('blur', function () {
