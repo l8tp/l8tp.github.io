@@ -116,7 +116,7 @@
 	.searchResults {
 		top: 0px; /* 调整弹窗的垂直位置 */
 		left: 10px;
-		width: 130px;
+		width: 135px;
 		z-index: 999; /* 确保弹窗在最上层 */
 		background-color: rgba(255, 255, 255, 0.2);
 		border-style: none;
@@ -206,8 +206,9 @@
                  });
 
                  // 根据搜索结果显示或隐藏弹窗
-                 searchResultsContainer.style.display = hasResults ? 'block' : 'none';  //if else语句缩减版
-				 if (hasResults == true){}else{
+				 if (hasResults == true){
+				   searchResultsContainer.style.display = 'block'
+				 }else{
 				   searchResultsContainer.style.display = 'block'
 				   const li = document.createElement('li');  //动态创建一个空白列表
 				   li.className = 'aurl';  //设置列表属性
