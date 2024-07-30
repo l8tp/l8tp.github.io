@@ -6,11 +6,11 @@ ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; backgrou
 #mulu{	width: 100vw; max-width: 100%; height:247px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
 
-.Active{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 85, 0, 0.4);border-radius: 50%;}
-.aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 85, 0, 0.1);border-radius: 50%;}
-.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:210px;left:calc(50% - 165px)}
-.FenLei li a{color:#000000; text-decoration:none;background-color: rgba(255, 255, 255, 0.5);border-radius: 50%; font-size:18px; font-weight:bold;}
-
+.Active{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: #f8f0e1;
+border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181;}
+.aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; }
+.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:212px;left:calc(50% - 165px)}
+.FenLei li a{color:#000000; text-decoration:none; font-size:18px; font-weight:bold;}
 
 .clearfix{clear:both}
 
