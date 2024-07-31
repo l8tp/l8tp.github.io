@@ -3,18 +3,18 @@
 body{background:#deceb0; padding:0px; margin:0px; font-size:12px;}
 ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; background-color: rgba(0,0,0,0);}
 
-#mulu{	width: 100vw; max-width: 100%; height:247px;}
+#mulu{	width: 100vw; max-width: 100%; height:247px; position: fixed; z-index: 1; top: 0px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
 
-.Active{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: #f8f0e1;
+.Active{float:left; width:82px; height:33px; line-height:32px; text-align:center;background-color: #f8f0e1;
 border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181;}
 .aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; }
-.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:212px;left:calc(50% - 165px)}
+.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:212px;left:calc(50% - 165px);z-index: 10;}
 .FenLei li a{color:#000000; text-decoration:none; font-size:18px; font-weight:bold;}
 
 .clearfix{clear:both}
 
-.nb_body{ background:url(../images/topbg_1.jpg) #deceb0 repeat-x left -24px; height:auto; }
+.nb_body{ background:url(../images/topbg_1.jpg) #deceb0 repeat-x fixed left -24px; height:auto; }
 .nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
@@ -47,8 +47,8 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 50%;
 .nav2 .selected{ background:url(../images/tabbg.jpg) no-repeat center bottom; width:82px;  font-size:14px; font-weight:bold;}
 .nav2 .selected a{background-color:rgba(0, 0, 0, 0.0);color:#60430d; text-decoration:none;} 
 
-.nb_smt{ background:url(../images/smt_bg.jpg) no-repeat center top; height:10px; margin-top: -3px; overflow: visible;  }
-.nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row;}
+.nb_smt{ background:url(../images/smt_bg.jpg) no-repeat center top; height:10px; margin-top: -3px; overflow: visible; margin-top: 244px;position: relative;z-index: 5;}
+.nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
 .mainLeft{width:183px; height:500px; flex-shrink: 0; flex-grow: 0; display: none;}
