@@ -1,4 +1,4 @@
-﻿var pathname = window.location.pathname; // 使用window.location.pathname获取当前页面的路径部分
+var pathname = window.location.pathname; // 使用window.location.pathname获取当前页面的路径部分
 if (pathname.endsWith('/')) { pathname = pathname.slice(0, -1);} // 如果路径以斜杠结尾，则去除它
 var parentDirectoryName = pathname.split('/').slice(-2, -1)[0]; // 使用字符串的split方法和正则表达式来获取上级目录的名称
 //以上用来获取上级文件夹的名称
