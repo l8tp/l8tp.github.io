@@ -1,0 +1,16 @@
+.magicpattern { 
+  width: 1200px;
+  height: 600px;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: repeat;
+  background-image: url(images/牛郎织女星.jpg)
+	}
+/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
+@media screen and (max-width: 500px) {
+.magicpattern { 
+  width: 100vw;
+  height: calc(100vw * 3);	
+  background-image: url(images/牛郎织女星2.jpg)
+	}
+}
