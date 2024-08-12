@@ -7,6 +7,8 @@
 <link><url>calo-meal\dbcopork.html</url><title>咸</title><content>锅包肉</content></link>
 <link><url>calo-meal\KungPow.html</url><title>酸甜咸</title><content>宫保鸡丁</content></link>
 <link><url>calo-meal\pepchi.html</url><title>香酥辣</title><content>香酥辣子鸡</content></link>
+<link><url>calo-meal\saumeat.html</url><title>咸</title><content>京酱肉丝</content></link>
+<link><url>calo-meal\steamchi.html</url><title>咸辣</title><content>口水鸡</content></link>
 <link><url>calo-meal\stnoodle.html</url><title>咸</title><content>河南蒸面条</content></link>
 <link><url>calo-meal\stoblood.html</url><title>咸辣</title><content>毛血旺</content></link>
 <link><url>calo-meal\tomeat.html</url><title>酸甜</title><content>番茄滑肉汤</content></link>
@@ -20,9 +22,11 @@
 <link><url>side-dish\zhimayan.html</url><title>咸香</title><content>芝麻盐</content></link>
 <link><url>slim-dish\cumibeef.html</url><title>咸</title><content>孜然牛肉</content></link>
 <link><url>slim-dish\Egromeat.html</url><title>咸</title><content>黄金肉蛋卷</content></link>
+<link><url>slim-dish\MapoTofu.html</url><title>咸辣</title><content>麻婆豆腐</content></link>
 <link><url>slim-dish\pidantofu.html</url><title>咸</title><content>皮蛋豆腐</content></link>
 <link><url>slim-dish\shirchi.html</url><title>咸</title><content>虾滑鸡翅</content></link>
 <link><url>slim-dish\silkbean.html</url><title>咸</title><content>三丝爆豆</content></link>
 <link><url>slim-dish\soychi.html</url><title>咸</title><content>酱油手撕鸡</content></link>
+<link><url>slim-dish\steamegg.html</url><title>咸香</title><content>水蒸蛋</content></link>
 
 </links>

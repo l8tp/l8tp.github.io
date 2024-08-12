@@ -1,12 +1,12 @@
 @charset "UTF-8";
 /* CSS Document */
 body{background:#deceb0; padding:0px; margin:0px; font-size:12px;}
-ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; background-color: rgba(0,0,0,0);}
+div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; background-color: rgba(0,0,0,0);box-sizing: border-box;}
 
 #mulu{	width: 100vw; max-width: 1004px; height:247px; position: fixed; z-index: 1; top: 0px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
 
-.Active{float:left; width:82px; height:33px; line-height:32px; text-align:center;background-color: #f8f0e1;
+.Active{float:left; width:82px; height:34px; line-height:32px; text-align:center;background-color: #f8f0e1;
 border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181; }
 .aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
 .FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:212px;left:calc(50% - 165px);z-index: 10;}
@@ -21,7 +21,8 @@ border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
 .header{position: absolute; float:right; top: 70px; right: 20px; z-index: 800;}
-.header li{background-color: rgba(142, 255, 12, 0.3);border-radius: 40%;width: 90px; height: 30px; text-align:center;}
+.header li{background-color: rgba(142, 255, 12, 0.3);border-radius:40%;width: 90px; height: 30px; text-align:center;}
+.header li:hover{background-color: rgba(142, 255, 12, 1);}
 .header li a{display: block;font-size: 20px; width: 80px; height: 20px; font-weight:bold;
 background-color: rgba(255, 255, 255, 0.5);border-radius: 40%;text-decoration:none;}
 
@@ -38,27 +39,23 @@ display:flex; justify-content:center; align-items:center;/* 设置水平和垂�
 .nb_nav{ background:url(../images/nav_bg.jpg) no-repeat center top;height:32px;width: 1004px; overflow: visible;}
 .nb_nav .nav2{ height:100%; line-height:32px;width: 100vw;max-width: 100%; overflow: visible;/*超出部分可见*/
 display:flex; justify-content:center; align-items:flex-end; flex-direction: row;/* 设置水平居中和垂直向下对齐 */
-
 }
-.nav2 ul li{ float:left; width:82px; height:32px; line-height:32px; text-align:center;
-background-color: rgba(255, 85, 0, 0.3);border-radius: 50%;
-
-}
+.nav2 ul li{ float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 85, 0, 0.3);border-radius: 50%;}
 .nav2 ul li a{ color:#000000; text-decoration:none;background-color: rgba(255, 255, 255, 0.5);border-radius: 50%; font-size:18px; font-weight:bold;}
 .nav2 ul li a:hover{ background-color: rgba(255, 255, 255, 1);}
 .nav2 .selected{ background:url(../images/tabbg.jpg) no-repeat center bottom; width:82px;  font-size:14px; font-weight:bold;}
-.nav2 .selected a{background-color:rgba(0, 0, 0, 0.0);color:#60430d; text-decoration:none;} 
+.nav2 .selected a{color:#60430d; text-decoration:none;} 
 
-.nb_smt{ background:url(../images/smt_bg.jpg) no-repeat center top; height:10px; margin-top: -3px; overflow: visible; margin-top: 244px;position: relative;z-index: 5;}
-.nb_cnt{ background:url(../images/cnt_bg.jpg) repeat-y center top; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
+.nb_smt{ background: #f8f0e1; border-radius: 10px 10px 0 0;  border: 1.5px solid #b2a181; border-bottom: none; height:10px; margin-top: -3px; overflow: visible; margin-top: 243px;position: relative;z-index: 5;}
+.nb_cnt{ background: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none; border-top: none; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
 .mainLeft{width:183px; height:500px; flex-shrink: 0; flex-grow: 0; display: none;}
-.mainRight{width:0;  margin: 0 auto; flex:1}
+.mainRight{width:100%;  margin: 0 auto; }
 /* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
 @media screen and (min-width: 500px) {
 .mainLeft {display: block;}
-.mainRight{width:auto;  margin: 0 auto;}
+.mainRight{width: calc(100% - 183px);}
 .header{display: none;}
 }
 
@@ -78,7 +75,7 @@ background-color: rgba(255, 85, 0, 0.3);border-radius: 50%;
 .mainRightBottom{width:auto; height:10px;}
 
 .Rtitle{width:auto; margin-left:10px; line-height:20px; color:#605238}
-.Rrain{ width:auto; margin:0px auto; padding:0;height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
+.Rrain{ width:auto; margin:0px auto; height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
 .Rrain p{text-indent:2em; /* 首行缩进 */
 margin:0px; padding:0px; }
 
@@ -94,7 +91,7 @@ margin:0px; padding:0px; }
 .log a{color:#333; text-decoration:none; font-size:14px;}
 .log a:hover{text-decoration:underline}
 
-.ciel1{max-width:100%; margin:0px auto; padding: 10px 20px 10px 10px; height: auto; display: flex;flex-direction: row; flex-wrap: wrap; justify-content: flex-start; row-gap: 6px;}
+.ciel1{max-width:100%; margin:0px auto; margin: 10px 20px 10px 10px; height: auto; display: flex;flex-direction: row; flex-wrap: wrap; justify-content: flex-start; row-gap: 6px;}
 .ciel1 ul {margin:0px auto; width:100%; border-bottom: 1px dashed;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
 .ciel1 ul h1{ display: flex; flex-direction: column;flex-shrink: 0; justify-content:center; align-items:flex-start; text-align: justify-all;
@@ -111,8 +108,7 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 /* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px) {
 	.ciel1{padding:10px 10px; gap: 6px; }
-	.ciel1 ul{flex-direction: column; width:calc(50% - 3px); justify-content: space-between; margin-left: 0;border-bottom: 1px none;
-	 box-sizing: border-box;} /*设置flex的内部元素宽度和高度包括边界*/
+	.ciel1 ul{flex-direction: column; width:calc(50% - 3px); justify-content: space-between; margin-left: 0;border-bottom: 1px none;} 
 	.ciel1 ul a img{height:auto; max-height: 100px; max-width: 100%;}
 	.ciel1 ul li{display: none; height: 100%;}
 	.ciel1 ul a{margin: 0 auto; }
@@ -120,7 +116,7 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 }
 
 
-.ciel2{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; }
+.ciel2{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; display:flex; flex-direction: column;}
 .ciel2 h1{ font-size:25px; height:30px; line-height:30px; background:#dfdacc; font-weight:bold;}
 .ciel2 h2{ font-style: italic; color: chocolate; font-size:14px; height:30px; line-height:30px; font-weight:bold;}
 .ciel2 ul {margin:10px auto; width:100%;
@@ -131,6 +127,9 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 .ciel2 ul a img{height: 100px;}
 .ciel2 li{display: flex;}
 .ciel2 li a{ font-style: italic; color: chocolate;}
+.ciel2 a{margin:0 auto;}
+.ciel2 a img{max-height:200px;max-width:100%}
+
 /* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px) {
 	.ciel2 h1{font-size: 30px; height: 40px; line-height: 40px;}  /* 可以使文本垂直居中 */
