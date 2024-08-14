@@ -121,6 +121,8 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 .ciel2 h2{ font-style: italic; color: chocolate; font-size:14px; height:30px; line-height:30px; font-weight:bold;}
 .ciel2 ul {margin:10px auto; width:100%;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
+.shouyebox{line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;}
+.shouyebox img{float:left; width:200px; max-width:50%; margin-right:10px; border-radius:15px}
 .ciel2 ul li{ line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;  /* 两端对齐 */
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start;}/* 设置水平左对齐和垂直居中 */
 .ciel2 ul a{margin: 0 0 0 auto; }
@@ -135,6 +137,8 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 	.ciel2 h1{font-size: 30px; height: 40px; line-height: 40px;}  /* 可以使文本垂直居中 */
 	.ciel2 h2{font-size: 18px;}
 	.ciel2 ul li{font-size: 18px;}
+	.shouyebox{font-size:18px}
+	
 }
 
 
