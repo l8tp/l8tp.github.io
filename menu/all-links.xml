@@ -3,11 +3,14 @@
 
 <link><url>calo-meal\bunmeat.html</url><title>咸</title><content>把子肉</content></link>
 <link><url>calo-meal\cohocho.html</url><title>甜</title><content>冰山熔岩巧克力</content></link>
+<link><url>calo-meal\crismeat.html</url><title>咸香酥</title><content>小酥肉</content></link>
 <link><url>calo-meal\dapanji.html</url><title>咸</title><content>新疆大盘鸡</content></link>
-<link><url>calo-meal\dbcopork.html</url><title>咸</title><content>锅包肉</content></link>
+<link><url>calo-meal\dbcopork.html</url><title>酸甜</title><content>锅包肉</content></link>
+<link><url>calo-meal\frimush.html</url><title>咸香酥</title><content>炸蘑菇</content></link>
 <link><url>calo-meal\KungPow.html</url><title>酸甜咸</title><content>宫保鸡丁</content></link>
 <link><url>calo-meal\pepchi.html</url><title>香酥辣</title><content>香酥辣子鸡</content></link>
 <link><url>calo-meal\saumeat.html</url><title>咸</title><content>京酱肉丝</content></link>
+<link><url>calo-meal\shrimtem.html</url><title>咸香酥</title><content>炸虾天妇罗</content></link>
 <link><url>calo-meal\steamchi.html</url><title>咸辣</title><content>口水鸡</content></link>
 <link><url>calo-meal\stnoodle.html</url><title>咸</title><content>河南蒸面条</content></link>
 <link><url>calo-meal\stoblood.html</url><title>咸辣</title><content>毛血旺</content></link>
@@ -15,17 +18,19 @@
 <link><url>calo-meal\TSGPP.html</url><title>咸辣</title><content>虎皮青椒酿肉</content></link>
 <link><url>calo-meal\turkpork.html</url><title>咸</title><content>小猪盖被（烧排骨）</content></link>
 <link><url>calo-meal\zhicake.html</url><title>甜</title><content>空气炸锅芝麻糊蛋糕</content></link>
+<link><url>side-dish\dipsau.html</url><title>咸香辣</title><content>万能蘸料</content></link>
 <link><url>side-dish\egarlic.html</url><title>咸辣</title><content>鸡蛋蒜</content></link>
 <link><url>side-dish\mclj.html</url><title>咸辣</title><content>面炒辣椒</content></link>
 <link><url>side-dish\sgarlic.html</url><title>甜脆</title><content>糖蒜</content></link>
 <link><url>side-dish\sjpd.html</url><title>咸辣</title><content>烧椒皮蛋</content></link>
+<link><url>side-dish\spicray.html</url><title>咸辣</title><content>麻辣小龙虾</content></link>
 <link><url>side-dish\zhimayan.html</url><title>咸香</title><content>芝麻盐</content></link>
 <link><url>slim-dish\cumibeef.html</url><title>咸</title><content>孜然牛肉</content></link>
 <link><url>slim-dish\Egromeat.html</url><title>咸</title><content>黄金肉蛋卷</content></link>
 <link><url>slim-dish\MapoTofu.html</url><title>咸辣</title><content>麻婆豆腐</content></link>
 <link><url>slim-dish\pidantofu.html</url><title>咸</title><content>皮蛋豆腐</content></link>
 <link><url>slim-dish\shirchi.html</url><title>咸</title><content>虾滑鸡翅</content></link>
-<link><url>slim-dish\silkbean.html</url><title>咸</title><content>三丝爆豆</content></link>
+<link><url>slim-dish\silkbean.html</url><title>咸酥</title><content>三丝爆豆</content></link>
 <link><url>slim-dish\soychi.html</url><title>咸</title><content>酱油手撕鸡</content></link>
 <link><url>slim-dish\steamegg.html</url><title>咸香</title><content>水蒸蛋</content></link>
 
