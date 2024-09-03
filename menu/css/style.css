@@ -9,32 +9,32 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 .Active{float:left; width:82px; height:34px; line-height:32px; text-align:center;background-color: #f8f0e1;
 border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181; }
 .aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
-.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:212px;left:calc(50% - 165px);z-index: 10;}
+.FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:172px;left:calc(50% - 165px);z-index: 10;}
 .FenLei li a{color:#000000; text-decoration:none; font-size:18px; font-weight:bold; display: block;  border-radius: 10px;}
 .FenLei li a:hover{background-color: #f8f0e1;}
 
 
 .clearfix{clear:both}
 
-.nb_body{ background:url(../images/topbg_1.jpg) #deceb0 repeat-x fixed left -24px; height:auto; }
+.nb_body{ background:url(../images/head.jpg) #deceb0 repeat-x fixed left -24px; height:auto; }
 .nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
-.header{position: absolute; float:right; top: 70px; right: 20px; z-index: 800;}
+.header{position: absolute; float:right; top: 100px; right: 20px; z-index: 800;}
 .header li{background-color: rgba(142, 255, 12, 0.3);border-radius:40%;width: 90px; height: 30px; text-align:center;}
 .header li:hover{background-color: rgba(142, 255, 12, 1);}
 .header li a{display: block;font-size: 20px; width: 80px; height: 20px; font-weight:bold;
 background-color: rgba(255, 255, 255, 0.5);border-radius: 40%;text-decoration:none;}
 
 .homeName{ margin:0px auto;color: #8a703e; height:212px;
-background-image:url(../images/headbgn.jpg); height:212px;}
+background-image:rgba(0,0,0,0); height:212px;}
 
 .myFamilyName{
-position:relative;height:60px; line-height:60px; color:#8a703e; font-size:28px;top:52px; font-weight:bold;
+position:relative;height:60px; line-height:60px; color:#268a26; font-size:28px;top:82px; font-weight:bold;
 display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
  }
 .myFamilyName i{ font-style:normal;}
-.myFamilyInfo{width:280px; height:30px; line-height:30px; position:absolute; right:0px; top:92px; font-size:14px;} 
+.myFamilyInfo{width:280px; height:30px; line-height:30px; position:absolute; right:0px; top:122px; font-size:14px;} 
 
 .nb_nav{ background:url(../images/nav_bg.jpg) no-repeat center top;height:32px;width: 1004px; overflow: visible;}
 .nb_nav .nav2{ height:100%; line-height:32px;width: 100vw;max-width: 100%; overflow: visible;/*超出部分可见*/
@@ -46,7 +46,7 @@ display:flex; justify-content:center; align-items:flex-end; flex-direction: row;
 .nav2 .selected{ background:url(../images/tabbg.jpg) no-repeat center bottom; width:82px;  font-size:14px; font-weight:bold;}
 .nav2 .selected a{color:#60430d; text-decoration:none;} 
 
-.nb_smt{ background: #f8f0e1; border-radius: 10px 10px 0 0;  border: 1.5px solid #b2a181; border-bottom: none; height:10px; margin-top: -3px; overflow: visible; margin-top: 243px;position: relative;z-index: 5;}
+.nb_smt{ background: #f8f0e1; border-radius: 10px 10px 0 0;  border: 1.5px solid #b2a181; border-bottom: none; height:10px; margin-top: -3px; overflow: visible; margin-top: 203px;position: relative;z-index: 5;}
 .nb_cnt{ background: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none; border-top: none; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
