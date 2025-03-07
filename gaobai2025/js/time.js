@@ -1,6 +1,6 @@
 function showTime() { 
 	var currentDate = new Date(); 
-	var startDate = new Date(2024, 03, 06);
+	var startDate = new Date(2025, 02, 02);
 	var date3 = currentDate-startDate;
 	var days=Math.floor(date3/(24*3600*1000));
 	var leave1=date3%(24*3600*1000);     //计算天数后剩余的毫秒数
@@ -13,7 +13,7 @@ function showTime() {
 	minutes = "0" + minutes; 
 	if (seconds < 10) 
 	seconds = "0" + seconds; 
-	var currentTimeString = "Dear Chen:<br>"
+	var currentTimeString = "Dear ShiXiaoqian:<br>"
 		+ "我们相遇的时间已过:<br> "
 		+ "&nbsp&nbsp&nbsp&nbsp&nbsp"
 		+ "<c style=\"color: #CCFF99; text-shadow:2px 3px 3px #222; font-family:Microsoft YaHei; font-size:24px\" >" + days +" </c>day " 
@@ -24,7 +24,7 @@ function showTime() {
 		+ "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"
 		+	"<c style=\"color: #CCCCCC; text-shadow:2px 3px 3px #222; font-family:Microsoft YaHei; font-size:20px\">----LiTianpeng </c><br>"
 		+"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"; 
-	var res="from 2024-04-06";
+	var res="from 2025-03-02";
 	var res= res.link('shangye.html');
 	document.getElementById("show").innerHTML=currentTimeString + res;  //改这地方
 	window.setTimeout("showTime()", 1000); 
