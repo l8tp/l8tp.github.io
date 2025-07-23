@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /* CSS Document */
 body{background:#deceb0; padding:0px; margin:0px; font-size:12px;}
 div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; background-color: rgba(0,0,0,0);box-sizing: border-box;}
@@ -95,7 +95,10 @@ margin:0px; padding:0px; }
 .ciel1 ul {margin:0px auto; width:100%; border-bottom: 1px dashed;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
 .ciel1 ul h1{ display: flex; flex-direction: column;flex-shrink: 0; justify-content:center; align-items:flex-start; text-align: justify-all;
-font-size:16px; width:120px; line-height:30px; background:#dfdacc; font-weight:bold; border-radius: 0 10px 10px 0; }
+							font-size:16px; width:120px; line-height:30px; background:#dfdacc; font-weight:bold; border-radius: 0 10px 10px 0; }
+.ciel1 ul h1 a{font-size:16px; line-height:30px; margin-left: 0; text-decoration: none; color: inherit;}
+.ciel1 ul h1 a:hover{color: #0000ff; text-decoration:underline}
+
 .ciel1 ul li{ line-height:30px; color:#333; font-size:12px; 
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start; }/* 设置水平左对齐和垂直居中 */
 .ciel1 ul a{margin: 0 0 0 auto; }
@@ -113,7 +116,9 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 	.ciel1 ul li{display: none; height: 100%;}
 	.ciel1 ul a{margin: 0 auto; }
 	.ciel1 ul h1{font-size:20px; width:auto; max-width:100%; height: 100%; flex-shrink: initial; align-items:center; border-radius: 0 0 10px 10px;}
+	.ciel1 ul h1 a{font-size:20px; margin-left: auto;}
 }
+
 
 
 .ciel2{max-width:800px; margin:0px auto; padding:10px 10px;height: auto; display:flex; flex-direction: column;}
