@@ -9,12 +9,12 @@
 		
         #searchInput {}
 		.leiBie{
-		  margin: 0 0 0 40px;
+		  margin: auto;
 		  font-size: 20px;
 		  color: #000000;
 		}
 		.searchys{
-			margin: 5px auto 5px 10px ;
+			margin: auto;
 			background-color: rgba(180, 225, 255, 1.0);
 			border-style: ridge;
 			border-color: rgba(85, 170, 255, 1.0);
@@ -26,9 +26,9 @@
 		.anniu {
 			position: relative;
 			top:30px;
-			left:60px;
+			left:0px;
 			width:330px;
-			margin: 0 0 50px 0;
+			margin: 0 auto 50px auto;
 		}
 		.button { /*正常按钮*/
 		  font-size: 20px;
@@ -149,7 +149,7 @@
   	<button class="button" onclick="appendToInput('酥')" style="background-image: url(images/香.jpg)">酥</button>
   </div>	
 <!-- 搜索框 -->
- <form>
+ <form style="display: flex; flex-direction: column; justify-content:center;">
  <a class="leiBie">难度、菜名</a><input type="text" id="searchInput" class="searchys" placeholder="输入搜索词"><br>
  <a class="leiBie">口味、别名</a><input type="text" id="searchKwei" class="searchys" placeholder="输入搜索词">
  </form>

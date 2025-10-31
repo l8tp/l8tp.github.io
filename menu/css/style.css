@@ -5,12 +5,17 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 
 #mulu{	width: 100vw; max-width: 1004px; height:247px; position: fixed; z-index: 1; top: 0px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
-/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
+/* 当屏幕的宽度小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px ) {
 	#sou{	height:calc(100vh - 50px);}
+	/* 当屏幕的高度小于200的时候，我希望展示出来的内容 */
+	@media screen and (max-height: 200px ) {
+			#sou{	height:calc(100vh);}
 
-	
+	}
 }
+
+
 
 .Active{float:left; width:82px; height:34px; line-height:32px; text-align:center;background-color: #f8f0e1;
 border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181; }
