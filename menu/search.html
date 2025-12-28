@@ -8,6 +8,7 @@
 		body{background:#f8f0e1; padding:0px; margin:0px;}
 		
         #searchInput {}
+				#head2{}
 		.leiBie{
 		  margin: auto;
 		  font-size: 20px;
@@ -173,7 +174,7 @@
      const searchResultsContainer = document.querySelector('.searchResults');  
 	//const声明常量，但其内部属性和元素可以改变
 
-function sousuo () {  //搜索函数
+	function sousuo () {  //搜索函数
 			 const searchKeyword = searchInput.value.toLowerCase();  //输入字符串大写字母转化成小写
 			 const searchKeyword2 = searchKwei.value.toLowerCase();  //输入字符串大写字母转化成小写
 
@@ -185,7 +186,15 @@ function sousuo () {  //搜索函数
 					 searchResultsContainer.style.display = 'none';
 					 return;
 			 }
-
+			 
+			var head2 = document.createElement("li");
+			head2.id = "head2";
+			head2.className = 'aurl';
+			head2.innerHTML = "^收起^";
+			head2.style = "font-size:20px; background:rgba(0, 255, 170, 0.2); color:rgb(0, 170, 0)";
+			searchResultsContainer.appendChild(head2);
+			head2.onclick = function(){searchResultsContainer.style.display = 'none';}//设置一个收起按钮
+			
 			 fetch('all-links.xml')
 					.then(response => response.text())  //读取响应文本
 					.then(data => {  //处理解析后的文本数据
@@ -224,18 +233,18 @@ function sousuo () {  //搜索函数
 					})
 					 .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
 	}
-		searchInput.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}
-		searchKwei.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}
+		searchInput.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
+		searchKwei.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
      //searchInput.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
      //searchKwei.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
 
      // 监听输入框失去焦点事件，隐藏搜索结果弹窗
-     searchInput.addEventListener('blur', function () {
+ //    searchInput.addEventListener('blur', function () {
          // 使用 setTimeout 确保点击搜索结果时能触发链接
-         setTimeout(() => {
-             searchResultsContainer.style.display = 'none';
-         }, 200);  //200毫秒以后隐藏结果弹窗
-     });
+  //       setTimeout(() => {
+  //           searchResultsContainer.style.display = 'none';
+ //        }, 200);  //200毫秒以后隐藏结果弹窗
+//     });
  </script>
 </body>
 </html>
