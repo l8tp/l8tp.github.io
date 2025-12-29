@@ -6,7 +6,7 @@
 			#myid1 {}
 			#root{background-color: royalblue; width: 400px;}/*设置一个id，便于js调用*/
 			.myclass1{background-color: red; width: 600px;}
-			.myclass2{background-color: burlywood; width: 300px;}
+			.myclass2{background-color: burlywood; width: 50px;}
 			.myclass3{background-color: green; width: 300px;}
 		</style>
 	</head>
@@ -47,7 +47,7 @@
 			console.log(div2.className);
 			div2.className = "myclass3";
 			
-			console.log("页面高度".concat(document.documentElement.clientHeight))//获取页面高度
+			console.log("页面高度" + document.documentElement.clientHeight)//获取页面高度
 			console.log(document.body.clientHeight)//获取视口高度
 			
 			//console.log(div1);
@@ -59,8 +59,13 @@
 			
 			div2.innerHTML = "myid2";
 			
-			div2.setAttribute("style","width:".concat(50 + d4 *10).concat("px"));
-			div2.style.height = "".concat(25 + Math.random() * 20).concat("px");//设置CSS属性
+			div2.style.height = 25 + Math.random() * 20 + "px";//设置CSS属性
+			var i2 =1;
+			setInterval(function(){
+				div2.style.width = (50 + i2 *1) + "px";
+				i2++;
+				i2 %= 400;
+			},20);
 	
 		</script>
 		

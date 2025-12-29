@@ -31,12 +31,12 @@ border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom
 .nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
-.header{position: absolute; float:right; top: 100px; right: 20px; z-index: 800;}
+/* .header{position: absolute; float:right; top: 100px; right: 20px; z-index: 800;}
 .header li{background-color: rgba(142, 255, 12, 0.3);border-radius:40%;width: 90px; height: 30px; text-align:center;}
 .header li:hover{background-color: rgba(142, 255, 12, 1);}
 .header li a{display: block;font-size: 20px; width: 80px; height: 20px; font-weight:bold;
 background-color: rgba(255, 255, 255, 0.5);border-radius: 40%;text-decoration:none;}
-
+ */
 .homeName{ margin:0px auto;color: #8a703e; height:212px;
 background-image:rgba(0,0,0,0); height:212px;}
 
@@ -67,7 +67,7 @@ display:flex; justify-content:center; align-items:flex-end; flex-direction: row;
 @media screen and (min-width: 500px) {
 .mainLeft {display: block;}
 .mainRight{width: calc(100% - 183px);}
-.header{display: none;}
+/* .header{display: none;} */
 }
 
 
