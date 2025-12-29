@@ -56,15 +56,16 @@
         .searchResults {
             position: relative;
             top: 10px; /* 调整弹窗的垂直位置 */
-            left: 110px;
-			width: 200px;
+						display:flex;
+						margin: auto;
+						width: 200px;
             z-index: 999; /* 确保弹窗在最上层 */
             background-color: rgba(170, 255, 0, 0.5);
-			border-width: 8px;
-			border-color: rgba(0, 170, 0, 1.0);
-			border-style: outset;
-			border-radius: 20px 20px 20px 20px;
-			font-weight: bold;
+						border-width: 8px;
+						border-color: rgba(0, 170, 0, 1.0);
+						border-style: outset;
+						border-radius: 20px 20px 20px 20px;
+						font-weight: bold;
             padding: 10px;
             display: none;
         }
@@ -233,18 +234,13 @@
 					})
 					 .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
 	}
-		searchInput.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
-		searchKwei.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
+		searchInput.onchange = function(){sousuo()}//按下回车或失去焦点执行函数
+		searchKwei.onchange = function(){sousuo()}//按下回车或失去焦点执行函数
+	//	searchInput.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
+	//	searchKwei.onkeydown = function(eve){if(eve.keyCode===13){sousuo()}}//按下回车才执行函数
      //searchInput.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
      //searchKwei.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
 
-     // 监听输入框失去焦点事件，隐藏搜索结果弹窗
- //    searchInput.addEventListener('blur', function () {
-         // 使用 setTimeout 确保点击搜索结果时能触发链接
-  //       setTimeout(() => {
-  //           searchResultsContainer.style.display = 'none';
- //        }, 200);  //200毫秒以后隐藏结果弹窗
-//     });
  </script>
 </body>
 </html>
