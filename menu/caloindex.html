@@ -1,0 +1,79 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<!-- 设置视口宽度为设备宽度，初始缩放为1.0 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
+		<title>美食</title>
+		<script>
+			var datalink = 'menu.json';//获取json数据链接
+			
+			// 异步加载函数
+			async function loadData(datalink) {
+				// 1. 使用 Fetch API 获取数据
+				const response = await fetch(datalink);
+				// 2. 解析 JSON
+				const data = await response.json();
+				console.log(data);
+				console.log(data.menu);
+				// 3.加载刷新函数刷新数据
+				updata(data);
+			};
+			loadData(datalink)
+			
+			//刷新函数
+			function updata(data){
+				//结构布局
+				var menus = document.getElementById("menus") 
+				menus.innerHTML = '<li><a style="margin: 0 0 0 auto;">ps:详情点击图片</a></li>'
+				var number = 1;
+				for(var menum in data.menu){//for in循环遍历
+					var tito = data.menu[menum].title//标题
+					var imgo = '<img src="calo-meal/images/' + data.menu[menum].title + '.jpg">'//图片
+					
+					var conts = "";//内容
+					for(var i=0;i < 2;i++){
+						conts += "<p>" + data.menu[menum].content[i] + "</p>"
+					}
+					conts += "<p>……</p>"
+					
+					//模版字符串添加
+					menus.innerHTML += `<ul><h1><a href="calo.html?name=${tito}">${number}.${tito}</a></h1><li>${conts}</li><a href="calo.html?name=${tito}">${imgo}</a></ul>`
+					
+					number++;
+				}
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div class="nb_body">
+			<div class="nb_main">
+				<ul class="FenLei"> </ul>
+				<script src="css/fenlei.js"></script> <!-- 菜谱分类将会动态加载到这里 -->
+				<embed id="mulu" src="item.html" type="image/svg+xml" /><!-- 嵌入头部网页 -->
+
+				<div class="nb_are nb_smt"></div> <!-- 内容背景头部-->
+				<div class="nb_are nb_cnt">
+					<div class="mainLeft"> <embed id="sou" src="search.html" type="image/svg+xml" /></div> <!-- 插入左搜索框 -->
+					<div class="mainRight">
+						<div class="mainRightCenter" style="height:auto">
+							<div class="Rrain" style="height:auto">
+								<div class="ciel1" id="menus"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="nb_are nb_fot">
+					<div class="copyRight">
+						&nbsp; 知识共享&copy; 2024
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

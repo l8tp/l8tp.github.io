@@ -1,75 +1,153 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html >
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<!-- 设置视口宽度为设备宽度，初始缩放为1.0 -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<!-- 设置视口宽度为设备宽度，初始缩放为1.0 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
-<title>菜谱集锦</title>
-<style>
-	.ciel2 h1{background-color: rgba(255, 0, 4, 0.5); border-radius:10px;}
-	.ciel2div{max-width: 450px; margin: 10px 0 0 0; display: none;}
-	/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
-	@media screen and (max-width: 500px ) {
-		.ciel2div{display: flex;}
-		.ciel2 ul{display: none;}
-		.ciel2 h1{background-color: rgba(255, 0, 4, 0); border-radius:0; border-width:3px; border-bottom-style: dotted;}
-	}
-	
-</style>
+		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
+		<title>菜谱集锦</title>
+		<style>
+			.ciel2 h1 {
+				background-color: rgba(255, 0, 4, 0.5);
+				border-radius: 10px;
+			}
+
+			.ciediv {
+				max-width: 450px;
+				margin: 10px 0 0 0;
+				display: none;
+			}
+
+			/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
+			@media screen and (max-width: 500px) {
+				.ciediv {
+					display: flex;
+				}
+
+				#maincon {
+					display: none;
+				}
+
+				.ciel2 h1 {
+					background-color: rgba(255, 0, 4, 0);
+					border-radius: 0;
+					border-width: 3px;
+					border-bottom-style: dotted;
+				}
+			}
+		</style>
 
 
-</head>
-<body>
-<div class="nb_body">
-  <div class="nb_main">
-	<ul class="FenLei">	</ul>	<!-- 菜谱分类将会动态加载到这里 -->	
-	<script src="css/fenlei.js"></script> <!-- 菜谱分类的脚本加载 -->
-	<embed id="mulu" src="item.html" type="image/svg+xml"/><!-- 嵌入头部网页 -->
-	
-    <div class="nb_are nb_smt"></div> <!-- 内容背景头部-->
-    <div class="nb_are nb_cnt">
-	  <div class="mainLeft"> <embed id="sou" src="search.html" type="image/svg+xml"/> </div>  <!-- 插入左搜索框 -->
-      <div class="mainRight">
-        <div class="mainRightTop"></div>
-        <div class="mainRightCenter" style="height:auto">
-          <div class="Rtitle"><b></b></div>
-          <div class="Rrain" style="height:auto">
-            <div class="ciel2" >
-              <h1 align="center">均衡饮食，健康生活</h1>
-							
-							
-							
-              <ul>
-                <div class="shouyebox">
-									<img src="images/首页.jpg">
-				  <p>掌心里的盛宴</p>
-					<p>一食一味，皆是光阴的窖藏。这本小小的集锦，是你我味蕾重逢的地图——它不想成为繁缛步骤的牢笼，而愿化为你掌中明亮的烟火。
-					不论你信手搅动一锅家常的浓汤，抑或郑重迎接一方节庆的糕点，愿那些锅碗盆勺碰响的片刻，都能溢出暖意：食材无需矜贵，只要心诚手巧，柴米油盐亦能绽放万种风情。</p>
-					<p>这些笔墨记下的，不单是食物，更是那些被香气浸泡的瞬间，是生活温度本身。欢迎打开这份关于味道的日记，愿每一次掀动书页，皆是与岁月风味的从容相遇。
-					愿我们在此相遇，于方寸灶台之间，烹饪四季流转，也蒸腾人间烟火——让寻常滋味化作温暖心胃的光。</p>
-                </div>
-              </ul>
-							
-							<div class="ciel2div"><embed id="sou" src="search.html" type="image/svg+xml"/></div>
-							
-							
-            </div>
-　 
- 
-　             </div>
-        </div>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-    <div class="nb_are nb_fot">
-      <div class="copyRight">
-        知识共享&copy; 2024
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</body>
+	</head>
+	<body>
+		<div class="nb_body">
+			<div class="nb_main">
+				<ul class="FenLei"> </ul> <!-- 菜谱分类将会动态加载到这里 -->
+				<script src="css/fenlei.js"></script> <!-- 菜谱分类的脚本加载 -->
+				<embed id="mulu" src="item.html" type="image/svg+xml" /><!-- 嵌入头部网页 -->
+
+				<div class="nb_are nb_smt"></div> <!-- 内容背景头部-->
+				<div class="nb_are nb_cnt">
+					<div class="mainLeft"><div id="soub"></div></div><!-- 插入左搜索框 -->
+					<div class="mainRight">
+						<div class="mainRightTop"></div>
+						<div class="mainRightCenter" style="height:auto">
+							<div class="Rtitle"><b></b></div>
+							<div class="Rrain" style="height:auto">
+								<div class="ciel2">
+									<h1 align="center">均衡饮食，健康生活</h1>
+									<ul id="maincon">
+										<div class="shouyebox">
+											<img src="images/首页.jpg">
+											<p>掌心里的盛宴</p>
+											<p>一食一味，皆是光阴的窖藏。这本小小的集锦，是你我味蕾重逢的地图——它不想成为繁缛步骤的牢笼，而愿化为你掌中明亮的烟火。
+												不论你信手搅动一锅家常的浓汤，抑或郑重迎接一方节庆的糕点，愿那些锅碗盆勺碰响的片刻，都能溢出暖意：食材无需矜贵，只要心诚手巧，柴米油盐亦能绽放万种风情。</p>
+											<p>这些笔墨记下的，不单是食物，更是那些被香气浸泡的瞬间，是生活温度本身。欢迎打开这份关于味道的日记，愿每一次掀动书页，皆是与岁月风味的从容相遇。
+												愿我们在此相遇，于方寸灶台之间，烹饪四季流转，也蒸腾人间烟火——让寻常滋味化作温暖心胃的光。</p>
+										</div>
+									</ul>
+									<div class="ciediv">
+										<div id="sou"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="nb_are nb_fot">
+					<div class="copyRight">
+						知识共享&copy; 2024
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<script>
+			// 异步加载HTML组件
+			async function loadComponent(containerId, filePath) {
+				const container = document.getElementById(containerId);
+				if (!container) return;
+
+				const response = await fetch(filePath);
+				const html = await response.text();
+				//   container.innerHTML = html;
+
+				const tempdiv = document.createElement('div');
+				tempdiv.innerHTML = html;
+
+				const element = tempdiv.querySelector('#seamain')
+				container.innerHTML = element.innerHTML;
+
+			}
+
+			//防抖函数
+			function debounce(fn, delay) {
+				let timer = null;
+				return function() {
+					clearTimeout(timer);
+					timer = setTimeout(fn, delay);
+				}
+			}
+
+			//加载组件
+			function loadclear() {
+				var vvdh = window.innerWidth
+				if (vvdh < 500) {
+					loadComponent('sou', 'search.html');
+					document.getElementById('soub').innerHTML = "";
+				} else {
+					loadComponent('soub', 'search.html');
+					document.getElementById('sou').innerHTML = "";
+				}
+			}
+
+			var vvdh = window.innerWidth
+			//页面加载完成后加载组件
+			document.addEventListener('DOMContentLoaded', function() {
+				loadclear()
+				//窗口大小变化
+				window.addEventListener('resize', debounce(function() {
+					var vvdhnew = window.innerWidth;
+					console.log('窗口大小变化了' );
+					if((vvdh<500&&vvdhnew>500)||(vvdh>500&&vvdhnew<500)){
+						loadclear();
+						if(vvdhnew - vvdh > 0){
+							console.log(`窗口变宽，已重新加载`);
+						}else{
+							console.log('窗口变窄，已重新加载');
+						}
+						vvdh = vvdhnew;
+					}
+				}, 100))
+				
+			}
+			
+			);
+		</script>
+		<script src="css/search.js"></script>
+	</body>
 </html>

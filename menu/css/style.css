@@ -5,9 +5,27 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 
 #mulu{	width: 100vw; max-width: 1004px; height:247px; position: fixed; z-index: 1; top: 0px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
+
+#soub{max-width: 100%; height:auto; position: relative; display: flex; flex-direction: column; }
+#soub div{width: auto;}
+#soub div button{width: 35px; height: 35px; border-width: initial; margin: 3px; font-size: 17px;}
+#soub div ul{border-width: 0; background-color: rgba(170, 255, 0, 0.1);}
+#soub div ul li{padding: 3px 5px; font-size: 17px;}
+#soub div ul li.aurlb{background: rgba(0, 255, 170, 0.05);}
+
+#soub div ul li a{font-size: 17px; line-height: initial; text-decoration-line:none;}
+
+#soub form a{font-size: 17px;}
+#soub form input{width: 150px; height: 20px; border-width: initial;}
+#Results{display: none;}
+#sResults{display: flex; flex-direction: column; margin: 10px auto; width: 200px;}
+#sResults li{ flex-direction: row; font-size: 20px;}
+#sResults li a{margin: 0 auto 0 0;}
+
 /* 当屏幕的宽度小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px ) {
-	#sou{	height:calc(100vh - 50px);}
+	#sou{	height:auto;}
+	#soub{display: none;}
 	/* 当屏幕的高度小于200的时候，我希望展示出来的内容 */
 	@media screen and (max-height: 200px ) {
 			#sou{	height:calc(100vh);}
@@ -19,7 +37,9 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 
 .Active{float:left; width:82px; height:34px; line-height:32px; text-align:center;background-color: #f8f0e1;
 border-radius: 10px 10px 0 0;border-style: solid;border-width: 1px;border-bottom: none;border-color: #b2a181; }
-.aurl{float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
+.aurl{float:left; width:auto; height:auto; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
+.aurlb{background: rgba(0, 255, 170, 0.2);text-align:center; border-radius: 10px;}
+
 .FenLei{width: 330px; max-width: 100%; height:39px;position: absolute; top:172px;left:calc(50% - 165px);z-index: 10;}
 .FenLei li a{color:#000000; text-decoration:none; font-size:18px; font-weight:bold; display: block;  border-radius: 10px;}
 .FenLei li a:hover{background-color: #f8f0e1;}
@@ -61,7 +81,7 @@ display:flex; justify-content:center; align-items:flex-end; flex-direction: row;
 .nb_cnt{ background: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none; border-top: none; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
 .nb_fot{ background:url(../images/fot_bg.jpg) no-repeat center top; height:200px;}
 
-.mainLeft{width:183px; height:500px; flex-shrink: 0; flex-grow: 0; display: none;}
+.mainLeft{width:183px; height:auto; flex-shrink: 0; flex-grow: 0; display: none;}
 .mainRight{width:100%;  margin: 0 auto; }
 /* 当屏幕的尺寸大于500的时候，我希望展示出来的内容 */
 @media screen and (min-width: 500px) {
@@ -158,6 +178,99 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 	
 }
 
+		.leiBie{
+		  margin: auto;
+		  font-size: 20px;
+		  color: #000000;
+		}
+		.searchys{
+			margin: auto;
+			background-color: rgba(180, 225, 255, 1.0);
+			border-style: ridge;
+			border-color: rgba(85, 170, 255, 1.0);
+			border-radius: 10px 30px 30px 10px;
+			border-width: 8px;
+			width: 210px;
+			height: 40px;
+		}
+		.anniu {
+			position: relative;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content:center;
+			top:30px;
+			width:280px;
+			margin: 0 auto 50px auto;
+		}
+		.button { /*正常按钮*/
+		  font-size: 20px;
+		  margin: 5px;
+		  width: 50px;
+		  height: 50px;
+		  border-style:outset;
+		  border-width:5px;
+		  border-radius: 7px;
+		  border-color:#ccc;
+		  background-color: #ccc;
+		  color: #000000;
+		  cursor: pointer;
+		  background-size:cover ;
+		  background-repeat: no-repeat;
+		}
+		.button:active{
+		  border-color:#767676;
+		  background-color: #767676;
+		}
+		.button2 { /*正常按钮*/
+		  font-size: 20px;
+		  margin: auto;
+		  width: 200px;
+		  height: 50px;
+		  border-style:outset;
+		  border-width:5px;
+		  border-radius: 7px;
+		  border-color:#ccc;
+		  background-color: #ccc;
+		  color: #000000;
+		  cursor: pointer;
+		  background-size:cover ;
+		  background-repeat: no-repeat;
+		}
+		.button2:active{
+		  border-color:#767676;
+		  background-color: #767676;
+		}
+		
+		.searchResults {
+				display:flex;
+				flex-direction: column;
+				margin: 10px auto;
+				width: 200px;
+				z-index: 999; /* 确保弹窗在最上层 */
+				background-color: rgba(170, 255, 0, 0.5);
+				border-width: 8px;
+				border-color: rgba(0, 170, 0, 1.0);
+				border-style: outset;
+				border-radius: 20px 20px 20px 20px;
+				font-weight: bold;
+				padding: 10px;
+		}
+		.searchResults li {
+				list-style-type: none;
+				padding: 5px 5px;
+				font-size: 20px;
+				font-style: italic;
+				color: rgb(255, 0, 0);
+		}
+		.searchResults li a{
+			color: #0000ff;
+			
+			font-size: 20px;
+			font-style: normal;
+			text-decoration-thickness:1;
+			text-decoration-style: dashed;
+			text-decoration-color: red;
+			}
 
 
 

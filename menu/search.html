@@ -1,244 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>搜索</title>
-    <style>
-		body{background:#f8f0e1; padding:0px; margin:0px;}
-		
-        #searchInput {}
-				#head2{}
-		.leiBie{
-		  margin: auto;
-		  font-size: 20px;
-		  color: #000000;
-		}
-		.searchys{
-			margin: auto;
-			background-color: rgba(180, 225, 255, 1.0);
-			border-style: ridge;
-			border-color: rgba(85, 170, 255, 1.0);
-			border-radius: 10px 30px 30px 10px;
-			border-width: 8px;
-			width: 210px;
-			height: 40px;
-		}
-		.anniu {
-			position: relative;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content:center;
-			top:30px;
-			width:280px;
-			margin: 0 auto 50px auto;
-		}
-		.button { /*正常按钮*/
-		  font-size: 20px;
-		  margin: 5px;
-		  width: 50px;
-		  height: 50px;
-		  border-style:outset;
-		  border-width:5px;
-		  border-radius: 7px;
-		  border-color:#ccc;
-		  background-color: #ccc;
-		  color: #000000;
-		  cursor: pointer;
-		  background-size:cover ;
-		  background-repeat: no-repeat;
-		}
-		.button:active{
-		  border-color:#767676;
-		  background-color: #767676;
-		}
-		
-        .searchResults {
-            position: relative;
-            top: 10px; /* 调整弹窗的垂直位置 */
-						display:flex;
-						margin: auto;
-						width: 200px;
-            z-index: 999; /* 确保弹窗在最上层 */
-            background-color: rgba(170, 255, 0, 0.5);
-						border-width: 8px;
-						border-color: rgba(0, 170, 0, 1.0);
-						border-style: outset;
-						border-radius: 20px 20px 20px 20px;
-						font-weight: bold;
-            padding: 10px;
-            display: none;
-        }
-        .searchResults li {
-            list-style-type: none;
-			padding: 5px 5px;
-			font-size: 20px;
-			font-style: italic;
-			color: rgb(255, 0, 0);
-        }
-		.searchResults li a{
-			color: #0000ff;
-			font-size: 20px;
-			font-style: normal;
-			text-decoration-thickness:1;
-			text-decoration-style: dashed;
-			text-decoration-color: red;
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
+
+		<title>搜索</title>
+		<style>
+			body {
+				background: #f8f0e1;
+				padding: 0px;
+				margin: 0px;
 			}
-/* 当屏幕的尺寸合适的时候，我希望展示出来的内容 */
-@media screen and (width: 183px ) {
-  @media screen and (height:500px ) {
-	body{background:rgba(0, 0, 0, 0)}
-	.leiBie{
-	  font-size: 17px;
-	}
-	
-	.searchys{
-			margin: 5px auto 5px 10px ;
-			width: 150px;
-			height: 20px;
-			border-style: solid;
-			border-width: 1px;
-	}
-	.anniu {
-		top:0;
-		left:0;
-		width:155px;
-		margin: 10px auto 10px 10px;
-	}
-	.button { /*正常按钮*/
-	  font-size: 15px;
-	  margin: 2px;
-	  padding: 0;
-	  width: 30px;
-	  height: 30px;
-	  border-width:3px;
-	  border-radius: 5px;
-	  border-color:rgba(200, 200, 200, 0.2);
-	  background-color: rgba(200,200,200,0.2);
-	  
-	}
-	
-	.searchResults {
-		top: 0px; /* 调整弹窗的垂直位置 */
-		left: 10px;
-		width: 135px;
-		z-index: 999; /* 确保弹窗在最上层 */
-		background-color: rgba(255, 255, 255, 0.2);
-		border-style: none;
-		padding: 0px 5px;
-		}
-	.searchResults li {
-		margin: 7px 0;
-		padding: 0;
-	
-	}
-	.searchResults li a{
-				font-size: 15px;
-				}
-	
-	}
-}
 
-
-
-    </style>
-</head>
-<body>
-  <div class="anniu">
-  	<button class="button" onclick="appendToInput('酸')" style="background-image: url(images/酸.jpg)">酸</button>
-  	<button class="button" onclick="appendToInput('甜')" style="background-image: url(images/甜.jpg)">甜</button>
-  	<button class="button" onclick="appendToInput('辣')" style="background-image: url(images/辣.jpg)">辣</button>
-  	<button class="button" onclick="appendToInput('咸')" style="background-image: url(images/咸.jpg)">咸</button>
-  	<button class="button" onclick="appendToInput('香')" style="background-image: url(images/香.jpg)">香</button>
-  	<button class="button" onclick="appendToInput('酥')" style="background-image: url(images/香.jpg)">酥</button>
-  	<button class="button" onclick="appendToInput('软')" style="background-image: url(images/甜.jpg)">软</button>
-  </div>	
-<!-- 搜索框 -->
- <form style="display: flex; flex-direction: column; justify-content:center;">
- <a class="leiBie">菜名、别名</a><input type="text" id="searchInput" class="searchys" placeholder="输入搜索词"><br>
- <a class="leiBie">难度、口味</a><input type="text" id="searchKwei" class="searchys" placeholder="输入搜索词">
- </form>
- <!-- 搜索结果 -->
- <ul class="searchResults">
-     <!-- 搜索结果将会动态加载到这里 -->
- </ul>
-
- <!-- JavaScript 代码 -->
- <script>
-	 function appendToInput(taste){
-		 document.getElementById("searchKwei").value = taste;
-		 sousuo ();
-	 }
-	 
-     const searchInput = document.getElementById('searchInput');
-     const searchKwei = document.getElementById('searchKwei');
-     const searchResultsContainer = document.querySelector('.searchResults');  
-	//const声明常量，但其内部属性和元素可以改变
-
-	function sousuo () {  //搜索函数
-			 const searchKeyword = searchInput.value.toLowerCase();  //输入字符串大写字母转化成小写
-			 const searchKeyword2 = searchKwei.value.toLowerCase();  //输入字符串大写字母转化成小写
-
-			 // 清空之前的搜索结果
-			 searchResultsContainer.innerHTML = '';
-
-			 if (searchKeyword.trim() === '' && searchKeyword2.trim() === '') {  //三个等号是恒等运算符  trim删除前后空白字符
-					 // 如果搜索关键字为空，隐藏弹窗并返回
-					 searchResultsContainer.style.display = 'none';
-					 return;
-			 }
-			 
-			var head2 = document.createElement("li");
-			head2.id = "head2";
-			head2.className = 'aurl';
-			head2.innerHTML = "^收起^";
-			head2.style = "font-size:20px; background:rgba(0, 255, 170, 0.2); color:rgb(0, 170, 0)";
-			searchResultsContainer.appendChild(head2);
-			head2.onclick = function(){searchResultsContainer.style.display = 'none';}//设置一个收起按钮
-			
-			 fetch('all-links.xml')
-					.then(response => response.text())  //读取响应文本
-					.then(data => {  //处理解析后的文本数据
-							 const parser = new DOMParser();  //XML字符串解析为DOM树
-							 const xmlDoc = parser.parseFromString(data, 'application/xml');  //解析为DOM树
-							 const links = xmlDoc.querySelectorAll('link');  //选择所有的link标签
-
-							 let hasResults = false;  //设置没有结果
-
-							 links.forEach(link => {  //遍历每一个link
-									 const url = link.querySelector('url').textContent.toLowerCase();  //选择标签内的文本内容
-									 const title = link.querySelector('title').textContent.toLowerCase();
-									 const content = link.querySelector('content').textContent.toLowerCase();
-
-									 if ((url.includes(searchKeyword) || content.includes(searchKeyword)) && title.includes(searchKeyword2)) {
-											 const li = document.createElement('li');  //动态创建一个空白列表
-											 li.className = 'aurl';  //设置列表属性
-											 li.innerHTML = `<a href="${url}" target="_top" rel="external nofollow"  data-lastfrom="" title="${title}">${content}</a>`;
-					 //设置列表内容。反引号代表模板字符串
-											 searchResultsContainer.appendChild(li);  //选择并添加子节点
-											 hasResults = true;  //设置拥有结果
-									 }
-							 });
-
-							 // 根据搜索结果显示或隐藏弹窗
-						if (hasResults == true){
-							 searchResultsContainer.style.display = 'block'
-						}else{
-							 searchResultsContainer.style.display = 'block'
-							 const li = document.createElement('li');  //动态创建一个空白列表
-							 li.className = 'aurl';  //设置列表属性
-							 li.innerHTML = '没搜到';
-							 //设置列表内容。反引号代表模板字符串
-							 searchResultsContainer.appendChild(li);  //选择并添加子节点
-						}
-					})
-					 .catch(error => console.error('Error fetching XML:', error));  //捕获错误并显示在控制台
-	}
-		searchInput.onchange = function(){sousuo()}//按下回车或失去焦点执行函数
-		searchKwei.onchange = function(){sousuo()}//按下回车或失去焦点执行函数
-     //searchInput.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
-     //searchKwei.addEventListener('input', function(){sousuo()}	 ); //输入事件发生后执行函数
-
- </script>
-</body>
+		</style>
+	</head>
+	<body>
+		<div id="seamain">
+			<div class="anniu">
+				<button class="button" onclick="appendToInput('酸')" style="background-image: url(images/酸.jpg)">酸</button>
+				<button class="button" onclick="appendToInput('甜')" style="background-image: url(images/甜.jpg)">甜</button>
+				<button class="button" onclick="appendToInput('辣')" style="background-image: url(images/辣.jpg)">辣</button>
+				<button class="button" onclick="appendToInput('咸')" style="background-image: url(images/咸.jpg)">咸</button>
+				<button class="button" onclick="appendToInput('香')" style="background-image: url(images/香.jpg)">香</button>
+				<button class="button" onclick="appendToInput('酥')" style="background-image: url(images/香.jpg)">酥</button>
+				<button class="button" onclick="appendToInput('软')" style="background-image: url(images/甜.jpg)">软</button>
+			</div>
+			<!-- 搜索框 -->
+			<form style="display: flex; flex-direction: column; justify-content:center;">
+				<a class="leiBie">菜名、别名</a><input type="text" onchange="sousuo()" id="searchInput" class="searchys" placeholder="输入搜索词"><br>
+				<a class="leiBie">难度、口味</a><input type="text" onchange="sousuo()" id="searchKwei" class="searchys" placeholder="输入搜索词">
+			</form>
+			<!-- 搜索结果 -->
+			<div id = Results>
+				<ul class="searchResults" id="sResults">
+					<!-- 搜索结果将会动态加载到这里 -->
+				</ul>
+			</div>
+			<!-- JavaScript 代码 -->
+			<script src="css/search.js"></script>
+		</div>
+	</body>
 </html>
