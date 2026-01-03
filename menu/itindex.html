@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
-		<title>美食</title>
+		<title id="tite">美食</title>
 	</head>
 	<body>
 		<div class="nb_body">
@@ -79,6 +79,15 @@
 				}
 				console.log(`已加载${number}条菜谱`)
 			}
+			//刷新页面标题
+			if(grup == 'slim'){
+				document.getElementById("tite").innerHTML = "轻食"
+			}else{
+				if(grup == 'side'){
+					document.getElementById("tite").innerHTML = "佐食"
+				}
+			}
+			
 		</script>
 
 		<script src="css/loadsearchhtml.js"></script>
