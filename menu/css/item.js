@@ -15,15 +15,15 @@ async function loadmulu(datalink) {
 	for (let n in itdat) {
 		if (n == "index") {
 			if(Uname == null){
-				itcon.innerHTML += `<li><a href="index.html" style="background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;">${itdat[n]}</a></li>`
+				itcon.innerHTML += `<li><a id="${n}" href="index.html" style="background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;">${itdat[n]}</a></li>`
 			}else{
-				itcon.innerHTML += `<li><a href="index.html">${itdat[n]}</a></li>`
+				itcon.innerHTML += `<li><a id="${n}" href="index.html">${itdat[n]}</a></li>`
 			}
 		} else {
-			if(n == Uname){
-				itcon.innerHTML += `<li><a href="itindex.html?name=${n}" style="background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;">${itdat[n]}</a></li>`
+			if(Uname == n){
+				itcon.innerHTML += `<li><a id="${n}" href="itindex.html?name=${n}" style="background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;">${itdat[n]}</a></li>`
 			}else{
-				itcon.innerHTML += `<li><a href="itindex.html?name=${n}">${itdat[n]}</a></li>`
+				itcon.innerHTML += `<li><a id="${n}" href="itindex.html?name=${n}">${itdat[n]}</a></li>`
 			}
 		}
 	}

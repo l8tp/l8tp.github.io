@@ -18,7 +18,7 @@
 	<body>
 		<div class="nb_body">
 			<div class="nb_main">
-				<ul class="FenLei" id="flei"> </ul>
+				<ul class="FenLei" id="flei"> </ul><!-- 菜谱分类将会动态加载到这里 -->
 				<embed id="mulu" src="item.html" type="image/svg+xml" /><!-- 嵌入头部网页 -->
 
 				<div class="nb_are nb_smt"></div><!-- 内容背景头部 -->
@@ -89,9 +89,12 @@
 						console.log(`已加载${Number(i)+1}条菜谱步骤`);
 						//刷新页面标题
 						document.getElementById("tite").innerHTML = data[n].title
+						//刷新目录标记
+						document.getElementById(data[n].group).style.cssText = "background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;"
 					}
 				}
 			}
+			
 		</script>
 
 		<script src="css/loadsearchhtml.js"></script>
