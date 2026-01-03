@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<!-- 设置视口宽度为设备宽度，初始缩放为1.0 -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
+
+		<title id="tite"></title>
+		<style>
+			#conts {
+				text-indent: 2em
+			}
+		</style>
+
+	</head>
+	<body>
+		<div class="nb_body">
+			<div class="nb_main">
+				<ul class="FenLei" id="flei"> </ul>
+				<embed id="mulu" src="item.html" type="image/svg+xml" /><!-- 嵌入头部网页 -->
+
+				<div class="nb_are nb_smt"></div><!-- 内容背景头部 -->
+				<div class="nb_are nb_cnt">
+					<div class="mainLeft">
+						<div id="soub"></div>
+					</div> <!-- 插入左搜索框 -->
+					<div class="mainRight">
+						<div class="mainRightCenter">
+							<div class="Rrain">
+								<div class="ciel2">
+									<h1 id="tito"></h1>
+									<ul>
+										<li id="conts"></li>
+									</ul>
+									<a id="imgo"></a>
+									<li id="hrefo"></li>
+								</div>
+								　
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="nb_are nb_fot">
+					<div class="copyRight">
+						&nbsp; 知识共享&copy; 2024
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="css/item.js"></script>
+		
+		<script>
+			const param = new URLSearchParams(window.location.search);
+			var grup = param.get("name"); //获取URL数据
+
+			// 异步加载函数
+			async function loadData(datalink) {
+				// 1. 使用 Fetch API 获取数据
+				const response = await fetch(datalink);
+				// 2. 解析 JSON
+				const data = await response.json();
+				console.log('获取数据成功');
+				// 3.加载刷新函数刷新数据
+				updata(data);
+			};
+			loadData(datalink)
+
+			//刷新函数
+			function updata(data) {
+				for (let n in data) {
+					if (grup == data[n].title) {
+
+						//刷新标题
+						document.getElementById("tito").innerHTML = data[n].title
+						//刷新图片
+						document.getElementById("imgo").innerHTML = '<img src="images/menuimg/' + data[n].title + '.jpg">'
+						//刷新链接
+						if (data[n].href == "") {
+							document.getElementById("hrefo").innerHTML = '<a>无视频链接</a>'
+						} else {
+							document.getElementById("hrefo").innerHTML = '<a href="' + data[n].href + '">点击打开抖音视频</a>'
+						}
+						//刷新内容
+						for (var i in data[n].content) {
+							document.getElementById("conts").innerHTML += ("<p>" + data[n].content[i] + "</p>")
+						}
+						console.log(`已加载${Number(i)+1}条菜谱步骤`);
+						//刷新页面标题
+						document.getElementById("tite").innerHTML = data[n].title
+					}
+				}
+			}
+		</script>
+
+		<script src="css/loadsearchhtml.js"></script>
+		<script src="css/search.js"></script>
+
+	</body>
+</html>

@@ -2,8 +2,6 @@
 				document.getElementById("searchKwei").value = taste;
 				sousuo();
 			}
-			// document.getElementById('searchInput').onchange = function(){sousuo()}//按下回车或失去焦点执行函数
-			// document.getElementById('searchKwei').onchange = function(){sousuo()}//按下回车或失去焦点执行函数
 			
 			function btn (){document.getElementById('Results').style.display='none'}
 			function sousuo () {  //搜索函数，开始搜索准备
@@ -12,7 +10,6 @@
 				var sKname = document.getElementById('searchInput').value.toLowerCase();  //输入字符串大写字母转化成小写
 				var sKwei = document.getElementById('searchKwei').value.toLowerCase();  //输入字符串大写字母转化成小写
 				console.log(sKname + " " + sKwei)
-				console.log(RContainer)
 				loadData('menu.json')//调用异步函数加载json数据并匹配
 				// 异步加载函数
 				async function loadData(datalink) {
@@ -20,19 +17,18 @@
 					const response = await fetch(datalink);
 					// 2. 解析 JSON
 					const data = await response.json();
-//					console.log(data.menu);
+					// console.log(data);
 					// 3.对比数据并刷新显示
 					var number = 1;
 					var hasResults = false;
 					RContainer.style.display = 'flex'
-					console.log(RContainer.style.display)
 					SRContainer.innerHTML =""
 					SRContainer.innerHTML = `<li class="aurlb" id="head2" onclick="btn()" style = "color:rgb(0, 170, 0)">^收起^</li>`//设置一个收起按钮
-					for(var i in data.menu){
-		//				console.log(i)
-						if((i.includes(sKname)||data.menu[i].nameb.includes(sKname))&&data.menu[i].kowei.includes(sKwei)){
-							console.log(`${i}包含“${sKname}” 而且 ${data.menu[i].kowei}包含“${sKwei}”`)
-							SRContainer.innerHTML += `<li><a href="calo.html?name=${i}" class='aurl'>${number}.${i}</a></li>`
+					for(var i in data){
+						//  console.log(i)
+						if((data[i].title.includes(sKname)||data[i].nameb.includes(sKname))&&data[i].kowei.includes(sKwei)){
+							console.log(`${data[i].title}包含“${sKname}” 而且 ${data[i].kowei}包含“${sKwei}”`)
+							SRContainer.innerHTML += `<li><a href="menu.html?name=${data[i].title}" class='aurl'>${number}.${data[i].title}</a></li>`
 							number++;
 							hasResults = true;
 						}

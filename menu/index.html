@@ -44,8 +44,7 @@
 	<body>
 		<div class="nb_body">
 			<div class="nb_main">
-				<ul class="FenLei"> </ul> <!-- 菜谱分类将会动态加载到这里 -->
-				<script src="css/fenlei.js"></script> <!-- 菜谱分类的脚本加载 -->
+				<ul class="FenLei" id="flei"> </ul> <!-- 菜谱分类将会动态加载到这里 -->
 				<embed id="mulu" src="item.html" type="image/svg+xml" /><!-- 嵌入头部网页 -->
 
 				<div class="nb_are nb_smt"></div> <!-- 内容背景头部-->
@@ -85,9 +84,10 @@
 			</div>
 		</div>
 		</div>
-
+		<script src="css/item.js"></script>
+		
 		<script>
-			// 异步加载HTML组件
+			// 异步加载HTML组件，首页的搜索组件与其他页面不同，分为两个
 			async function loadComponent(containerId, filePath) {
 				const container = document.getElementById(containerId);
 				if (!container) return;
@@ -128,24 +128,24 @@
 			var vvdh = window.innerWidth
 			//页面加载完成后加载组件
 			document.addEventListener('DOMContentLoaded', function() {
-				loadclear()
-				//窗口大小变化
-				window.addEventListener('resize', debounce(function() {
-					var vvdhnew = window.innerWidth;
-					console.log('窗口大小变化了' );
-					if((vvdh<500&&vvdhnew>500)||(vvdh>500&&vvdhnew<500)){
-						loadclear();
-						if(vvdhnew - vvdh > 0){
-							console.log(`窗口变宽，已重新加载`);
-						}else{
-							console.log('窗口变窄，已重新加载');
+					loadclear()
+					//窗口大小变化
+					window.addEventListener('resize', debounce(function() {
+						var vvdhnew = window.innerWidth;
+						console.log('窗口大小变化了');
+						if ((vvdh < 500 && vvdhnew > 500) || (vvdh > 500 && vvdhnew < 500)) {
+							loadclear();
+							if (vvdhnew - vvdh > 0) {
+								console.log(`窗口变宽，已重新加载`);
+							} else {
+								console.log('窗口变窄，已重新加载');
+							}
+							vvdh = vvdhnew;
 						}
-						vvdh = vvdhnew;
-					}
-				}, 100))
-				
-			}
-			
+					}, 100))
+
+				}
+
 			);
 		</script>
 		<script src="css/search.js"></script>
