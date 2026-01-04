@@ -42,7 +42,7 @@ border-radius: 10px 10px 0 0; border: 1.5px solid #b2a181; border-bottom: none; 
 .FenLei{width: 330px; max-width: 100%; position: absolute; top:175px; height:30px; left:calc(50% - 165px);z-index: 10; display: flex; justify-content:center;;}
 .FenLei li{width: 100%; height: 100%;}
 .FenLei li a{ height: 100%; color:#000000; text-decoration:none; font-size:18px; font-weight:bold; display: block;  border-radius: 10px 10px 0 0; margin: 0 3px; width: 100%;text-align:center;}
-.FenLei li a:hover{background-color: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none;}
+.FenLei li a:hover{background-color: rgba(248, 240, 225, 0.5); text-decoration: underline;}
 /* 当屏幕的宽度小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px) {
 	.FenLei{top:170px; height:35px; }
