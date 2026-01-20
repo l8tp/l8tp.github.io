@@ -34,8 +34,8 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 }
 
 
-/* .Active{float:left; width:100%; height:auto; text-align:center;background-color: #f8f0e1;
-border-radius: 10px 10px 0 0; border: 1.5px solid #b2a181; border-bottom: none; } */
+
+.reconmmend{}
 .aurl{float:left; width:auto; height:auto; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
 .aurlb{background: rgba(0, 255, 170, 0.2);text-align:center; border-radius: 10px;}
 
@@ -177,130 +177,95 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 	
 }
 
-		.leiBie{
-		  margin: auto;
-		  font-size: 20px;
-		  color: #000000;
-		}
-		.searchys{
-			margin: auto;
-			background-color: rgba(180, 225, 255, 1.0);
-			border-style: ridge;
-			border-color: rgba(85, 170, 255, 1.0);
-			border-radius: 10px 30px 30px 10px;
-			border-width: 8px;
-			width: 210px;
-			height: 40px;
-		}
-		.anniu {
-			position: relative;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content:center;
-			top:30px;
-			width:280px;
-			margin: 0 auto 50px auto;
-		}
-		.button { /*正常按钮*/
-		  font-size: 20px;
-		  margin: 5px;
-		  width: 50px;
-		  height: 50px;
-		  border-style:outset;
-		  border-width:5px;
-		  border-radius: 7px;
-		  border-color:#ccc;
-		  background-color: #ccc;
-		  color: #000000;
-		  cursor: pointer;
-		  background-size:cover ;
-		  background-repeat: no-repeat;
-		}
-		.button:active{
-		  border-color:#767676;
-		  background-color: #767676;
-		}
-		.button2 { /*正常按钮*/
-		  font-size: 20px;
-		  margin: auto;
-		  width: 200px;
-		  height: 50px;
-		  border-style:outset;
-		  border-width:5px;
-		  border-radius: 7px;
-		  border-color:#ccc;
-		  background-color: #ccc;
-		  color: #000000;
-		  cursor: pointer;
-		  background-size:cover ;
-		  background-repeat: no-repeat;
-		}
-		.button2:active{
-		  border-color:#767676;
-		  background-color: #767676;
-		}
-		
-		.searchResults {
-				display:flex;
-				flex-direction: column;
-				margin: 10px auto;
-				width: 200px;
-				z-index: 999; /* 确保弹窗在最上层 */
-				background-color: rgba(170, 255, 0, 0.5);
-				border-width: 8px;
-				border-color: rgba(0, 170, 0, 1.0);
-				border-style: outset;
-				border-radius: 20px 20px 20px 20px;
-				font-weight: bold;
-				padding: 10px;
-		}
-		.searchResults li {
-				list-style-type: none;
-				padding: 5px 5px;
-				font-size: 20px;
-				font-style: italic;
-				color: rgb(255, 0, 0);
-		}
-		.searchResults li a{
-			color: #0000ff;
-			
-			font-size: 20px;
-			font-style: normal;
-			text-decoration-thickness:1;
-			text-decoration-style: dashed;
-			text-decoration-color: red;
-			}
+.leiBie{margin: auto;font-size: 20px;color: #000000;}
+.searchys{
+	margin: auto;
+	background-color: rgba(180, 225, 255, 1.0);
+	border-style: ridge;
+	border-color: rgba(85, 170, 255, 1.0);
+	border-radius: 10px 30px 30px 10px;
+	border-width: 8px;
+	width: 210px;
+	height: 40px;
+}
+.anniu {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content:center;
+	top:30px;
+	width:280px;
+	margin: 0 auto 50px auto;
+}
+.button { /*正常按钮*/
+	font-size: 20px;
+	margin: 5px;
+	width: 50px;
+	height: 50px;
+	border-style:outset;
+	border-width:5px;
+	border-radius: 7px;
+	border-color:#ccc;
+	background-size:cover ;
+}
+.button:active{
+	border-color:#767676;
+	background-color: #767676;
+}
+/* .button2 {
+	font-size: 20px;
+	margin: auto;
+	width: 200px;
+	height: 50px;
+	border-style:outset;
+	border-width:5px;
+	border-radius: 7px;
+	border-color:#ccc;
+	background-color: #ccc;
+	color: #000000;
+	cursor: pointer;
+	background-size:cover ;
+	background-repeat: no-repeat;
+}
+.button2:active{
+	border-color:#767676;
+	background-color: #767676;
+} */
+
+.searchResults {
+		display:flex;
+		flex-direction: column;
+		margin: 10px auto;
+		width: 200px;
+		z-index: 999; /* 确保弹窗在最上层 */
+		background-color: rgba(170, 255, 0, 0.5);
+		border-width: 8px;
+		border-color: rgba(0, 170, 0, 1.0);
+		border-style: outset;
+		border-radius: 20px 20px 20px 20px;
+		font-weight: bold;
+		padding: 10px;
+}
+.searchResults li {
+		list-style-type: none;
+		padding: 5px 5px;
+		font-size: 20px;
+		font-style: italic;
+		color: rgb(255, 0, 0);
+}
+.searchResults li a{
+	color: #0000ff;
+	
+	font-size: 20px;
+	font-style: normal;
+	text-decoration-thickness:1;
+	text-decoration-style: dashed;
+	text-decoration-color: red;
+	}
 
 
 
 
-
-/*相册*/
-.myPhoto{width:960px; margin:0px auto; height:150px;}
-.myPhoto-top{width:960px; height:10px; background:url(../images/big-top.jpg)  left top no-repeat}
-.myPhoto-center{width:960px; height:130px; background:url(../images/big-center.jpg) left top repeat-y}
-.myPhoto-bottom{width:960px; height:10px; background:url(../images/big-bottom.jpg) left top no-repeat}
-.myPhotoL{width:940px; margin:0px auto; overflow:hidden}
-.myPhotoL ul{width:1470px}
-.myPhotoL ul li{ width:105px; text-align:center; float:left}.myPhotoL img{width:98px}
-
-.myPhotoS{width:660px; margin:50px auto; overflow:hidden}
-.myPhotoS ul{width:3080px}
-.myPhotoS ul li{ width:220px; text-align:center; float:left}.myPhotoS img{width:200px; border-top-left-radius:25px; border-bottom-right-radius:25px; background-clip:border-box}
-
-.ciel3{width:670px; margin:0px auto; padding:10px 0px;}
-.ciel3 h1{margin:0px; padding:0px; font-size:14px; height:30px; line-height:30px; text-indent:1em; background:#dfdacc; font-weight:bold;}
-.ciel3 ul {margin:10px auto; width:650px;}
-.ciel3 ul li{ width:100%; color:#333; font-size:12px; text-align:center}
-.ciel3 a{margin:30px 30px; height:50px; line-height:50px; color:#333; text-decoration:none; font-size:14px}.ciel3 a:hover{text-decoration:underline}
-.myPhotoS div{height:30px; line-height:30px}.myPhotoS a{color:#333; text-decoration:none}.myPhotoS a:hover{text-decoration:underline}
-
-.myPhotoS-list{width:660px; margin:50px auto;}
-.myPhotoS-list ul{width:660px}
-.myPhotoS-list ul li{ width:220px;text-align:center; float:left}.myPhotoS-list img{width:200px; min-height:150px; border-top-left-radius:25px; border-bottom-right-radius:25px; background-clip:border-box}
-.myPhotoS-show{width:660px; margin:20px auto}
-.myPhotoS-show .img{width:660px; overflow:hidden; text-align:center}.img img{width:660px}
-.myPhotoS-show .pages{width:150px; margin:20px auto}
 
 
 
