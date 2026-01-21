@@ -9,12 +9,18 @@
 		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
 		<title>菜谱集锦</title>
 		<style>
+			#recommend{display: flex;flex-direction:column;margin-top: 10px;}
+			#recommend p{text-indent:0;}
+			#recommend li{display: flex;flex-direction:row;margin: auto;font-size: 30px;}
+			#recommend li a{margin: auto 10px; font-size: 20px; border-radius: 10px; background: rgba(255, 213, 0, 0.2);color: black;text-decoration:underline solid #f8f0e1 3px;}
+			#recommend li a:hover{background: rgba(255, 213, 0, 0.5);}
 			.ciel2 h1 {
 				background-color: rgba(255, 0, 4, 0.5);
 				border-radius: 10px;
 			}
 
 			.ciediv {
+				border:solid black; border-width: 1px 0 0 0;
 				max-width: 450px;
 				margin: 10px 0 0 0;
 				display: none;
@@ -22,6 +28,9 @@
 
 			/* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
 			@media screen and (max-width: 500px) {
+				#recommend{flex-direction:row;}
+				#recommend li{flex-direction:column;}
+				#recommend li a{margin:2px auto;}
 				.ciediv {
 					display: flex;
 				}
@@ -67,6 +76,14 @@
 												愿我们在此相遇，于方寸灶台之间，烹饪四季流转，也蒸腾人间烟火——让寻常滋味化作温暖心胃的光。</p>
 										</div>
 									</ul>
+									<div id="recommend">
+										<li><p>推荐菜</p></li>
+										<li>
+											<a>猪肉白菜炖粉条</a>
+											<a>卤肉卤素</a>
+											<a>豌豆尖肉丸汤</a>
+										</li>
+									</div>
 									<div class="ciediv">
 										<div id="sou"></div>
 									</div>
@@ -84,6 +101,18 @@
 			</div>
 		</div>
 		</div>
+		<script>//加载推荐菜
+			loadrecom ('menu.json')
+			async function loadrecom(filePath) {
+				const response = await fetch(filePath);
+				const data = await response.json();
+				const name = document.querySelectorAll('#recommend li a')
+				for(i=0;i<name.length;i++){
+					console.log(name[i])
+					name[i].href = `menu.html?name=${name[i].innerHTML}`
+				}
+			}
+		</script>
 		<script src="css/item.js"></script>
 		
 		<script>
