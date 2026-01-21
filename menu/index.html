@@ -9,7 +9,7 @@
 		<link rel="stylesheet" rev="stylesheet" href="css/style.css" type="text/css" />
 		<title>菜谱集锦</title>
 		<style>
-			#recommend{display: flex;flex-direction:column;margin-top: 10px;}
+			#recommend{display: flex;flex-direction:column;}
 			#recommend p{text-indent:0;}
 			#recommend li{display: flex;flex-direction:row;margin: auto;font-size: 30px;}
 			#recommend li a{margin: auto 10px; font-size: 20px; border-radius: 10px; background: rgba(255, 213, 0, 0.2);color: black;text-decoration:underline solid #f8f0e1 3px;}
@@ -30,7 +30,7 @@
 			@media screen and (max-width: 500px) {
 				#recommend{flex-direction:row;}
 				#recommend li{flex-direction:column;}
-				#recommend li a{margin:2px auto;}
+				#recommend li a{margin:2px 0;}
 				.ciediv {
 					display: flex;
 				}
@@ -40,6 +40,7 @@
 				}
 
 				.ciel2 h1 {
+					display: none;
 					background-color: rgba(255, 0, 4, 0);
 					border-radius: 0;
 					border-width: 3px;
@@ -60,9 +61,9 @@
 				<div class="nb_are nb_cnt">
 					<div class="mainLeft"><div id="soub"></div></div><!-- 插入左搜索框 -->
 					<div class="mainRight">
-						<div class="mainRightTop"></div>
+						<!-- <div class="mainRightTop"></div> -->
 						<div class="mainRightCenter" style="height:auto">
-							<div class="Rtitle"><b></b></div>
+							<!-- <div class="Rtitle"><b></b></div> -->
 							<div class="Rrain" style="height:auto">
 								<div class="ciel2">
 									<h1 align="center">均衡饮食，健康生活</h1>
