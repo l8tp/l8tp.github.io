@@ -63,7 +63,7 @@ position:relative;height:60px; line-height:60px; color:#268a26; font-size:28px;t
 display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
  }
 .myFamilyName i{ font-style:normal;}
-.myFamilyInfo{width:280px; height:30px; line-height:30px; position:absolute; right:0px; top:122px; font-size:14px;} 
+.myFamilyInfo{width:100%; height:30px; line-height:30px; position:absolute; top:122px; font-size:14px;} 
 
 .nb_nav{ background:url(../images/nav_bg.jpg) no-repeat center top;height:32px;width: 1004px; overflow: visible;}
 .nb_nav .nav2{ height:100%; line-height:32px;width: 100vw;max-width: 100%; overflow: visible;/*超出部分可见*/
