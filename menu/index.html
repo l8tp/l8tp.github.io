@@ -103,16 +103,8 @@
 		</div>
 		</div>
 		<script>//加载推荐菜
-			loadrecom ('menu.json')
-			async function loadrecom(filePath) {
-				const response = await fetch(filePath);
-				const data = await response.json();
 				const name = document.querySelectorAll('#recommend li a')
-				for(i=0;i<name.length;i++){
-					console.log(name[i])
-					name[i].href = `menu.html?name=${name[i].innerHTML}`
-				}
-			}
+				for(i=0;i<name.length;i++){name[i].href = `menu.html?name=${name[i].innerHTML}`}
 		</script>
 		<script src="css/item.js"></script>
 		
