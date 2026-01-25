@@ -5,11 +5,11 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 
 #mulu{	width: 100vw; max-width: 1004px; height:247px; position: fixed; z-index: 1; top: 0px;}
 #sou{	width: 100vw; max-width: 100%; height:500px; position: relative; }
+#sou div ul{background-color: rgba(170, 255, 0, 0.5);border-width: 8px;}
 
 #soub{max-width: 100%; height:auto; position: relative; display: flex; flex-direction: column; }
 #soub div{width: auto;}
-#soub div button{width: 35px; height: 35px; border-width: initial; margin: 3px; font-size: 17px;}
-#soub div ul{border-width: 0; background-color: rgba(170, 255, 0, 0.1);}
+#soub div > button{width: 35px; height: 35px; border-width: initial; margin: 3px; font-size: 17px;}
 #soub div ul li{padding: 3px 5px; font-size: 17px;}
 #soub div ul li.aurlb{background: rgba(0, 255, 170, 0.05);}
 
@@ -18,9 +18,6 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 #soub form a{font-size: 17px;}
 #soub form input{width: 150px; height: 20px; border-width: initial;}
 #Results{display: none;}
-#sResults{display: flex; flex-direction: column; margin: 10px auto; width: 200px;}
-#sResults li{ flex-direction: row; font-size: 20px;}
-#sResults li a{margin: 0 auto 0 0;}
 
 /* 当屏幕的宽度小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px ) {
@@ -35,8 +32,8 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 
 
 
-.aurl{float:left; width:auto; height:auto; line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px; display: block;}
-.aurlb{background: rgba(0, 255, 170, 0.2);text-align:center; border-radius: 10px;}
+.aurl{float:left;  line-height:32px; text-align:center;background-color: rgba(255, 255, 255, 0.4);border-radius: 10px;}
+.aurlb{background: rgba(0, 255, 170, 0.2);text-align:center; border-radius: 10px; justify-content: center;}
 
 .FenLei{width: 330px; max-width: 100%; position: absolute; top:175px; height:30px; left:calc(50% - 165px);z-index: 10; display: flex; justify-content:center;}
 .FenLei li{width: 100%; height: 100%;}
@@ -48,32 +45,11 @@ div,ul,li,h1,h2,img,a{margin:0px; padding:0px; border:0px; list-style:none; back
 	.FenLei li a{font-size: 23px;}
 }
 
-
-.clearfix{clear:both}
-
-.nb_body{ background:url(../images/head.jpg) #deceb0 repeat-x fixed left -24px; height:auto; }
-.nb_main{ max-width: 1004px; height:auto; margin:0px auto; position:relative;
+.nb_body{ background:url(../images/head.jpg) #deceb0 repeat-x fixed left -24px;}
+.nb_main{ max-width: 1004px;  margin:0px auto;
 overflow: hidden; /* 超出容器的图片部分将被隐藏 */
 }
-.homeName{ margin:0px auto;color: #8a703e; height:212px;
-background-image:rgba(0,0,0,0); height:212px;}
 
-.myFamilyName{
-position:relative;height:60px; line-height:60px; color:#268a26; font-size:28px;top:82px; font-weight:bold;
-display:flex; justify-content:center; align-items:center;/* 设置水平和垂直居中 */
- }
-.myFamilyName i{ font-style:normal;}
-.myFamilyInfo{width:100%; height:30px; line-height:30px; position:absolute; top:122px; font-size:14px;} 
-
-.nb_nav{ background:url(../images/nav_bg.jpg) no-repeat center top;height:32px;width: 1004px; overflow: visible;}
-.nb_nav .nav2{ height:100%; line-height:32px;width: 100vw;max-width: 100%; overflow: visible;/*超出部分可见*/
-display:flex; justify-content:center; align-items:flex-end; flex-direction: row;/* 设置水平居中和垂直向下对齐 */
-}
-.nav2 ul li{ float:left; width:82px; height:32px; line-height:32px; text-align:center;background-color: rgba(255, 85, 0, 0.3);border-radius: 50%;}
-.nav2 ul li a{ color:#000000; text-decoration:none;background-color: rgba(255, 255, 255, 0.5);border-radius: 50%; font-size:18px; font-weight:bold;}
-.nav2 ul li a:hover{ background-color: rgba(255, 255, 255, 1);}
-.nav2 .selected{ background:url(../images/tabbg.jpg) no-repeat center bottom; width:82px;  font-size:14px; font-weight:bold;}
-.nav2 .selected a{color:#60430d; text-decoration:none;} 
 
 .nb_smt{ background: #f8f0e1; border-radius: 10px 10px 0 0;  border: 1.5px solid #b2a181; border-bottom: none; height:10px; margin-top: -3px; overflow: visible; margin-top: 203px;position: relative;z-index: 5;}
 .nb_cnt{ background: #f8f0e1; border: 1.5px solid #b2a181; border-bottom: none; border-top: none; height:auto; width: 100%; display: flex; flex-direction: row; position: relative;z-index: 5;}
@@ -89,21 +65,7 @@ display:flex; justify-content:center; align-items:flex-end; flex-direction: row;
 }
 
 
-.mainLeftTop{width:241px; height:10px; }
-.mainLeftCenter{width:241px; height:auto; }
-.mainLeftBottom{width:241px; height:10px; }
-.left-title{width:230px; margin-left:10px; height:20px; line-height:20px; color:#555; font-size:12px; color:#605238;}
-.left-photo{width:208px; height:248px; margin:10px auto; border:1px solid #d0c4b3;}
-.left-photo img{ width:200px; height:240px; display:block; padding:4px;}
-.left-name{width:220px; height:30px; line-height:30px; margin:0px auto; color:#333; font-size:16px; text-align:center}
-.left-info{width:200px; margin:15px auto}
-.left-info ul li{width:100%; height:26px; line-height:26px; color:#333}
-
-.mainRightTop{width:auto; height:10px; }
-.mainRightCenter{width:100%;}
-.mainRightBottom{width:auto; height:10px;}
-
-.Rtitle{width:auto; margin-left:10px; line-height:20px; color:#605238}
+/* .Rtitle{width:auto; margin-left:10px; line-height:20px; color:#605238} */
 .Rrain{ width:auto; margin:0px auto; height: auto;font-size:14px; line-height:1.8; color:#444; overflow:hidden}
 .Rrain p{text-indent:2em; /* 首行缩进 */
 margin:0px; padding:0px; }
@@ -153,25 +115,25 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 .ciel2{max-width:800px; margin:0px auto; padding:0px 10px 10px 10px;height: auto; display:flex; flex-direction: column;}
 .ciel2 h1{ font-size:25px; height:30px; line-height:30px; background:#dfdacc; font-weight:bold; text-align: center;}
 .ciel2 h2{ font-style: italic; color: chocolate; font-size:14px; height:30px; line-height:30px; font-weight:bold; text-align:right}
-.ciel2 ul {margin:10px auto; width:100%;
+.ciel2 > ul {margin:10px auto; width:100%;
 display: flex; flex-direction: row;}/*让内部元素横向排列*/
 .shouyebox{line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;}
 .shouyebox img{float:left; width:200px; max-width:50%; margin-right:10px; border-radius: min(15px, 3vw)}
-.ciel2 ul li{ line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;  /* 两端对齐 */
+.ciel2 > ul li{ line-height:30px; color:#333; font-size:12px;  width: 100%; text-align: justify;  /* 两端对齐 */
 display: flex; flex-direction: column; justify-content:center; align-items:flex-start;}/* 设置水平左对齐和垂直居中 */
-.ciel2 ul a{margin: 0 0 0 auto; }
-.ciel2 ul a img{height: 100px;}
-.ciel2 li{display: flex;}
-.ciel2 li a{ font-style: italic; color: chocolate; margin: 0 0 0 auto;}
-.ciel2 a{margin:0 auto;}
-.ciel2 a img{max-height:200px;max-width:100%}
+.ciel2 > ul a{margin: 0 0 0 auto; }
+.ciel2 > ul a img{height: 100px;}
+.ciel2 > li{display: flex;}
+.ciel2 > li a{ font-style: italic; color: chocolate; margin: 0 0 0 auto;}
+.ciel2 > a{margin:0 auto;}
+.ciel2 > a img{max-height:200px;max-width:100%}
 
 
 /* 当屏幕的尺寸小于500的时候，我希望展示出来的内容 */
 @media screen and (max-width: 500px) {
 	.ciel2 h1{font-size: 30px; height: 40px; line-height: 40px;}  /* 可以使文本垂直居中 */
 	.ciel2 h2{font-size: 18px;}
-	.ciel2 ul li{font-size: 18px;}
+	.ciel2 > ul li{font-size: 18px;}
 	.shouyebox{font-size:18px}
 	
 }
@@ -188,13 +150,11 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 	height: 40px;
 }
 .anniu {
-	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content:center;
-	top:30px;
 	width:280px;
-	margin: 0 auto 50px auto;
+	margin: 30px auto 50px auto;
 }
 .button { /*正常按钮*/
 	font-size: 20px;
@@ -219,8 +179,7 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 		margin: 10px auto;
 		width: 200px;
 		z-index: 999; /* 确保弹窗在最上层 */
-		background-color: rgba(170, 255, 0, 0.5);
-		border-width: 8px;
+		background-color: rgba(170, 255, 0, 0.1);
 		border-color: rgba(0, 170, 0, 1.0);
 		border-style: outset;
 		border-radius: 20px 20px 20px 20px;
@@ -232,7 +191,8 @@ display: flex; flex-direction: column; justify-content:center; align-items:flex-
 		padding: 5px 5px;
 		font-size: 20px;
 		font-style: italic;
-		color: rgb(255, 0, 0);
+		/* color: rgb(255, 0, 0); */
+		color:rgb(0, 170, 0);
 }
 .searchResults li a{
 	color: #0000ff;

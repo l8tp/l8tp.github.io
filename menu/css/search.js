@@ -23,7 +23,7 @@
 					var hasResults = false;
 					RContainer.style.display = 'flex'
 					SRContainer.innerHTML =""
-					SRContainer.innerHTML = `<li class="aurlb" id="head2" onclick="btn()" style = "color:rgb(0, 170, 0)">^收起^</li>`//设置一个收起按钮
+					SRContainer.innerHTML = `<li class="aurlb" id="head2" onclick="btn()">^收起^</li>`//设置一个收起按钮
 					for(var i in data){
 						//  console.log(i)
 						if((data[i].title.includes(sKname)||data[i].nameb.includes(sKname))&&data[i].kowei.includes(sKwei)){
