@@ -5,14 +5,11 @@
 
 				const response = await fetch(filePath);
 				const html = await response.text();
-				//   container.innerHTML = html;
-
-				const tempdiv = document.createElement('div');
-				tempdiv.innerHTML = html;
-
-				const element = tempdiv.querySelector('#seamain')
-				container.innerHTML = element.innerHTML;
-
+				//解析DOM
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(html, 'text/html');
+				//加载内容
+				container.innerHTML = doc.querySelector('#seamain').innerHTML
 			}
 
 			//防抖函数
