@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px 100px 20px;
+}
+
+label {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 600;
+    width: auto;
+    align-items: center;
+    justify-content: end;
+}
+
+input {
+    width: auto;
+    flex: 1;
+    padding: 14px 16px;
+    border: 2px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+
+
+/* 蓝天白云列表框 */
+.bluelist{
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap;
+    padding: 10px;
+    background-color: #c0e2ff;
+    border: 2px solid #e2e8f0;
+    border-radius: 0 0 10px 10px;
+    width: 100%;
+}
+.bluelist a{
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    position: relative; 
+    background-color: #ffffff;
+}
+
+
+/* #底部导航栏样式 */
+/* 底部选项卡栏样式 */
+.bottom-tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: white;
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    padding: 6px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* 选项卡项 */
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    color: #7f8c8d;
+}
+
+.tab-item.active {
+    color: #3498db;
+    background-color: rgba(52, 152, 219, 0.1);
+    /* transform: translateY(-5px); */
+}

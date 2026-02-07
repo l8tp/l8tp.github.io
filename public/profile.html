@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        input {width: 100%}
+        
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .user-info {
+            text-align: center;
+            width: 100%;
+        }
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        .btn-secondary {
+            background: #48bb78;
+        }
+        
+        .btn-danger {
+            background: #fc8181;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+
+        .managepanel {
+            display: none;
+            flex-direction: column;
+            row-gap: 10px;
+            margin-bottom: 20px;
+        }
+        .submitarea {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="userInfo" class="user-info">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <div class="managepanel">
+            <button class="btn btn-secondary" onclick="getalluser()">获取所有用户</button>
+            <a id="showalluser"></a>
+            <div style="background-color: rgba(255, 0, 0, 0.1); display: flex; flex-direction: column; gap: 10px; border-radius: 10px;">
+                <form>
+                    <input type="text" id="delusername" placeholder="请输入用户名" style="background-color:  rgba(255, 0, 0, 0.1);">
+                </form>
+                <div style="display: flex; flex-direction: row; gap: 5px;">
+                    <button class="btn btn-danger" onclick="deluser()">删除此用户</button>
+                </div>
+            </div>
+        </div>
+        <!-- 此功能暂时封存
+        <div class="getarea">
+            <button class="btn" onclick="getmypricenote()">我的提交价格记录</button>
+            <a id="pricenote"></a>
+        </div> -->
+        <div style="margin-bottom: 20px; background: #f7fafc; padding: 15px; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: #718096;">用户名:</span>
+                <span id="userName" style="font-weight: 500;"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: #718096;">用户ID:</span>
+                <span id="userId" style="font-weight: 500;"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: #718096;">邮箱:</span>
+                <span id="userEmail" style="font-weight: 500;">未设置</span>
+            </div>
+        </div>
+        
+        <button onclick="logout()" class="btn btn-danger">退出登录</button>
+    </div>
+
+    <div class="bottom-tab-bar"></div>
+    <script src="js/bottombar.js"></script>
+    <script>
+        const API_URL = window.location.origin + '/api';
+        let currentToken = localStorage.getItem('token') || '';
+
+        // 显示用户信息
+        (function showUserInfo() {
+            const user = JSON.parse(localStorage.getItem('user')) 
+            const username = user.username;
+
+            document.getElementById('userName').textContent = user.username;
+            document.getElementById('userId').textContent = user.id;
+            document.getElementById('userEmail').textContent = user.email || '未设置';
+            
+            // 设置用户头像
+            const avatar = document.getElementById('userAvatar');
+            avatar.textContent = username.charAt(0).toUpperCase();
+            
+            //显示用户面板
+            if (user.id.split(':')[0] == 'manage') {
+                document.querySelector('.managepanel').style.display = 'flex'
+            };
+        })()
+
+        //管理员获取所有用户
+        async  function getalluser(){
+            const showalluser = document.getElementById('showalluser');
+            showalluser.innerHTML = `<p>加载中...</p>`
+            try {
+                const response = await fetch(`${API_URL}/getalluser`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log('获取到了所有用户记录')
+                    console.log(result)
+                    showalluser.innerHTML = `<p>共${result.count}个用户：</p><br>`
+                    result.users.forEach(element => {
+                        const ele = Object.entries(element)
+                        ele.forEach(u => {
+                            showalluser.innerHTML +=  `<p>${u.join(': ')}</p>`
+
+                        });
+                        showalluser.innerHTML += '<br>'
+                    });
+                } else {
+                    alert(result.message);
+                }
+
+             } catch (error) {
+                alert('网络错误，请检查服务器是否运行');
+            }
+        }
+
+        //管理员删除用户
+        async  function deluser(){
+            const delusername = document.getElementById('delusername').value;
+            // const username = JSON.parse( localStorage.getItem('user')).username || '';
+            const conf = confirm(`确定要删除${delusername}吗？`)
+            if (!conf){
+                console.log('管理员取消删除')
+                return
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/deluser`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken, delusername })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log(`用户${delusername}删除成功`);
+                    alert(`${delusername}删除成功`)
+                } else {
+                    alert(result.message);
+                }
+
+             } catch (error) {
+                alert('网络错误，请检查服务器是否运行');
+            }
+        }
+        
+        //此功能暂时封存
+        //获取用户提交过的价格记录
+        // async function getmypricenote() {
+        //     const pricenote = document.getElementById('pricenote');
+        //     const username = JSON.parse( localStorage.getItem('user')).username || '';
+        //     pricenote.innerHTML = '加载中...'
+        //     console.log(username)
+        //     try {
+        //         const response = await fetch(`${API_URL}/products/getmypricenote`, {
+        //             method: 'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body: JSON.stringify({ username })
+        //         });
+        //         const result = await response.json();
+                
+        //         if (result.success) {
+        //             console.log('获取到了用户提交的价格记录')
+        //             console.log(result)
+                    
+        //             if (result.data) {
+        //                 const data = Object.entries(result.data);
+        //                 pricenote.innerHTML = `共${data.length}条记录：`
+        //                 for (const [ware, priceJson] of data) {
+        //                     const market = priceJson.market;
+        //                     const price = priceJson.price;
+        //                     const unit = priceJson.unit;
+        //                     const createdAt = priceJson.createdAt
+        //                     pricenote.innerHTML += `<p>${createdAt}</p>`
+        //                     pricenote.innerHTML += `<p>${market}的${ware}是${price}${unit}</p>`
+        //                 }
+        //             }
+        //         } else {
+        //             alert(result.message);
+        //         }
+        //      } catch (error) {
+        //         alert('网络错误，请检查服务器是否运行');
+        //     }
+        // }
+
+        // 退出登录
+        async function logout() {
+            if (currentToken) {
+                try {
+                    await fetch(`${API_URL}/logout`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken })
+                    });
+                } catch (error) {
+                    // 忽略错误
+                }
+            }
+            
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            currentToken = '';
+            
+            window.location.href = '/'
+        }
+
+    </script>
+</body>
+</html>

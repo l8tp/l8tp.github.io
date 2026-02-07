@@ -1,75 +1,444 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-	
-	<script type="text/javascript">   
-	function password() {   
-	var testV = 1;   
-	var pass1 = prompt('请输入你的名字:','');  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/css/style.css">
 
-/*此代码只有一次输入密码机会，失败则跳转百度*/
-	if (pass1 == "李天鹏") {//设置密码
-		window.location.href="menu/index.html";//添加你要跳转的页面
-	}else{
-		window.location.href='https://www.baidu.com';//避免有些浏览器不支持关闭，所以请求跳转新页面    
-	}
-
-
-/*此代码拥有三次输入密码机会，失败则关闭窗口*/
-	// var password = "李天鹏"  //设置密码
-	// var target = "menu/index.html" //添加你要跳转的页面
-	// while (testV < 3) {   
-	// 	if (!pass1)    //如果密码为无意义的值则后退并刷新页面
-	// 	history.go(-1);   //后退并刷新页面
-	// 	if (pass1 == password) {
-	// 		alert('验证通过，进行跳转');   
-	// 		window.location.href = target;
-	// 		break;   
-	// 	}    
-	// 	testV+=1;   
-	// 	var pass1 = prompt('密码错误','');   
-	// }   
-	// if (pass1!= password ){
-	// 	alert("无法跳转网页   ！！");
-	// 	window.opener=null; window.close();//密码不正确就关闭
-	// 	window.location.href='about:blank';//避免有些浏览器不支持关闭，所以请求跳转新页面    
-	// }else{
-	// 	alert('验证通过，进行跳转');   
-	// 	window.location.href=target;//添加你要跳转的页面
-	// }
-
-
-	return " ";   
-	} 
-	document.write(password());   //将函数写在body的最前面并运行
-	</script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>跳转页</title>
-<style type="text/css" >
-
-	#apDiv1 {
-		position: absolute;
-		left: auto;
-		top: auto;
-		width: auto;
-		height: 400px;
-		z-index: 1;
-	}
-	body,td,th {
-		font-size: 20px;
-		color: #000000;
-	}
-</style>
+    <title>Vercel KV 登录系统</title>
+    <style>
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-container {
+            transition: all 0.3s ease;
+        }
+        
+        .form {
+            display: none;
+        }
+        
+        .form.active {
+            display: block;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    
+        
+        .btn-secondary {
+            background: #48bb78;
+        }
+        
+        .btn-danger {
+            background: #fc8181;
+        }
+        
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+        
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+            display: block;
+        }
+        
+        .error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+            display: block;
+        }
+        
+        .info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+            display: block;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .switch-form a {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+        
+        .user-info {
+            text-align: center;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        
+        
+    </style>
 </head>
-
 <body>
-	
+    <div class="container">
+        <div class="header">
+            <h1>🔐 登录系统</h1>
+        </div>
+        
+        <div class="content">
+            <!-- 消息显示区域 -->
+            <div id="messageBox" class="message"></div>
+            
+            <!-- 登录表单 -->
+            <div class="form-container">
+                <div id="loginForm" class="form active">
+                    <h2 style="margin-bottom: 20px; color: #2d3748;">登录账户</h2>
+                    <div class="input-group">
+                        <label for="loginUsername">用户名</label>
+                        <input type="text" id="loginUsername" placeholder="输入用户名" autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="loginPassword">密码</label>
+                        <input type="password" id="loginPassword" placeholder="输入密码" autocomplete="current-password">
+                    </div>
+                    <button onclick="login()" class="btn">登录</button>
+                    <div class="switch-form">
+                        还没有账户？ <a onclick="showRegister()">立即注册</a>
+                    </div>
+                </div>
+                
+                <!-- 注册表单 -->
+                <div id="registerForm" class="form">
+                    <h2 style="margin-bottom: 20px; color: #2d3748;">创建账户</h2>
+                    <div class="input-group">
+                        <label for="regUsername">用户名<span>（用户名只能含有字母、数字、横杠和下划线）</span></label>
+                        <input type="text" id="regUsername" placeholder="至少3个字符" autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="regPassword">密码</label>
+                        <input type="password" id="regPassword" placeholder="至少6个字符" autocomplete="new-password">
+                    </div>
+                    <div class="input-group">
+                        <label for="regEmail">邮箱 (可选)</label>
+                        <input type="email" id="regEmail" placeholder="example@email.com" autocomplete="email">
+                    </div>
+                    <button onclick="register()" class="btn btn-secondary">注册</button>
+                    <div class="switch-form">
+                        已有账户？ <a onclick="showLogin()">返回登录</a>
+                    </div>
+                </div>
+                
+                <!-- 登录后显示的用户信息 -->
+                <div id="userInfo" class="user-info" style="display: none;">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <h2 style="margin-bottom: 8px; color: #2d3748;">欢迎, <span id="usernameDisplay"></span>!</h2>
+                    <div><a href='public/home.html'>没有跳转请点击此处</a></div>
+                    <div style="margin-bottom: 20px; background: #f7fafc; padding: 15px; border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="color: #718096;">用户ID:</span>
+                            <span id="userId" style="font-weight: 500;"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #718096;">邮箱:</span>
+                            <span id="userEmail" style="font-weight: 500;">未设置</span>
+                        </div>
+                    </div>
+                    <button onclick="logout()" class="btn btn-danger">退出登录</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin + '/api';
+        let currentToken = localStorage.getItem('token') || '';
 
 
-	
+        // 显示消息
+        function showMessage(text, type = 'info') {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.textContent = text;
+            messageBox.className = 'message ' + type;
+            setTimeout(() => {
+                messageBox.className = 'message';
+            }, 3000);
+        }
+        
+        // 显示注册表单
+        function showRegister() {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.add('active');
+            clearForms();
+        }
+        
+        // 显示登录表单
+        function showLogin() {
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('loginForm').classList.add('active');
+            clearForms();
+        }
+        
+        // 清空表单
+        function clearForms() {
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regEmail').value = '';
+        }
+        
+        // 显示用户信息
+        function showUserInfo(user) {
+            document.getElementById('loginForm').classList.remove('active');
+            document.getElementById('registerForm').classList.remove('active');
+            document.getElementById('userInfo').style.display = 'block';
+            
+            const username = user.username;
+            document.getElementById('usernameDisplay').textContent = username;
+            document.getElementById('userId').textContent = user.id;
+            document.getElementById('userEmail').textContent = user.email || '未设置';
+            
+            // 设置用户头像
+            const avatar = document.getElementById('userAvatar');
+            avatar.textContent = username.charAt(0).toUpperCase();
+            
+        }
+        
+        // 登录函数
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                showMessage('请输入用户名和密码', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('登录成功！')
+                    showMessage('登录成功！', 'success');
+                    currentToken = result.token;
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    showUserInfo(result.user);
+                    window.location.href = 'public/home.html'
+                } else {
+                    console.log('登录失败！')
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                showMessage('登录服务器错误', 'error');
+            }
+        }
+        
+        
 
-<div id="apDiv1" style="top: 0px">
-	<blockquote style="margin-left: 0px; width: auto; height:auto; background-color:rgba(170, 255, 248, 0.2);  padding:20px 0 15px 10px">
-	<a style="font-size: 10vw";>跳转网页 ！！</a>
-</div>
+        // 注册函数
+        async function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const email = document.getElementById('regEmail').value.trim();
+            
+            if (!username || !password) {
+                showMessage('请输入用户名和密码', 'error');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showMessage('用户名至少3个字符', 'error');
+                return;
+            }
+            const pattern = /^[a-zA-Z0-9_-]+$/;
+            if (!pattern.test(username)) {
+                showMessage('用户名只能含有字母、数字、横杠和下划线', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('密码至少6个字符', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, email })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('注册成功！请登录', 'success');
+                    showLogin();
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误，请检查服务器是否运行', 'error');
+            }
+        }
+        
+        // 退出登录
+        async function logout() {
+            if (currentToken) {
+                try {
+                    await fetch(`${API_URL}/logout`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken })
+                    });
+                } catch (error) {
+                    // 忽略错误
+                }
+            }
+            
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            currentToken = '';
+            
+            document.getElementById('userInfo').style.display = 'none';
+            showLogin();
+            showMessage('已退出登录', 'info');
+        }
+        
+        // 验证token
+        async function verifyToken() {
+            if (!currentToken) return false;
+            
+            try {
+                const response = await fetch(`${API_URL}/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showUserInfo(result.user);
+                    return true;
+                }
+            } catch (error) {
+                // 忽略错误
+            }
+            
+            return false;
+        }
+        
+        // 页面加载时检查登录状态
+        window.onload = async function() {
+            // 验证token
+            const isValid = await verifyToken();
+            
+            if (!isValid) {
+                // 清空无效的token
+                localStorage.removeItem('token');
+                currentToken = '';
+            }
+            
+        };
+        
+        // 添加回车键支持
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('loginForm').classList.contains('active')) {
+                    login();
+                } else if (document.getElementById('registerForm').classList.contains('active')) {
+                    register();
+                }
+            }
+        });
+    </script>
 </body>
+</html>

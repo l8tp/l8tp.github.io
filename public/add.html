@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        
+
+
+        .form-group{
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        .inputarea{
+            display: flex;
+        }
+        .bluelist{
+            display: none;
+            position: absolute; 
+            z-index: 999;
+            transform: translateY(50px);
+        }        
+    </style>
+</head>
+<body>
+    <div id="message"></div>
+    <div class="form-group">
+        <div class="inputarea">
+            <label for="marketInput">超市：</label>
+            <div style="display: flex; flex: 1; position: relative;">
+                <input value="邛崃发到家" type="text" id="marketInput" name="marketInput" placeholder="从下拉列表选择" autocomplete="off">
+                <li id="marketList" class="bluelist">
+                    <!-- 此处加载超市列表 -->
+                </li>
+
+            </div>
+            
+        </div>
+        <div class="inputarea">
+            <label for="wareInput">商品：</label>
+            <div style="display: flex; flex: 1; position: relative;">
+                <input type="text" id="wareInput" name="ware" placeholder="从下拉列表选择" autocomplete="off">
+                <li id="wareList" class="bluelist">
+                    <!-- 此处加载商品列表 -->
+                </li>
+            </div>
+        </div>
+        <div class="inputarea">
+            <label for="priceInput">价格：</label>
+            <input type="number" id="priceInput" name="price" placeholder="输入价格" autocomplete="off">
+            <div style="display: flex; flex-direction: column; justify-content: center; position: relative;">
+                <a style=" font-weight: 800; margin-left: 10px; cursor: pointer;" id="unit" onclick=unitList()>元/斤 ▼</a>
+                <li id="unitList" class="bluelist">
+                    <!-- 此处加载单位列表 -->
+                </li>
+            </div>
+        </div>
+    </div>
+    <button type="submit" id="submitBtn" disabled onclick="submitprice()">提交</button>
+
+    <div class="bottom-tab-bar"></div>
+    <script src="js/bottombar.js"></script>
+    <script>
+        const API_URL = window.location.origin + '/api';
+        let currentToken = localStorage.getItem('token') || '';
+
+        //异步加载超市和商品列表
+        (async function () {
+            const marketInput = document.getElementById('marketInput');
+            const marketList = document.getElementById('marketList');
+            const wareInput = document.getElementById('wareInput');
+            const wareList = document.getElementById('wareList');
+            const  response = await fetch('json/ware.json');
+            const ware = await response.json();
+            loadlist(marketInput, marketList, ware.market);
+            loadlist(wareInput, wareList, ware.ware);
+            localStorage.setItem('ware', JSON.stringify(ware));
+            InputFilter(marketInput, marketList, ware.market);
+            InputFilter(wareInput, wareList, ware.ware);
+
+            const times = new Date().toLocaleString('zh-CN')
+            console.log(times)
+        })();
+
+        //加载候选列表函数
+        function loadlist(Input, List, data){
+                List.innerHTML = ''
+                for (let i of data){
+                    List.innerHTML += `<a class="list-item">${i}</a>`
+                }
+                listToInput(Input, List);
+        }
+
+        //监视列表点击赋值给输入框的函数
+        function listToInput (Input, List){
+            List.addEventListener('click', (e)=>{
+                const i = e.target;
+                if (i !== List){
+                    Input.value = i.innerHTML;
+                    List.style.display = 'none';
+                    Input.style.border = '2px solid #0dff00';
+                    setTimeout(validateInput, 10)
+                }
+            })
+        }
+
+        //监视输入框显示或隐藏列表
+        function showlist(Input, List, data){
+            let closelist;
+            Input.addEventListener('focus', ()=>{
+                List.style.display = 'flex';
+                closelist = true;
+            });
+            List.addEventListener('mousedown', ()=>{
+                closelist = false;
+            });
+            Input.addEventListener('blur', ()=>{
+                if (closelist){
+                    List.style.display = 'none';
+                }
+                closelist = true;
+                if (!data.includes(Input.value) && Input.value){
+                    message.innerHTML = `（${Input.value}）不在列表内`
+                }else{
+                    if (Input.value){Input.style.border = '2px solid #0dff00';}
+                }
+            });
+        }
+
+        // 异步加载单位列表
+        async function unitList() {
+            const unit = document.getElementById('unit');
+            const unitList = document.getElementById('unitList');
+            const  response = await fetch('json/ware.json');
+            const ware = await response.json();
+            unitList.style.display = 'flex';
+            unitList.innerHTML = ''
+            for (let i of ware.unit){
+                unitList.innerHTML += `<a class="list-item">${i}</a>`
+            }
+            unitList.addEventListener('click', (e)=>{
+                const i = e.target;
+                if (i !== unitList){
+                    unit.innerHTML = i.innerHTML + ' ▼';
+                    unitList.style.display = 'none';
+                }
+            })
+            unit.addEventListener('mouseout', ()=>{
+                const closelist = setTimeout(()=>{unitList.style.display = 'none'}, 10)
+            });
+        };
+
+        //根据输入筛选下拉列表
+        function InputFilter(Input, list, data){
+            showlist(Input, list, data)
+            Input.addEventListener('input', ()=>{
+                Input.style.border = '2px solid #e0e6ed';
+                const inputValue = Input.value.trim();
+                const newdata = [];
+                for (let i of data){
+                    if (i.includes(inputValue)){
+                        newdata.push(i);
+                    }
+                }
+                if (!newdata.length){
+                    message.innerHTML = `（${inputValue}）不在列表中`
+                }else{
+                    message.innerHTML=''
+                        
+                    }
+                loadlist(Input, list, newdata)
+                validateInput();
+            });
+        }
+
+        //验证输入激活提交按钮
+        function validateInput (){
+            const wareinputValue = document.getElementById('wareInput').value.trim();
+            const marketinputValue = document.getElementById('marketInput').value.trim();
+            const ware = JSON.parse(localStorage.getItem('ware')).ware;
+            const market = JSON.parse(localStorage.getItem('ware')).market;
+            if (ware.includes(wareinputValue) && market.includes(marketinputValue)){
+                document.getElementById('submitBtn').disabled = false
+            }else{
+                document.getElementById('submitBtn').disabled = true
+            }
+        }
+
+
+        //提交价格数据
+        async function submitprice() {
+            const user = JSON.parse( localStorage.getItem('user')) || '';
+            if (!user || !currentToken){
+                alert('请先登录')
+                window.location.href = '/'
+                return
+            }
+
+            const username = user.username;
+            const marketInput = document.getElementById('marketInput').value.trim();
+            const wareInput = document.getElementById('wareInput').value.trim();
+            const priceInput = document.getElementById('priceInput').value;
+            const unit = document.getElementById('unit').innerHTML.slice(0, -1)
+            const Message = document.getElementById('message')
+
+            if (!marketInput){
+                Message.innerHTML = '请输入超市'
+                return
+            }
+            if (!priceInput){
+                Message.innerHTML = '请输入价格'
+                return
+            }
+
+            console.log(`${username}开始提交${wareInput}:${priceInput}${unit}`)
+            Message.innerHTML = `开始提交${wareInput}:${priceInput}${unit}`
+
+            try {
+                const response = await fetch(`${API_URL}/products/submitprice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken, marketInput, wareInput, priceInput, unit })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    Message.innerHTML = `${wareInput}:${priceInput}${unit} 提交成功！`
+                } else {
+                    Message.innerHTML = result.message
+                }
+            } catch (error) {
+                Message.innerHTML = '服务器网络错误'
+            }
+
+        }
+    </script>
+</body>
+</html>
