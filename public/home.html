@@ -12,18 +12,24 @@
             width: 100%;
             border-collapse: collapse;
             margin: 25px 0;
-            font-size: 0.9em;
+            font-size: 18px;
             font-family: sans-serif;
-            min-width: 400px;
+            min-width: 300px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
         table thead tr{
-            background-color: #009879;
-            color: #ffffff;
+            background-color: #7db1ff;
             text-align: left;
+            font-size: 20px;
+        }
+        table p {
+            font-size: 15px;
         }
         table th, table td{
-            padding: 12px 15px;
+            padding: 2px;
+            border-width:0 2px;
+            border-style: solid;
+            border-color: #ffffff;
         }
         table tbody tr{
             border-bottom: 1px solid rgb(0, 0, 0);
@@ -98,7 +104,6 @@
             //监听点击后展开此行的时间
             tbody.addEventListener('click', (e)=>{
                 const tr = e.target.closest('tr');
-                console.log(tr)
                 tr.querySelectorAll('p').forEach(element => {
                     element.style.display = 'block';
                 });
@@ -145,14 +150,17 @@
                             //遍历表格体的每一行
                             for (let i of tbodytrs){
                                 //遍历超市的商品
+                                let containware = false;
                                 for (const [ware, priceJson] of data) {
                                     const price = priceJson.price;
                                     const unit = priceJson.unit;
                                     const time = priceJson.createdAt;
                                     if (ware === i.querySelector('th').innerHTML){
+                                        containware = true;
                                         i.innerHTML += `<th>${price}${unit}<p style='display:none'>时间：${time.split(' ')[0]}</p></th>`
                                     }
                                 }
+                                if (!containware){i.innerHTML += '<th></th>'}
                             }
                         }
                     }
@@ -169,7 +177,6 @@
         //筛选超市和商品
         async function filter (){
             poptimes++;
-            console.log(`第${poptimes}次弹窗`)
             const filter = document.querySelector('.filter')
             filter.style.display = 'flex'
             const  response = await fetch('json/ware.json');
