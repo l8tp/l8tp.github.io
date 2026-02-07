@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         
-
+        #unit{
+            border-bottom: 2px solid #000;
+        }
 
         .form-group{
             display: flex;
@@ -92,7 +94,7 @@
         function loadlist(Input, List, data){
                 List.innerHTML = ''
                 for (let i of data){
-                    List.innerHTML += `<a class="list-item">${i}</a>`
+                    List.innerHTML += `<a>${i}</a>`
                 }
                 listToInput(Input, List);
         }
@@ -142,7 +144,7 @@
             unitList.style.display = 'flex';
             unitList.innerHTML = ''
             for (let i of ware.unit){
-                unitList.innerHTML += `<a class="list-item">${i}</a>`
+                unitList.innerHTML += `<a>${i}</a>`
             }
             unitList.addEventListener('click', (e)=>{
                 const i = e.target;
