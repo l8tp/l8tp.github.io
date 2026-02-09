@@ -57,6 +57,13 @@
             width: 100%;
             margin-bottom: 20px;
         }
+        .delarea{
+            background-color: rgba(255, 0, 0, 0.1); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            border-radius: 10px;
+        }
 
     </style>
 </head>
@@ -64,15 +71,21 @@
     <div id="userInfo" class="user-info">
         <div class="user-avatar" id="userAvatar">U</div>
         <div class="managepanel">
-            <button class="btn btn-secondary" onclick="getalluser()">获取所有用户</button>
+            <button class="btn-secondary" onclick="getalluser()">获取所有用户</button>
             <a id="showalluser"></a>
-            <div style="background-color: rgba(255, 0, 0, 0.1); display: flex; flex-direction: column; gap: 10px; border-radius: 10px;">
+            <div class="delarea">
                 <form>
                     <input type="text" id="delusername" placeholder="请输入用户名" style="background-color:  rgba(255, 0, 0, 0.1);">
                 </form>
                 <div style="display: flex; flex-direction: row; gap: 5px;">
-                    <button class="btn btn-danger" onclick="deluser()">删除此用户</button>
+                    <button class="btn-danger" onclick="deluser()">删除此用户</button>
                 </div>
+            </div>
+            <div class="delarea">
+                <form>
+                    <input type="text" id="delware" placeholder="请输入商品名" style="background-color:  rgba(255, 0, 0, 0.1);">
+                </form>
+                <button class="btn-danger" onclick="delware()">删除此商品的价格</button>
             </div>
         </div>
         <!-- 此功能暂时封存
@@ -95,7 +108,7 @@
             </div>
         </div>
         
-        <button onclick="logout()" class="btn btn-danger">退出登录</button>
+        <button onclick="logout()" class="btn-danger">退出登录</button>
     </div>
 
     <div class="bottom-tab-bar"></div>
@@ -160,7 +173,6 @@
         //管理员删除用户
         async  function deluser(){
             const delusername = document.getElementById('delusername').value;
-            // const username = JSON.parse( localStorage.getItem('user')).username || '';
             const conf = confirm(`确定要删除${delusername}吗？`)
             if (!conf){
                 console.log('管理员取消删除')
@@ -185,6 +197,40 @@
              } catch (error) {
                 alert('网络错误，请检查服务器是否运行');
             }
+        }
+
+        //管理员删除商品
+        async function delware(){
+            const delware = document.getElementById('delware').value;
+            const response = await fetch('json/ware.json');
+            const ware = await response.json();
+            const markets = ware.market
+            const conf = confirm(`确定要删除（${delware}）吗？`)
+            if (!conf){
+                console.log('管理员取消删除')
+                return
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/products/delware`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken, markets, delware })
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    console.log(`商品${delware}删除成功`);
+                    alert(`${delware}删除成功`)
+                } else {
+                    alert(result.message);
+                }
+
+             } catch (error) {
+                console.log('请求服务器错误', error)
+                alert('请求服务器错误');
+            }
+
         }
         
         //此功能暂时封存

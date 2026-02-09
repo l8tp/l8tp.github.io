@@ -127,6 +127,49 @@ router.post('/getpricenote', async (req, res) => {
   }
 })
 
+//3. 管理员删除商品
+router.delete('/delware', async (req, res) => {
+  const { token, markets, delware } = req.body;
+  if (!token) {
+    return res.json({ 
+      success: false, 
+      message: '请先登录' 
+    });
+  }
+  
+  // 从token获取管理员账号名
+  const username = await kv.hget('tokens', token);
+  if (username !== global.managename) {
+    return res.json({ 
+      success: false, 
+      message: '不是管理员账号' 
+    });
+  }
+
+  try {
+    console.log(`删除的商品: ${delware}`)
+
+    // 删除商品
+    const data = [];
+    for (let i of markets){
+      await kv.hdel(`wareprice:${i}`, delware);
+    }
+    
+    res.json({ 
+      success: true, 
+      message: '商品删除成功' 
+    });
+    
+  } catch (error) {
+    console.error('删除商品错误:', error);
+    res.json({ 
+      success: false, 
+      message: '删除商品失败' 
+    });
+  }
+});
+
+
 //此功能暂时封存
 //5. 获取用户提交过的价格记录
 // router.post('/getmypricenote', async (req, res) => {
