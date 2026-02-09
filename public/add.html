@@ -78,42 +78,55 @@
             const marketList = document.getElementById('marketList');
             const wareInput = document.getElementById('wareInput');
             const wareList = document.getElementById('wareList');
-            const  response = await fetch('json/ware.json');
+            const response = await fetch('json/ware.json');
             const ware = await response.json();
             loadlist(marketInput, marketList, ware.market);
             loadlist(wareInput, wareList, ware.ware);
             localStorage.setItem('ware', JSON.stringify(ware));
             InputFilter(marketInput, marketList, ware.market);
             InputFilter(wareInput, wareList, ware.ware);
-
-            const times = new Date().toLocaleString('zh-CN')
-            console.log(times)
         })();
 
         //加载候选列表函数
-        function loadlist(Input, List, data){
-                List.innerHTML = ''
+        function loadlist(Input, List, data, delAlias=true){
+            List.innerHTML = ''
+            if(delAlias){
+                for (let i of data){
+                    i = i.split('#')[0];
+                    List.innerHTML += `<a>${i}</a>`
+                }
+            }else{
                 for (let i of data){
                     List.innerHTML += `<a>${i}</a>`
                 }
-                listToInput(Input, List);
-        }
+            }
 
-        //监视列表点击赋值给输入框的函数
-        function listToInput (Input, List){
+            //监视列表点击赋值给输入框
             List.addEventListener('click', (e)=>{
                 const i = e.target;
                 if (i !== List){
-                    Input.value = i.innerHTML;
+                    if(delAlias){
+                        Input.value = i.innerHTML;
+                    }else{
+                        Input.value = i.innerHTML.split('#')[0];
+                    }
                     List.style.display = 'none';
                     Input.style.border = '2px solid #0dff00';
+                    message.innerHTML = '';
                     setTimeout(validateInput, 10)
                 }
             })
         }
 
         //监视输入框显示或隐藏列表
-        function showlist(Input, List, data){
+        function showHidelist(Input, List, data){
+            //去除#后面的别名
+            const newdata = [];
+            for (let i of data){
+                i = i.split('#')[0];
+                newdata.push(i);
+            }
+
             let closelist;
             Input.addEventListener('focus', ()=>{
                 List.style.display = 'flex';
@@ -127,7 +140,7 @@
                     List.style.display = 'none';
                 }
                 closelist = true;
-                if (!data.includes(Input.value) && Input.value){
+                if (!newdata.includes(Input.value) && Input.value){
                     message.innerHTML = `（${Input.value}）不在列表内`
                 }else{
                     if (Input.value){Input.style.border = '2px solid #0dff00';}
@@ -160,7 +173,7 @@
 
         //根据输入筛选下拉列表
         function InputFilter(Input, list, data){
-            showlist(Input, list, data)
+            showHidelist(Input, list, data)
             Input.addEventListener('input', ()=>{
                 Input.style.border = '2px solid #e0e6ed';
                 const inputValue = Input.value.trim();
@@ -174,9 +187,8 @@
                     message.innerHTML = `（${inputValue}）不在列表中`
                 }else{
                     message.innerHTML=''
-                        
                     }
-                loadlist(Input, list, newdata)
+                loadlist(Input, list, newdata, false)
                 validateInput();
             });
         }
@@ -186,8 +198,13 @@
             const wareinputValue = document.getElementById('wareInput').value.trim();
             const marketinputValue = document.getElementById('marketInput').value.trim();
             const ware = JSON.parse(localStorage.getItem('ware')).ware;
+            let newware = [];
+            for (let i of ware){newware.push(i.split('#')[0])};
             const market = JSON.parse(localStorage.getItem('ware')).market;
-            if (ware.includes(wareinputValue) && market.includes(marketinputValue)){
+            let newmarket = [];
+            for (let i of market){newmarket.push(i.split('#')[0])};
+            
+            if (newware.includes(wareinputValue) && newmarket.includes(marketinputValue)){
                 document.getElementById('submitBtn').disabled = false
             }else{
                 document.getElementById('submitBtn').disabled = true

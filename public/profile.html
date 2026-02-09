@@ -205,6 +205,9 @@
             const response = await fetch('json/ware.json');
             const ware = await response.json();
             const markets = ware.market
+            //去除超市别名
+            let newmarkets = [];
+            for (let i of markets){newmarkets.push(i.split('#')[0])};
             const conf = confirm(`确定要删除（${delware}）吗？`)
             if (!conf){
                 console.log('管理员取消删除')
@@ -215,7 +218,7 @@
                 const response = await fetch(`${API_URL}/products/delware`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken, markets, delware })
+                    body: JSON.stringify({ token: currentToken, markets: newmarkets, delware })
                 });
                 const result = await response.json();
 

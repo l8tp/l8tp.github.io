@@ -109,25 +109,34 @@
                 tr.querySelectorAll('p').forEach(element => {
                     element.style.display = 'block';
                 });
-
             })
 
             const  response = await fetch('json/ware.json');
             const ware = await response.json();
             theadtr.innerHTML = `<th class='xtitle' onclick='filter()'><button>筛选▼</button></th>`
 
-            const markets = ware.market.slice(0,2);
+            const markets = delAlias(ware.market.slice(0,2));
             for (let i of markets){
                 theadtr.innerHTML += `<th>${i}</th>`
             };
             tbody.innerHTML = ''
-            for (let i of ware.ware){
+            for (let i of delAlias(ware.ware)){
                 tbody.innerHTML += `<tr><th>${i}</th></tr>`
             };
             const tbodytrs = tbody.querySelectorAll('tr');
             getpricenote(tbodytrs, markets);
 
         })();
+
+        //去除#后面别名的函数
+        function delAlias(data){
+            let newdata = [];
+            for (let i of data){
+                i = i.split('#')[0];
+                newdata.push(i);
+            }
+            return newdata;
+        }
 
         //获取价格数据
         async function getpricenote(tbodytrs, markets) {
@@ -170,7 +179,7 @@
                     alert(result.message);
                 }
              } catch (error) {
-                alert('网络错误，请检查服务器是否运行');
+                alert('请求服务器错误');
                 message.innerHTML=error
             }
         }
@@ -282,12 +291,12 @@
             let markets = []
             theadtr.innerHTML = `<th class='xtitle' onclick='filter()'><button>筛选▼</button></th>`
             for (let i of marketnodes){
-                theadtr.innerHTML += `<th>${i.innerHTML.slice(0, -1)}</th>`
-                markets.push(i.innerHTML.slice(0, -1));
+                theadtr.innerHTML += `<th>${i.innerHTML.slice(0, -1).split('#')[0]}</th>`
+                markets.push(i.innerHTML.slice(0, -1).split('#')[0]);
             };
             tbody.innerHTML = ''
             for (let i of warenodes){
-                tbody.innerHTML += `<tr><th>${i.innerHTML.slice(0, -1)}</th></tr>`
+                tbody.innerHTML += `<tr><th>${i.innerHTML.slice(0, -1).split('#')[0]}</th></tr>`
             };
             const tbodytrs = tbody.querySelectorAll('tr');
            getpricenote(tbodytrs, markets);
