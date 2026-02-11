@@ -315,10 +315,14 @@ app.post('/api/logout', async (req, res) => {
 
 // 8. 主页
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/home.html');
+});
+// 9. 登录页面
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/login.html');
 });
 
-// 9. 管理员获取所有用户
+// 10. 管理员获取所有用户
 app.post('/api/getalluser', async (req, res) => {
   const { token } = req.body;
   if (!token) {
@@ -364,7 +368,7 @@ app.post('/api/getalluser', async (req, res) => {
   }
 });
 
-// 10. 管理员删除用户账号
+// 11. 管理员删除用户账号
 app.delete('/api/deluser', async (req, res) => {
   const { token, delusername } = req.body;
   if (!token) {

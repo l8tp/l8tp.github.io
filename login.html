@@ -425,9 +425,10 @@
                 // 清空无效的token
                 localStorage.removeItem('token');
                 currentToken = '';
+            }else{
+                //跳转页面
+                window.location.href = 'public/home.html'
             }
-            //跳转页面
-            window.location.href = 'public/home.html'
             
         };
         

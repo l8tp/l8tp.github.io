@@ -15,23 +15,44 @@ const kv = Redis.fromEnv();
 
 //1. 存储提交的价格数据
 router.post('/submitprice', async (req, res) => {
-  const { token, marketInput, wareInput, priceInput, unit } = req.body;
+  const { token, userIdTemp, marketInput, wareInput, priceInput, unit } = req.body;
+  let username = '';
 
+  //跳过登录验证
   if (!token) {
-    return res.json({ 
-      success: false, 
-      message: '无token请重新登录' 
-    });
+    // 无token时，使用userIdTemp作为标识
+    if (!userIdTemp) {
+      return res.json({ 
+        success: false, 
+        message: '请先登录' 
+      });
+    }
+    const tempTimestamp = userIdTemp.split('_').pop();
+    if (tempTimestamp < 0 || tempTimestamp > 9) {
+      return res.json({ 
+        success: false, 
+        message: '请先登录或注册，试用次数结束' 
+      });
+    }
+    username = userIdTemp; // 使用userIdTemp作为临时用户名
+  }else{
+    if (!token) {
+      return res.json({ 
+        success: false, 
+        message: '无token请重新登录' 
+      });
+    }
+    
+    // 从token获取账号名验证
+    username = await kv.hget('tokens', token);
+    if (!username) {
+      return res.json({ 
+        success: false, 
+        message: '无效的token' 
+      });
+    }
   }
-  
-  // 从token获取管理员账号名验证
-  const username = await kv.hget('tokens', token);
-  if (!username) {
-    return res.json({ 
-      success: false, 
-      message: '无效的token' 
-    });
-  }
+
 
   if (!priceInput) {
     return res.json({ 
@@ -40,7 +61,6 @@ router.post('/submitprice', async (req, res) => {
     });
   }
 
-    const time = new Date().toISOString().replaceAll(':','')
     // 创建对象
     const marketpriceData = {
       username,
@@ -56,7 +76,6 @@ router.post('/submitprice', async (req, res) => {
     //   unit,
     //   createdAt: new Date().toLocaleString(),
     // };
-    console.log('开始KV存储')
     // 按超市保存
     await kv.hset(`wareprice:${marketInput}`, { [wareInput]: marketpriceData });
 
@@ -64,8 +83,7 @@ router.post('/submitprice', async (req, res) => {
     // 按用户保存
     // await kv.hset(`wareprice:${username}`, { [wareInput]: userpriceData });
 
-    console.log(`${username}存储的价格数据：`)
-    console.log(marketpriceData)
+    console.log(`${username}存储的价格数据：`, marketpriceData)
 
     res.json({ 
       success: true, 
@@ -78,23 +96,44 @@ router.post('/submitprice', async (req, res) => {
 //2. 获取超市的价格记录
 router.post('/getpricenote', async (req, res) => {
   console.log('服务器开始获取所有超市价格记录')
-  const { token, markets } = req.body;
+  const { token, userIdTemp, markets } = req.body;
   
+  //跳过登录验证
   if (!token) {
-    return res.json({ 
-      success: false, 
-      message: '请先登录' 
-    });
+    // 无token时，使用userIdTemp作为标识
+    if (!userIdTemp) {
+      return res.json({ 
+        success: false, 
+        message: '请先登录' 
+      });
+    }
+    const tempTimestamp = userIdTemp.split('_').pop();
+    if (tempTimestamp < 0 || tempTimestamp > 9) {
+      return res.json({ 
+        success: false, 
+        message: '请先登录或注册，试用次数结束' 
+      });
+    }
+    console.log(`${userIdTemp}访问`);
+    
+  }else{
+      if (!token) {
+        return res.json({ 
+          success: false, 
+          message: '请先登录' 
+        });
+      }
+      // 从token获取账号名验证
+      const username = await kv.hget('tokens', token);
+      if (!username) {
+        return res.json({ 
+          success: false, 
+          message: '无效的token' 
+        });
+      }
   }
-  
-  // 从token获取管理员账号名验证
-  const username = await kv.hget('tokens', token);
-  if (!username) {
-    return res.json({ 
-      success: false, 
-      message: '无效的token' 
-    });
-  }
+
+
   if(markets.length > 3){
     return res.json({ 
       success: false, 

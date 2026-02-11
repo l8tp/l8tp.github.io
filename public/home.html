@@ -97,6 +97,11 @@
     <script>
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
+        let userIdTemp = localStorage.getItem('userIdTemp');
+        if (!userIdTemp) {
+            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_9';
+            localStorage.setItem('userIdTemp', userIdTemp);
+        }
 
         //第一次渲染表格
         (async function renderTable() {
@@ -146,8 +151,14 @@
                 const response = await fetch(`${API_URL}/products/getpricenote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({  token: currentToken, markets })
+                    body: JSON.stringify({  token: currentToken, userIdTemp, markets })
                 });
+                //更新userIdTemp
+                let IdTempArray = userIdTemp.split('_');
+                let IdTimesStamp =  IdTempArray.pop();
+                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp -1);
+                localStorage.setItem('userIdTemp', userIdTemp);
+
                 const result = await response.json();
                 
                 if (result.success) {
@@ -177,6 +188,13 @@
                     }
                 } else {
                     alert(result.message);
+                    if (result.message === '请先登录或注册，试用次数结束') {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        currentToken = '';
+                        
+                        window.location.href = '/login';
+                    }
                 }
              } catch (error) {
                 alert('请求服务器错误');

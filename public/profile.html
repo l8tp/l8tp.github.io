@@ -108,7 +108,7 @@
             </div>
         </div>
         
-        <button onclick="logout()" class="btn-danger">退出登录</button>
+        <button onclick="logout()" id="logout" class="btn-danger">退出登录</button>
     </div>
 
     <div class="bottom-tab-bar"></div>
@@ -118,11 +118,11 @@
         let currentToken = localStorage.getItem('token') || '';
 
         // 显示用户信息
-        (function showUserInfo() {
+        function showUserInfo() {
             const user = JSON.parse(localStorage.getItem('user')) 
             const username = user.username;
-
-            document.getElementById('userName').textContent = user.username;
+            
+            document.getElementById('userName').textContent = username;
             document.getElementById('userId').textContent = user.id;
             document.getElementById('userEmail').textContent = user.email || '未设置';
             
@@ -134,7 +134,7 @@
             if (user.id.split(':')[0] == 'manage') {
                 document.querySelector('.managepanel').style.display = 'flex'
             };
-        })()
+        }
 
         //管理员获取所有用户
         async  function getalluser(){
@@ -293,8 +293,49 @@
             localStorage.removeItem('user');
             currentToken = '';
             
-            window.location.href = '/'
+            window.location.href = '/login'
         }
+
+        // 验证token
+        async function verifyToken() {
+            if (!currentToken) return false;
+            
+            try {
+                const response = await fetch(`${API_URL}/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: currentToken })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showUserInfo(result.user);
+                    return true;
+                }
+            } catch (error) {
+                // 忽略错误
+            }
+            
+            return false;
+        }
+        // 页面加载时检查登录状态
+        window.onload = async function() {
+            // 验证token
+            const isValid = await verifyToken();
+            
+            if (!isValid) {
+                // 清空无效的token
+                localStorage.removeItem('token');
+                currentToken = '';
+                //刷新登录按钮
+                const btn = document.getElementById('logout');
+                btn.innerText = '去登录';
+                btn.classList.remove('btn-danger');
+            }else{
+                showUserInfo();
+            }
+            
+        };
 
     </script>
 </body>

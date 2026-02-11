@@ -71,6 +71,12 @@
     <script>
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
+        let userIdTemp = localStorage.getItem('userIdTemp');
+        if (!userIdTemp) {
+            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_9';
+            localStorage.setItem('userIdTemp', userIdTemp);
+        }
+
 
         //异步加载超市和商品列表
         (async function () {
@@ -215,13 +221,7 @@
         //提交价格数据
         async function submitprice() {
             const user = JSON.parse( localStorage.getItem('user')) || '';
-            if (!user || !currentToken){
-                alert('请先登录')
-                window.location.href = '/'
-                return
-            }
-
-            const username = user.username;
+            const username = user.username || userIdTemp;
             const marketInput = document.getElementById('marketInput').value.trim();
             const wareInput = document.getElementById('wareInput').value.trim();
             const priceInput = document.getElementById('priceInput').value;
@@ -244,15 +244,27 @@
                 const response = await fetch(`${API_URL}/products/submitprice`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken, marketInput, wareInput, priceInput, unit })
+                    body: JSON.stringify({ token: currentToken, userIdTemp, marketInput, wareInput, priceInput, unit })
                 });
-                
+                //更新userIdTemp
+                let IdTempArray = userIdTemp.split('_');
+                let IdTimesStamp =  IdTempArray.pop();
+                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp -1);
+                localStorage.setItem('userIdTemp', userIdTemp);
+
                 const result = await response.json();
                 
                 if (result.success) {
                     Message.innerHTML = `${wareInput}:${priceInput}${unit} 提交成功！`
                 } else {
-                    Message.innerHTML = result.message
+                    Message.innerHTML = result.message;
+                    if (result.message === '请先登录或注册，试用次数结束') {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        currentToken = '';
+                        alert(result.message);
+                        window.location.href = '/login';
+                    }
                 }
             } catch (error) {
                 Message.innerHTML = '服务器网络错误'

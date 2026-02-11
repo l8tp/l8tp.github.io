@@ -115,5 +115,4 @@ button:disabled {
 .tab-item.active {
     color: #3498db;
     background-color: rgba(52, 152, 219, 0.1);
-    /* transform: translateY(-5px); */
 }
