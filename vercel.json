@@ -12,10 +12,6 @@
   ],
   "routes": [
     {
-        "src": "/public/(.*)",
-        "dest": "/$1"
-    },
-    {
       "src": "/(.*)",
       "dest": "/server.js"
     }

@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('.'));
+app.use(express.static('public'));
 //导入路由模块
 const poductRouter = require('./routes/products');
 //挂载路由
@@ -319,7 +319,7 @@ app.get('/', (req, res) => {
 });
 // 9. 登录页面
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/login.html');
+  res.sendFile(__dirname + '/public/login.html');
 });
 
 // 10. 管理员获取所有用户

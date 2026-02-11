@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <title>超市自助比价</title>
     <style>
@@ -307,7 +307,7 @@
                     localStorage.setItem('token', result.token);
                     localStorage.setItem('user', JSON.stringify(result.user));
                     showUserInfo(result.user);
-                    window.location.href = 'public/home.html'
+                    window.location.href = 'home.html'
                 } else {
                     console.log('登录失败！')
                     showMessage(result.message, 'error');
@@ -422,7 +422,7 @@
                 currentToken = '';
             }else{
                 //跳转页面
-                window.location.href = 'public/home.html'
+                window.location.href = 'home.html'
             }
             
         };
