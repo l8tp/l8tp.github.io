@@ -4,20 +4,16 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "public/(.*)",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/css/:path*",
-      "dest": "/public/css/:path*"
-    },
-    {
-      "src": "/json/:path*",
-      "dest": "/public/json/:path*"
-    },
-    {
-      "src": "/js/:path*",
-      "dest": "/public/js/:path*"
+      "src": "^/(.*\\.(css|js|json|png|jpg|svg))$",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
