@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>超市自助比价</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         
         #unit{
@@ -67,7 +67,7 @@
     <button type="submit" id="submitBtn" disabled onclick="submitprice()">提交</button>
 
     <div class="bottom-tab-bar"></div>
-    <script src="/js/bottombar.js"></script>
+    <script src="js/bottombar.js"></script>
     <script>
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
@@ -84,7 +84,7 @@
             const marketList = document.getElementById('marketList');
             const wareInput = document.getElementById('wareInput');
             const wareList = document.getElementById('wareList');
-            const response = await fetch('/json/ware.json');
+            const response = await fetch('json/ware.json');
             const ware = await response.json();
             loadlist(marketInput, marketList, ware.market);
             loadlist(wareInput, wareList, ware.ware);
