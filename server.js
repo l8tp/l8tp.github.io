@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(_dirname + 'public'));
+app.use(express.static(_dirname + '/public'));
 //导入路由模块
 const poductRouter = require('./routes/products');
 //挂载路由
