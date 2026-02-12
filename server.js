@@ -313,14 +313,6 @@ app.post('/api/logout', async (req, res) => {
   }
 });
 
-//app.get('(/\/(.+)\.(json|css|js)$/,', (req, res) => {
-//  res.sendFile(__dirname +"/public/"+ req.params[0] +"."+ req.params[1] );
-//});
-
-
-//app.get('/json/*', (req, res) => {
-//  res.sendFile(__dirname + '/public/json/' + req.params[0]);
-//});
 // 8. 主页
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/home.html');

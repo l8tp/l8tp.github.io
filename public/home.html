@@ -45,6 +45,15 @@
         }
         label{
             justify-content: flex-start;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        label span{
+            color: green;
+        }
+        hr{
+            border-color: #000000;
+            height: 2px;
         }
         .filter{
             display: flex;
@@ -64,8 +73,19 @@
             display: flex;
             flex-direction: column;
         }
+        .inputarea>div{
+            display: flex;
+            gap: 3px;
+        }
+        .inputarea button{ width: 100px;}
         .xtitle button{font-size: 20px; padding: 2px; height: 100%;}
         .xtitle button:hover{color: #000000;}
+        .bluelist{
+            border-width:0 0 0 2px;
+            border-radius: 0;
+            border-color: #ffffff;
+        }
+        .bluelist a{background-color: rgba(255, 255, 255, 0.3);}
     </style>
 </head>
 <body>
@@ -82,15 +102,23 @@
     <div class="filter" style="display: none;">
         <div class="inputarea">
             <label id="marketLable">超市: </label>
-            <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市">
+            <div>
+                <button id="clearMarketLabel" type="button">清空标签</button>
+                <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市">
+
+            </div>
         </div>
         <div id="marketList" class="bluelist"></div>
+        <hr>
         <div class="inputarea">
             <label id="wareLable">商品: </label>
-            <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品">
+            <div>
+                <button id="clearWareLabel" type="button">清空标签</button>
+                <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品">
+            </div>
         </div>
         <div id="wareList" class="bluelist"></div>
-        <button id="submitselect">选择完成</button>
+        <button id="submitselect" style="background-color: #00983a;">选择完成</button>
     </div>
     <div class="bottom-tab-bar"></div>
     <script src="/js/bottombar.js"></script>
@@ -220,18 +248,32 @@
             if (poptimes < 2){
                 const button = document.getElementById('submitselect');
                 button.addEventListener('click', ()=>{closefilter(filter, marketLable, wareLable, ware)})
+                document.getElementById('clearMarketLabel').addEventListener('click', ()=>{
+                    lableToList(marketLable, marketList);
+                });
+                document.getElementById('clearWareLabel').addEventListener('click', ()=>{
+                    lableToList(wareLable, wareList);
+                });
 
-                loadlist(marketLable, marketList, ware.market)
-                loadlist(wareLable, wareList, ware.ware)
+            // localStorage.removeItem('filters');
+                const filters = JSON.parse(localStorage.getItem('filters') || null);
+                let markets, wares;
+                if (filters){
+                    console.log('加载了上次的筛选条件')
+                    markets = filters.markets;
+                    wares = filters.wares;
+                }
+                loadlist(marketLable, marketList, ware.market, markets)
+                loadlist(wareLable, wareList, ware.ware, wares)
             }
 
-            InputFilter(marketLable, marketInput, marketList, ware.market)
-            InputFilter(wareLable, wareInput, wareList, ware.ware)
+            InputFilter(marketLable, marketInput, marketList)
+            InputFilter(wareLable, wareInput, wareList)
 
         }
 
         //根据输入筛选列表
-        function InputFilter(lable, Input, list, data){
+        function InputFilter(lable, Input, list){
             Input.addEventListener('input', ()=>{
                 const inputValue = Input.value.trim();
 
@@ -260,7 +302,7 @@
 
         
         //加载候选列表的函数
-        function loadlist(label, List, data){
+        function loadlist(label, List, data, selectedData = null){
             //加载列表
             List.innerHTML = ''
             for (let i of data){
@@ -277,19 +319,44 @@
                 }
 
                 const i = e.target;
-                if (i !== List){
-                    const span = document.createElement('span');
-                    span.innerHTML = i.innerHTML + '&times;'
-                    label.appendChild(span);
-                    i.style.display = 'none';
-
-                    //监视标签内容点击标签删除标签
-                    span.addEventListener('click', ()=>{
-                        span.remove();
-                        i.style.display = 'block'
-                    })
-                }
+                if (i !== List){ listToLabel(i, label) };
             })
+
+            //加载上次选择的标签
+            if (selectedData){
+                const anodes = List.querySelectorAll('a');
+                for (let i of anodes){
+                    if (selectedData.includes(i.innerHTML.split('#')[0])){
+                        listToLabel(i, label);
+                    }
+                }
+            }
+        }
+
+        //列表赋值给标签并隐藏列表项，点击标签删除标签并显示列表项
+        function listToLabel(anode, label){
+            const span = document.createElement('span');
+            span.innerHTML = anode.innerHTML + '&times;'
+            label.appendChild(span);
+            anode.style.display = 'none';
+            span.addEventListener('click', ()=>{
+                span.remove();
+                anode.style.display = 'block'
+            })
+        }
+
+        //删除标签并显示列表项的函数
+        function lableToList(label, list){
+            const spannodes = label.querySelectorAll('span');
+            for (let i of spannodes){
+                const anodes = list.querySelectorAll('a');
+                for (let j of anodes){
+                    if (i.innerHTML.slice(0, -1) === j.innerHTML){
+                        j.style.display = 'block';
+                    }
+                }
+                i.remove();
+            }
         }
 
         //关闭筛选弹窗开始重新渲染表格
@@ -313,11 +380,16 @@
                 markets.push(i.innerHTML.slice(0, -1).split('#')[0]);
             };
             tbody.innerHTML = ''
+            const wares = []
             for (let i of warenodes){
                 tbody.innerHTML += `<tr><th>${i.innerHTML.slice(0, -1).split('#')[0]}</th></tr>`
+                wares.push(i.innerHTML.slice(0, -1).split('#')[0]);
             };
+            //存储筛选条件到本地，下次打开弹窗自动加载
+            let filters = {markets, wares};
+            localStorage.setItem('filters', JSON.stringify(filters));
             const tbodytrs = tbody.querySelectorAll('tr');
-           getpricenote(tbodytrs, markets);
+            getpricenote(tbodytrs, markets);
         }
 
     </script>

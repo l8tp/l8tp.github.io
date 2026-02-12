@@ -80,6 +80,7 @@ button:disabled {
     border-radius: 5px;
     position: relative; 
     background-color: #ffffff;
+    font-size: 20px;
 }
 
 

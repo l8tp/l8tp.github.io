@@ -9,7 +9,12 @@
     <style>
         
         #unit{
-            border-bottom: 2px solid #000;
+            text-decoration: underline 2px;
+            text-underline-offset: 5px;
+            font-weight: 800; 
+            margin-left: 10px; 
+            cursor: pointer;
+            width: 70px;
         }
 
         .form-group{
@@ -57,7 +62,7 @@
             <label for="priceInput">价格：</label>
             <input type="number" id="priceInput" name="price" placeholder="输入价格" autocomplete="off">
             <div style="display: flex; flex-direction: column; justify-content: center; position: relative;">
-                <a style=" font-weight: 800; margin-left: 10px; cursor: pointer;" id="unit" onclick=unitList()>元/斤 ▼</a>
+                <a id="unit" onclick=unitList()>元/斤 ▼</a>
                 <li id="unitList" class="bluelist">
                     <!-- 此处加载单位列表 -->
                 </li>
