@@ -4,6 +4,10 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "public/**/*",  # 处理所有静态文件
+      "use": "@vercel/static"
     }
   ],
   "routes": [
