@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "public/**/*",  # 处理所有静态文件
+      "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
