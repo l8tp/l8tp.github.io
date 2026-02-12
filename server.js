@@ -314,7 +314,7 @@ app.post('/api/logout', async (req, res) => {
 });
 
 app.get('(/\/(.+)\.(json|css|js)$/,', (req, res) => {
-  res.sendFile(__dirname +"/"+ req.params[0] +"."+ req.params[1] );
+  res.sendFile(__dirname +"/public/"+ req.params[0] +"."+ req.params[1] );
 });
 
 
