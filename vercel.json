@@ -7,10 +7,6 @@
     }
   ],
   "routes": [
-        {
-      "src": "/json/ware.json",
-      "dest": "/public/json/ware.json"
-        },
     {
       "src": "/(.*)",
       "dest": "/server.js"
