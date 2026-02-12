@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static('/public'));
 //导入路由模块
 const poductRouter = require('./routes/products');
 //挂载路由
@@ -313,9 +313,9 @@ app.post('/api/logout', async (req, res) => {
   }
 });
 
-app.get('(/\/(.+)\.(json|css|js)$/,', (req, res) => {
-  res.sendFile(__dirname +"/public/"+ req.params[0] +"."+ req.params[1] );
-});
+//app.get('(/\/(.+)\.(json|css|js)$/,', (req, res) => {
+//  res.sendFile(__dirname +"/public/"+ req.params[0] +"."+ req.params[1] );
+//});
 
 
 //app.get('/json/*', (req, res) => {
