@@ -313,8 +313,8 @@ app.post('/api/logout', async (req, res) => {
   }
 });
 
-app.get('/json/(*)', (req, res) => {
-  res.sendFile(__dirname + '/public/json/$1');
+app.get('/json/*', (req, res) => {
+  res.sendFile(__dirname + '/public/json/' + req.params[0]);
 });
 // 8. 主页
 app.get('/', (req, res) => {
