@@ -78,7 +78,7 @@
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
         if (!userIdTemp) {
-            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_9';
+            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_1';
             localStorage.setItem('userIdTemp', userIdTemp);
         }
 
@@ -254,7 +254,7 @@
                 //更新userIdTemp
                 let IdTempArray = userIdTemp.split('_');
                 let IdTimesStamp =  IdTempArray.pop();
-                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp -1);
+                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp +1);
                 localStorage.setItem('userIdTemp', userIdTemp);
 
                 const result = await response.json();

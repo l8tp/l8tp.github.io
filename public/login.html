@@ -136,7 +136,10 @@
         }
                 
         .user-info {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
         }
         
         .user-avatar {
@@ -206,19 +209,7 @@
                 
                 <!-- 登录后显示的用户信息 -->
                 <div id="userInfo" class="user-info" style="display: none;">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <h2 style="margin-bottom: 8px; color: #2d3748;">欢迎, <span id="usernameDisplay"></span>!</h2>
-                    <div><a href='public/home.html'>没有跳转请点击此处</a></div>
-                    <div style="margin-bottom: 20px; background: #f7fafc; padding: 15px; border-radius: 8px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <span style="color: #718096;">用户ID:</span>
-                            <span id="userId" style="font-weight: 500;"></span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #718096;">邮箱:</span>
-                            <span id="userEmail" style="font-weight: 500;">未设置</span>
-                        </div>
-                    </div>
+                    <h2><a href='/home.html'>没有跳转请点击此处</a></h2>
                     <button onclick="logout()" class="btn btn-danger">退出登录</button>
                 </div>
             </div>
@@ -264,22 +255,6 @@
             document.getElementById('regEmail').value = '';
         }
         
-        // 显示用户信息
-        function showUserInfo(user) {
-            document.getElementById('loginForm').classList.remove('active');
-            document.getElementById('registerForm').classList.remove('active');
-            document.getElementById('userInfo').style.display = 'block';
-            
-            const username = user.username;
-            document.getElementById('usernameDisplay').textContent = username;
-            document.getElementById('userId').textContent = user.id;
-            document.getElementById('userEmail').textContent = user.email || '未设置';
-            
-            // 设置用户头像
-            const avatar = document.getElementById('userAvatar');
-            avatar.textContent = username.charAt(0).toUpperCase();
-            
-        }
         
         // 登录函数
         async function login() {
@@ -306,7 +281,8 @@
                     currentToken = result.token;
                     localStorage.setItem('token', result.token);
                     localStorage.setItem('user', JSON.stringify(result.user));
-                    showUserInfo(result.user);
+                    document.getElementById('loginForm').classList.remove('active');
+                    document.getElementById('userInfo').style.display = 'flex';
                     window.location.href = 'home.html'
                 } else {
                     console.log('登录失败！')
@@ -401,7 +377,6 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    showUserInfo(result.user);
                     return true;
                 }
             } catch (error) {
@@ -421,6 +396,9 @@
                 localStorage.removeItem('token');
                 currentToken = '';
             }else{
+                document.getElementById('loginForm').classList.remove('active');
+                document.getElementById('userInfo').style.display = 'flex';
+
                 //跳转页面
                 window.location.href = 'home.html'
             }

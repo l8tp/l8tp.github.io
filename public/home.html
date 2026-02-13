@@ -9,6 +9,10 @@
 
     <style>
         body{padding: 15px 10px 100px 10px;}
+        h1{
+            text-align: center;
+            font-size: 20px;
+        }
         table{
             width: 100%;
             border-collapse: collapse;
@@ -51,6 +55,11 @@
         }
         label span{
             color: green;
+            cursor: pointer;
+        }
+        label span::after{
+            content: '×';
+            cursor: pointer;
         }
         hr{
             border-color: #000000;
@@ -64,6 +73,7 @@
             flex-wrap: wrap;
             padding: 10px;
             height: calc(100vh - 150px);
+            min-height: 650px;
             background-color: #eaf5ff;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
@@ -105,6 +115,7 @@
         </table>
     </div>
     <div class="filter" style="display: none;">
+        <h1>请选择输入框下方的列表</h1>
         <div class="inputarea">
             <label id="marketLable">超市: </label>
             <div>
@@ -132,7 +143,7 @@
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
         if (!userIdTemp) {
-            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_9';
+            userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_1';
             localStorage.setItem('userIdTemp', userIdTemp);
         }
 
@@ -189,7 +200,7 @@
                 //更新userIdTemp
                 let IdTempArray = userIdTemp.split('_');
                 let IdTimesStamp =  IdTempArray.pop();
-                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp -1);
+                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp +1);
                 localStorage.setItem('userIdTemp', userIdTemp);
 
                 const result = await response.json();
@@ -286,7 +297,7 @@
                 const spannodes = lable.querySelectorAll('span');
                 const spans = [];
                 for (let i of spannodes){
-                    spans.push(i.innerHTML.slice(0, -1));
+                    spans.push(i.innerHTML);
                 }
                 //获取候选列表
                 const anodes = list.querySelectorAll('a');
@@ -341,7 +352,7 @@
         //列表赋值给标签并隐藏列表项，点击标签删除标签并显示列表项
         function listToLabel(anode, label){
             const span = document.createElement('span');
-            span.innerHTML = anode.innerHTML + '&times;'
+            span.innerHTML = anode.innerHTML
             label.appendChild(span);
             anode.style.display = 'none';
             span.addEventListener('click', ()=>{
@@ -356,7 +367,7 @@
             for (let i of spannodes){
                 const anodes = list.querySelectorAll('a');
                 for (let j of anodes){
-                    if (i.innerHTML.slice(0, -1) === j.innerHTML){
+                    if (i.innerHTML === j.innerHTML){
                         j.style.display = 'block';
                     }
                 }
@@ -381,14 +392,14 @@
             let markets = []
             theadtr.innerHTML = `<th class='xtitle' onclick='filter()'><button>筛选▼</button></th>`
             for (let i of marketnodes){
-                theadtr.innerHTML += `<th>${i.innerHTML.slice(0, -1).split('#')[0]}</th>`
-                markets.push(i.innerHTML.slice(0, -1).split('#')[0]);
+                theadtr.innerHTML += `<th>${i.innerHTML.split('#')[0]}</th>`
+                markets.push(i.innerHTML.split('#')[0]);
             };
             tbody.innerHTML = ''
             const wares = []
             for (let i of warenodes){
-                tbody.innerHTML += `<tr><th>${i.innerHTML.slice(0, -1).split('#')[0]}</th></tr>`
-                wares.push(i.innerHTML.slice(0, -1).split('#')[0]);
+                tbody.innerHTML += `<tr><th>${i.innerHTML.split('#')[0]}</th></tr>`
+                wares.push(i.innerHTML.split('#')[0]);
             };
             //存储筛选条件到本地，下次打开弹窗自动加载
             let filters = {markets, wares};
