@@ -59,11 +59,27 @@
         }
         label span::after{
             content: '×';
+            color: #852626;
             cursor: pointer;
         }
         hr{
             border-color: #000000;
             height: 2px;
+        }
+        #Xfilter{
+            position: absolute;
+            z-index: 997;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            background-color: transparent;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 0;
+            border: #000000 solid 1px;
+            cursor: pointer;
+            color: #852626;
         }
         .filter{
             display: flex;
@@ -115,12 +131,13 @@
         </table>
     </div>
     <div class="filter" style="display: none;">
+        <button id="Xfilter">×</button>
         <h1>请选择输入框下方的列表</h1>
         <div class="inputarea">
             <label id="marketLable">超市: </label>
             <div>
                 <button id="clearMarketLabel" type="button">清空标签</button>
-                <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市">
+                <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市↓">
 
             </div>
         </div>
@@ -130,7 +147,7 @@
             <label id="wareLable">商品: </label>
             <div>
                 <button id="clearWareLabel" type="button">清空标签</button>
-                <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品">
+                <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品↓">
             </div>
         </div>
         <div id="wareList" class="bluelist"></div>
@@ -262,6 +279,9 @@
             const wareList = document.getElementById('wareList');
 
             if (poptimes < 2){
+                document.getElementById('Xfilter').addEventListener('click', ()=>{
+                    filter.style.display = 'none';
+                });
                 const button = document.getElementById('submitselect');
                 button.addEventListener('click', ()=>{closefilter(filter, marketLable, wareLable, ware)})
                 document.getElementById('clearMarketLabel').addEventListener('click', ()=>{
