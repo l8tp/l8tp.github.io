@@ -408,6 +408,16 @@
             getpricenote(tbodytrs, markets);
         }
 
+        // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
+        document.querySelector('.filter').querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', ()=>{
+                document.querySelector('.bottom-tab-bar').style.display = 'none';
+            });
+            input.addEventListener('blur', ()=>{
+                document.querySelector('.bottom-tab-bar').style.display = 'flex';
+            });
+        })
+
     </script>
 </body>
 </html>

@@ -142,6 +142,7 @@
             Input.addEventListener('focus', ()=>{
                 List.style.display = 'flex';
                 closelist = true;
+                document.querySelector('.bottom-tab-bar').style.display = 'none';
             });
             List.addEventListener('mousedown', ()=>{
                 closelist = false;
@@ -156,6 +157,7 @@
                 }else{
                     if (Input.value){Input.style.border = '2px solid #0dff00';}
                 }
+                document.querySelector('.bottom-tab-bar').style.display = 'flex';
             });
         }
 
