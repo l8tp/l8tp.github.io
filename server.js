@@ -423,7 +423,7 @@ app.delete('/api/deluser', async (req, res) => {
 
 // 本地开发服务器
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 服务器启动成功！`);
     console.log(`🌐 访问地址: http://localhost:${PORT}`);
     console.log(`🔐 数据库: ${Redis.fromEnv() ? 'Vercel KV' : '内存存储（测试用）'}`);

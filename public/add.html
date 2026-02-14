@@ -72,7 +72,8 @@
     <button type="submit" id="submitBtn" disabled onclick="submitprice()">提交</button>
 
     <div class="bottom-tab-bar"></div>
-    <script src="/js/bottombar.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/bottombar.js"></script>
     <script>
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
@@ -160,29 +161,6 @@
                 document.querySelector('.bottom-tab-bar').style.display = 'flex';
             });
         }
-
-        // 异步加载单位列表
-        async function unitList() {
-            const unit = document.getElementById('unit');
-            const unitList = document.getElementById('unitList');
-            const  response = await fetch('json/ware.json');
-            const ware = await response.json();
-            unitList.style.display = 'flex';
-            unitList.innerHTML = ''
-            for (let i of ware.unit){
-                unitList.innerHTML += `<a>${i}</a>`
-            }
-            unitList.addEventListener('click', (e)=>{
-                const i = e.target;
-                if (i !== unitList){
-                    unit.innerHTML = i.innerHTML + ' ▼';
-                    unitList.style.display = 'none';
-                }
-            })
-            unit.addEventListener('mouseout', ()=>{
-                const closelist = setTimeout(()=>{unitList.style.display = 'none'}, 10)
-            });
-        };
 
         //根据输入筛选下拉列表
         function InputFilter(Input, list, data){

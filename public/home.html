@@ -66,7 +66,24 @@
             border-color: #000000;
             height: 2px;
         }
-        #Xfilter{
+        #unit{
+            text-decoration: underline 2px;
+            text-underline-offset: 5px;
+            font-weight: 800; 
+            margin-left: 10px; 
+            cursor: pointer;
+            width: 70px;
+        }
+        #filter .bluelist{
+            background-color: transparent;
+            border-width:0 0 0 2px;
+            border-radius: 0;
+            border-color: #ffffff;
+            max-height: 150px;
+        }
+        #filter .bluelist a{background-color: rgba(255, 255, 255, 0.3);}
+
+        .Xwinpop{
             position: absolute;
             z-index: 997;
             top: 10px;
@@ -81,7 +98,7 @@
             cursor: pointer;
             color: #852626;
         }
-        .filter{
+        .winpop{
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -92,10 +109,31 @@
             background-color: #eaf5ff;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
-            margin: 0 10px;
+            margin: 0 10px 500px 10px;
             position: absolute; 
             top: 50px;
             z-index: 998;
+        }
+        #edit{
+            min-height: auto;
+            z-index: 1001;
+        }
+        .priceEdit{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 50px;
+            gap: 20px;
+
+        }
+        .priceEdit .unitarea{
+            display: flex; 
+            flex-direction: column;
+            gap: inherit;
+            justify-content: center; 
+        }
+        .priceEdit .bluelist{
+            display: none;
         }
         .inputarea{
             display: flex;
@@ -108,14 +146,6 @@
         .inputarea button{ width: 100px; background-color:#4e7188}
         .xtitle button{font-size: 20px; padding: 2px; height: 100%;}
         .xtitle button:hover{color: #000000;}
-        .bluelist{
-            background-color: transparent;
-            border-width:0 0 0 2px;
-            border-radius: 0;
-            border-color: #ffffff;
-            max-height: 150px;
-        }
-        .bluelist a{background-color: rgba(255, 255, 255, 0.3);}
     </style>
 </head>
 <body>
@@ -129,8 +159,8 @@
             </tbody>
         </table>
     </div>
-    <div class="filter" style="display: none;">
-        <button id="Xfilter">×</button>
+    <div id="filter" class="winpop" style="display: none;">
+        <button id="Xfilter" class="Xwinpop">×</button>
         <h1>请选择输入框下方的列表</h1>
         <div class="inputarea">
             <label id="marketLable">超市: </label>
@@ -152,8 +182,23 @@
         <div id="wareList" class="bluelist"></div>
         <button id="submitselect" style="background-color: #287e49;">选择完成</button>
     </div>
+    <div id="edit" class="winpop" style="display: none;">
+        <button id="Xedit" class="Xwinpop">×</button>
+        <div class="priceEdit">
+            <label for="priceInput">价格</label>
+            <input type="number" id="priceInput" name="priceInput" placeholder="请输入价格">
+            <div class="unitarea">
+                <li id="unitList" class="bluelist">
+                    <!-- 此处加载单位列表 -->
+                </li>
+                <a id="unit" onclick=unitList()>元/斤 ▼</a>
+            </div>
+            <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
+        </div>
+    </div>
     <div class="bottom-tab-bar"></div>
-    <script src="/js/bottombar.js"></script>
+    <script src="js/elements.js"></script>
+    <script src="js/bottombar.js"></script>
     <script>
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
@@ -170,10 +215,7 @@
             const tbody = container.querySelector('tbody');
             //监听点击后展开此行的时间
             tbody.addEventListener('click', (e)=>{
-                const tr = e.target.closest('tr');
-                tr.querySelectorAll('p').forEach(element => {
-                    element.style.display = 'block';
-                });
+                spreadEdit(e);
             })
 
             const  response = await fetch('/json/ware.json');
@@ -190,8 +232,10 @@
             };
             const tbodytrs = tbody.querySelectorAll('tr');
             getpricenote(tbodytrs, markets);
+            toggleBottomTabBar();
 
         })();
+
 
         //去除#后面别名的函数
         function delAlias(data){
@@ -239,7 +283,7 @@
                                     const time = priceJson.createdAt;
                                     if (ware === i.querySelector('th').innerHTML){
                                         containware = true;
-                                        i.innerHTML += `<th>${price}${unit}<p style='display:none'>时间：${time.split(' ')[0]}</p></th>`
+                                        i.innerHTML += `<th><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split(' ')[0]}</p></th>`
                                     }
                                 }
                                 if (!containware){i.innerHTML += '<th></th>'}
@@ -266,7 +310,7 @@
         //筛选超市和商品
         async function filter (){
             poptimes++;
-            const filter = document.querySelector('.filter')
+            const filter = document.querySelector('#filter')
             filter.style.display = 'flex'
             const  response = await fetch('/json/ware.json');
             const ware = await response.json();
@@ -278,7 +322,7 @@
             const wareList = document.getElementById('wareList');
 
             if (poptimes < 2){
-                document.getElementById('Xfilter').addEventListener('click', ()=>{
+                filter.querySelector('.Xwinpop').addEventListener('click', ()=>{
                     filter.style.display = 'none';
                 });
                 const button = document.getElementById('submitselect');
@@ -290,7 +334,6 @@
                     lableToList(wareLable, wareList);
                 });
 
-            // localStorage.removeItem('filters');
                 const filters = JSON.parse(localStorage.getItem('filters') || null);
                 let markets, wares;
                 if (filters){
@@ -428,14 +471,117 @@
         }
 
         // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
-        document.querySelector('.filter').querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', ()=>{
-                document.querySelector('.bottom-tab-bar').style.display = 'none';
+        function toggleBottomTabBar() {
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('focus', ()=>{
+                    document.querySelector('.bottom-tab-bar').style.display = 'none';
+                });
+                input.addEventListener('blur', ()=>{
+                    document.querySelector('.bottom-tab-bar').style.display = 'flex';
+                });
+            })
+        }
+
+        //展开时间和编辑弹窗
+        let actTh, actTr;
+        function spreadEdit(e){
+            const ware = e.target.closest('tr').querySelector('th').innerHTML;
+            const th = e.target.closest('th');
+            const p = th.querySelector('p');
+            const editHint = th.querySelector('.editHint');
+            if (p ? p.style.display === 'none' : true){
+                //第一次点击，展开时间
+                const tr = e.target.closest('tr');
+                tr.querySelectorAll('p').forEach(element => {
+                    element.style.display = 'block';
+                });
+                if (actTr){
+                    actTr.querySelectorAll('p').forEach(element => {
+                        element.style.display = 'none';
+                    });
+                }
+                actTr = tr;
+                if (actTh && actTh !== th) {
+                    actTh.style.color = 'black';
+                    if (actTh.querySelector('.editHint')){
+                        actTh.querySelector('.editHint').remove();
+                    }
+                }
+            }else{
+                if (!editHint){
+                    //第二次点击，提示再次点击开始编辑
+                    th.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + th.innerHTML
+                    th.style.color = 'red';
+                if (actTh && actTh !== th) {
+                    actTh.style.color = 'black';
+                    if (actTh.querySelector('.editHint')){
+                        actTh.querySelector('.editHint').remove();
+                    }
+                }
+                    actTh = th;
+                }else{
+                    //第三次点击，启动编辑弹窗
+                    editHint.remove();
+                    th.style.color = 'black';
+                    edit(ware, th, e);
+                }
+            }
+        }
+
+        //启动编辑弹窗
+        let editpoptimes = 0;
+        function edit(ware, th, e){
+            editpoptimes++;
+            //显示编辑弹窗
+            const edit = document.querySelector('#edit');
+            edit.style.display = 'flex';
+            edit.querySelector('.Xwinpop').addEventListener('click', ()=>{
+                edit.style.display = 'none';
             });
-            input.addEventListener('blur', ()=>{
-                document.querySelector('.bottom-tab-bar').style.display = 'flex';
-            });
-        })
+            edit.style.top = (th.getBoundingClientRect().bottom + window.pageYOffset) + 'px';
+            
+            //编辑弹窗赋值
+            const price = th.querySelector('.price').innerHTML;
+            const newpriceInput = edit.querySelector('#priceInput');
+            const unit = th.querySelector('.unit').innerHTML;
+            const unitText = edit.querySelector('#unit');
+            const market = document.querySelectorAll('#tablecontainer thead th')[th.cellIndex].innerHTML;
+            edit.querySelector('label').innerHTML = `${market}：${ware}`;
+            newpriceInput.value = price;
+            unitText.innerHTML = unit + ' ▼';
+
+            //上传数据并更新表格
+            if(editpoptimes > 1){ return };
+            edit.querySelector('#submitEdit').addEventListener('click', async ()=>{
+                const newPrice = newpriceInput.value;
+                const newUnit = unitText.innerHTML.split(' ')[0];
+                try {
+                    const response = await fetch(`${API_URL}/products/submitprice`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ token: currentToken, userIdTemp, marketInput: market, wareInput: ware, priceInput: newPrice, unit: newUnit })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('修改成功');
+                        th.querySelector('.price').innerHTML = newPrice;
+                        th.querySelector('.unit').innerHTML = newUnit;
+                        edit.style.display = 'none';
+                    } else {
+                        alert(result.message);
+                        if (result.message === '请先登录或注册，试用次数结束') {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            currentToken = '';
+                            
+                            window.location.href = '/login';
+                        }
+                    }
+                } catch (error) {
+                    alert('请求服务器错误');
+                }
+            })
+        }
 
     </script>
 </body>
