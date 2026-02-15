@@ -116,7 +116,6 @@
         }
         #edit{
             min-height: auto;
-            z-index: 1001;
         }
         .priceEdit{
             display: flex;
@@ -214,9 +213,7 @@
             const theadtr = container.querySelector('thead > tr');
             const tbody = container.querySelector('tbody');
             //监听点击后展开此行的时间
-            tbody.addEventListener('click', (e)=>{
-                spreadEdit(e);
-            })
+            spreadEdit(tbody)
 
             const  response = await fetch('/json/ware.json');
             const ware = await response.json();
@@ -483,62 +480,84 @@
         }
 
         //展开时间和编辑弹窗
-        let actTh, actTr;
-        function spreadEdit(e){
-            const ware = e.target.closest('tr').querySelector('th').innerHTML;
-            const th = e.target.closest('th');
-            const p = th.querySelector('p');
-            const editHint = th.querySelector('.editHint');
-            if (p ? p.style.display === 'none' : true){
-                //第一次点击，展开时间
-                const tr = e.target.closest('tr');
-                tr.querySelectorAll('p').forEach(element => {
-                    element.style.display = 'block';
-                });
-                if (actTr){
-                    actTr.querySelectorAll('p').forEach(element => {
-                        element.style.display = 'none';
-                    });
+        function spreadEdit(tbody){
+            let form2Th, form1Tr;
+            let editpoptimes = 0;
+            tbody.addEventListener('click', (e)=>{
+                const ware = e.target.closest('tr').querySelector('th').innerHTML;
+                const th = e.target.closest('th');
+                const p = th.querySelector('p');
+                const editHint = th.querySelector('.editHint');
+                let thForm = th.className;
+                switch (thForm) {
+                    case '':
+                        //第一次点击，展开时间
+                        const tr = e.target.closest('tr');
+                        tr.querySelectorAll('p').forEach(element => {
+                            element.style.display = 'block';
+                        });
+                        tr.querySelectorAll('th').forEach(element => {
+                            element.className = 'form_1';
+                        });
+                        if (form1Tr) {
+                            form1Tr.querySelectorAll('p').forEach(element => {
+                                element.style.display = 'none';
+                            });
+                            form1Tr.querySelectorAll('th').forEach(element => {
+                                element.className = '';
+                                element.style.color = 'black';
+                            });
+                            form1Tr.querySelectorAll('.editHint').forEach(element => {
+                                element.remove();
+                            });
+                        }
+                        form1Tr = tr;
+                        break;
+                    case 'form_1':
+                        //第二次点击，提示再次点击开始编辑
+                        th.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + th.innerHTML
+                        th.style.color = 'red';
+                        th.className = 'form_2';
+                        if (form2Th && form2Th !== th) {
+                            if (form2Th.className !== 'form_1'){
+                                form2Th.style.color = 'black';
+                                form2Th.querySelector('.editHint').remove();
+                                form2Th.className = 'form_1';
+                            }
+                        }
+                        form2Th = th;
+                        break;
+                    case 'form_2':
+                        //第三次点击，启动编辑弹窗
+                        editHint.remove();
+                        th.style.color = 'black';
+                        th.className = 'form_1';
+                        editpoptimes++;
+                        edit(ware, th, editpoptimes);
+                        break;
+                    default:
+                        console.error('th的class异常')
+                        return;
                 }
-                actTr = tr;
-                if (actTh && actTh !== th) {
-                    actTh.style.color = 'black';
-                    if (actTh.querySelector('.editHint')){
-                        actTh.querySelector('.editHint').remove();
-                    }
-                }
-            }else{
-                if (!editHint){
-                    //第二次点击，提示再次点击开始编辑
-                    th.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + th.innerHTML
-                    th.style.color = 'red';
-                if (actTh && actTh !== th) {
-                    actTh.style.color = 'black';
-                    if (actTh.querySelector('.editHint')){
-                        actTh.querySelector('.editHint').remove();
-                    }
-                }
-                    actTh = th;
-                }else{
-                    //第三次点击，启动编辑弹窗
-                    editHint.remove();
-                    th.style.color = 'black';
-                    edit(ware, th, e);
-                }
-            }
+            })
         }
 
         //启动编辑弹窗
-        let editpoptimes = 0;
-        function edit(ware, th, e){
-            editpoptimes++;
+        function edit(ware, th, editpoptimes){
             //显示编辑弹窗
             const edit = document.querySelector('#edit');
             edit.style.display = 'flex';
             edit.querySelector('.Xwinpop').addEventListener('click', ()=>{
                 edit.style.display = 'none';
             });
-            edit.style.top = (th.getBoundingClientRect().bottom + window.pageYOffset) + 'px';
+            const thBottom = th.getBoundingClientRect().bottom + window.pageYOffset;
+            const thViewBottom = th.getBoundingClientRect().bottom;
+            const thTop = th.getBoundingClientRect().top + window.pageYOffset;
+            if (thViewBottom + edit.getBoundingClientRect().height > window.innerHeight){
+                edit.style.top = (thTop - edit.getBoundingClientRect().height) + 'px';
+            } else {
+                edit.style.top = thBottom + 'px';
+            }
             
             //编辑弹窗赋值
             const price = th.querySelector('.price').innerHTML;
@@ -555,6 +574,7 @@
             edit.querySelector('#submitEdit').addEventListener('click', async ()=>{
                 const newPrice = newpriceInput.value;
                 const newUnit = unitText.innerHTML.split(' ')[0];
+                const subdata = new Date().toLocaleString('zh-CN').split(' ')[0];
                 try {
                     const response = await fetch(`${API_URL}/products/submitprice`, {
                         method: 'POST',
@@ -566,6 +586,7 @@
                         alert('修改成功');
                         th.querySelector('.price').innerHTML = newPrice;
                         th.querySelector('.unit').innerHTML = newUnit;
+                        th.querySelector('p').innerHTML = `时间：${subdata}`;
                         edit.style.display = 'none';
                     } else {
                         alert(result.message);
