@@ -560,14 +560,17 @@
             }
             
             //编辑弹窗赋值
-            const price = th.querySelector('.price').innerHTML;
+            let price, unit;
+            if (th.innerHTML){
+                price = th.querySelector('.price').innerHTML;
+                unit = th.querySelector('.unit').innerHTML;
+            }
             const newpriceInput = edit.querySelector('#priceInput');
-            const unit = th.querySelector('.unit').innerHTML;
             const unitText = edit.querySelector('#unit');
             const market = document.querySelectorAll('#tablecontainer thead th')[th.cellIndex].innerHTML;
             edit.querySelector('label').innerHTML = `${market}：${ware}`;
-            newpriceInput.value = price;
-            unitText.innerHTML = unit + ' ▼';
+            newpriceInput.value = price || '';
+            unitText.innerHTML = (unit || '元/斤') + ' ▼';
 
             //上传数据并更新表格
             if(editpoptimes > 1){ return };
@@ -584,9 +587,7 @@
                     const result = await response.json();
                     if (result.success) {
                         alert('修改成功');
-                        th.querySelector('.price').innerHTML = newPrice;
-                        th.querySelector('.unit').innerHTML = newUnit;
-                        th.querySelector('p').innerHTML = `时间：${subdata}`;
+                        th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata}</p>`;
                         edit.style.display = 'none';
                     } else {
                         alert(result.message);
