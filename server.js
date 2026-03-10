@@ -1,13 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
-
-// require('dotenv').config();
-// const {Redis} = require('@upstash/redis');
-// const express = require('express');
-// const bcrypt = require('bcrypt');
-
 import express from 'express';
-import {Redis} from '@upstash/redis';
+import { createClient } from '@supabase/supabase-js';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -23,74 +17,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 //导入路由模块
-// const poductRouter = require('./routes/products');
 import productRouter from './routes/products.js';
 //挂载路由
 app.use('/api/products', productRouter);
 
-// 创建Vercel KV客户端
-let kv;
-try {
-  // 检查是否存在 Upstash Redis 环境变量
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    kv = Redis.fromEnv();
-    console.log('✅ Vercel KV连接成功');
-  } else {
-    throw new Error('Vercel KV环境变量未配置');
-  }
-} catch (error) {
-  console.log('⚠️  Vercel KV未配置，使用内存存储（仅限测试）');
-  // 如果没有配置KV，使用内存存储（仅用于测试）
-  const memoryStore = {};
-  kv = {
-    hget: async (key, field) => memoryStore[`${key}:${field}`],
-    hset: async (key, data) => {
-      Object.entries(data).forEach(([field, value]) => {
-        memoryStore[`${key}:${field}`] = value;
-      });
-      return 1;
-    },
-    hgetall: async (key) => {
-      const result = {};
-      Object.keys(memoryStore).forEach(k => {
-        const i = k.split(':');
-        const j = i.pop();
-        if (i.join(':') == key) {
-          const field = j;
-          result[field] = memoryStore[k];
-        }
-      });
-      return result;
-    },
-    del: async (key) => {
-      Object.keys(memoryStore).forEach(k => {
-        if (k.startsWith(`${key}:`)) {
-          delete memoryStore[k];
-        }
-      });
-      return 1;
-    },
-    hdel: async (key, field) => {
-      Object.keys(memoryStore).forEach(k => {
-        if (k.startsWith(`${key}:`)) {
-          if (field == k.split(':')[1]) {
-            delete memoryStore[k];
-          }
-        }
-      });
-      return 1;
-    },
-    hlen: async (key) => {
-      let count = 0;
-      Object.keys(memoryStore).forEach(k => {
-        if (k.startsWith(`${key}:`)) {
-          count++;
-        }
-      });
-      return count;
-    }
-  };
-}
+//创建supabase客户端
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
 
 //设置管理员账号
 (async function () {
@@ -101,19 +36,28 @@ try {
     // 加密密码
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userData = {
-      username,
-      password: hashedPassword,
-      email: '',
-      createdAt: new Date().toISOString(),
-      id: 'manage:' + Date.now().toString() // 使用时间戳作为ID
-    };
-    
-    // 保存到KV
-    await kv.hset('users', { [username]: userData });
-    
-    // 也按ID存储一份，方便通过ID查找
-    await kv.hset('users_by_id', { [userData.id]: userData });
+  const { data:user, error:error1 } = await supabase
+    .from('price_users')
+    .select('*')
+    .eq('username', username)
+    .single();
+  if(user){
+    const { data, error } = await supabase
+      .from('price_users')
+      .update({ id:-1, password:hashedPassword })
+      .eq('username', username)
+      .select();
+    console.log('管理员更新成功：' + error)
+
+  }else{
+    const { data, error } = await supabase
+      .from('price_users')
+      .insert({id:-1, username, password:hashedPassword })
+      .select();
+    console.log('管理员创建成功：' + error)
+
+  }
+
   
 })();
 
@@ -122,13 +66,20 @@ try {
 app.post('/api/register', async (req, res) => {
   try {
     const { username, password, email } = req.body;
-    const count = await kv.hlen('users');
+    // const count = await kv.hlen('users');
+
+  const { count, error:error0 } = await supabase
+    .from('price_users')
+    .select('*', {count: 'exact', head: true});
+  console.log(`用户数量${count}`);
     if (count > 499){
       return res.json({ 
         success: false, 
         message: '注册用户已经到500个上限' 
       });
     }
+
+
     // 验证输入
     if (!username || !password) {
       return res.json({ 
@@ -161,8 +112,13 @@ app.post('/api/register', async (req, res) => {
     }
     
     // 检查用户名是否已存在
-    const existingUser = await kv.hget('users', username);
-    if (existingUser) {
+    const { data:existingUser, error:error1 } = await supabase
+      .from('price_users')
+      .select('*')
+      .eq('username', username)
+      .single();
+
+    if (existingUser || !error1) {
       return res.json({ 
         success: false, 
         message: '用户名已存在' 
@@ -173,27 +129,18 @@ app.post('/api/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     // 创建用户对象
-    const userData = {
-      username,
-      password: hashedPassword,
-      email: email || '',
-      createdAt: new Date().toISOString(),
-      id: Date.now().toString() // 使用时间戳作为ID
-    };
-    
-    // 保存到KV
-    await kv.hset('users', { [username]: userData });
-    
-    // 也按ID存储一份，方便通过ID查找
-    await kv.hset('users_by_id', { [userData.id]: userData });
-    
+    const { data, error } = await supabase
+      .from('price_users')
+      .insert({ username, password:hashedPassword })
+      .select();
+
+
     res.json({ 
       success: true, 
       message: '注册成功！',
       user: {
-        id: userData.id,
-        username: userData.username,
-        email: userData.email
+        username: username,
+        email: email
       }
     });
     
@@ -218,9 +165,14 @@ app.post('/api/login', async (req, res) => {
       });
     }
     
-    // 从KV获取用户
-    const userJson = await kv.hget('users', username);
-    
+    // 数据库获取用户    
+    const { data:userJson, error:error1 } = await supabase
+      .from('price_users')
+      .select('*')
+      .eq('username', username)
+      .single();
+
+
     if (!userJson) {
       return res.json({ 
         success: false, 
@@ -237,9 +189,15 @@ app.post('/api/login', async (req, res) => {
       // 生成一个简单的token（实际项目中应该用JWT）
       const token = Buffer.from(`${user.id}:${Date.now()}`).toString('base64');
       
-      // 保存token到KV
-      await kv.hset('tokens', { [token]: user.username });
-      
+      // 保存token
+      console.log('登录成功，token：' + token)
+      const { data, error } = await supabase
+        .from('price_users')
+        .update({ token })
+        .eq('username',username)
+        .select();
+
+
       res.json({ 
         success: true, 
         message: '登录成功！',
@@ -277,19 +235,15 @@ app.post('/api/verify', async (req, res) => {
         message: '缺少token' 
       });
     }
-    
-    // 从KV检查token
-    const username = await kv.hget('tokens', token);
-    console.log(username, token)
-    if (!username) {
-      return res.json({ 
-        success: false, 
-        message: '无效的token' 
-      });
-    }
-    
+        
     // 获取用户信息
-    const userJson = await kv.hget('users', username);
+    const { data:userJson, error:error } = await supabase
+      .from('price_users')
+      .select('*')
+      .eq('token', token)
+      .single();
+
+
     if (!userJson) {
       return res.json({ 
         success: false, 
@@ -323,7 +277,11 @@ app.post('/api/logout', async (req, res) => {
     const { token } = req.body;
     
     if (token) {
-      await kv.hdel('tokens', token);
+      const { data, error } = await supabase
+        .from('price_users')
+        .update({ token:'' })
+        .eq('token',token)
+        .select();
     }
     
     res.json({ 
@@ -359,9 +317,14 @@ app.post('/api/getalluser', async (req, res) => {
     });
   }
   
-  // 从token获取管理员账号名
-  const username = await kv.hget('tokens', token);
-  
+  // 从token获取管理员账号名  
+  const { data:username1, error:error } = await supabase
+    .from('price_users')
+    .select('username')
+    .eq('token', token)
+    .single();
+  const username = username1.username;
+
   if (username !== global.managename) {
     return res.json({ 
       success: false, 
@@ -370,16 +333,23 @@ app.post('/api/getalluser', async (req, res) => {
   }
 
   try {
-    const allUsers = await kv.hgetall('users');
+
+  const { data:userJson, error:error } = await supabase
+    .from('price_users')
+    .select('*');
+
     const users = [];
-    
-    for (const [, userJson] of Object.entries(allUsers)) {
-      const user = {...userJson};
-      // 移除密码
-      delete user.password;
-      users.push(user);
+
+    for(let i of userJson){
+      const j = {
+        id:i.id,
+        username:i.username,
+        email:i.email
+      };
+      users.push(j);
     }
-    
+
+
     res.json({ 
       success: true, 
       users: users,
@@ -406,8 +376,12 @@ app.delete('/api/deluser', async (req, res) => {
   }
   
   // 从token获取管理员账号名
-  const username = await kv.hget('tokens', token);
-
+    const { data:username1, error:error } = await supabase
+    .from('price_users')
+    .select('username')
+    .eq('token', token)
+    .single();
+    const username = username1.username;
 
   if (username !== global.managename) {
     return res.json({ 
@@ -420,7 +394,13 @@ app.delete('/api/deluser', async (req, res) => {
     console.log(`删除的用户: ${delusername}`)
 
     // 获取用户信息
-    const userJson = await kv.hget('users', delusername);
+    const { data:userJson, error } = await supabase
+      .from('price_users')
+      .select('*')
+      .eq('username',delusername)
+      .single();
+
+
     if (!userJson) {
       return res.json({ 
         success: false, 
@@ -429,9 +409,12 @@ app.delete('/api/deluser', async (req, res) => {
     }
     const user = userJson;
     
-    // 删除用户
-    await kv.hdel('users', delusername);
-    await kv.hdel('users_by_id', user.id);
+    // 删除用户    
+    const { data, error1 } = await supabase
+      .from('price_users')
+      .delete()
+      .eq('username',delusername);
+
     
     res.json({ 
       success: true, 
@@ -453,7 +436,7 @@ if (import.meta.main) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 服务器启动成功！`);
     console.log(`🌐 访问地址: http://localhost:${PORT}`);
-    console.log(`🔐 数据库: ${process.env.UPSTASH_REDIS_REST_URL ? 'Vercel KV' : '内存存储（测试用）'}`);
+    console.log(`🔐 数据库: ${supabaseUrl ? '在线数据库' : '内存存储（测试用）'}`);
     console.log('\n📡 API接口:');
     console.log(`  POST /api/register  - 注册用户`);
     console.log(`  POST /api/login     - 用户登录`);

@@ -272,15 +272,15 @@
                         message.innerHTML = `共${result.data.length}个超市的记录：`
                         //遍历每个超市
                         for (let j of result.data){
-                            const data = Object.entries(j);
                             //遍历表格体的每一行
                             for (let i of tbodytrs){
                                 //遍历超市的商品
                                 let containware = false;
-                                for (const [ware, priceJson] of data) {
+                                for(const priceJson of j){
+                                    const ware = priceJson.ware
                                     const price = priceJson.price;
                                     const unit = priceJson.unit;
-                                    const time = priceJson.createdAt;
+                                    const time = priceJson.created_at;
                                     if (ware === i.querySelector('th').innerHTML){
                                         containware = true;
                                         i.innerHTML += `<th><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split(' ')[0]}</p></th>`

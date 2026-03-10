@@ -1,15 +1,9 @@
-// routes/products.js
-// const express = require('express');
-// const app = express();
-// const {Redis} = require('@upstash/redis');
-// const bcrypt = require('bcrypt');
 
 import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import {Redis} from '@upstash/redis';
-import bcrypt from 'bcrypt';
+import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -25,60 +19,12 @@ app.use(express.static('.'));
 
 const router = express.Router();
 
-// 创建Vercel KV客户端
-let kv;
-try {
-  // 检查是否存在 Upstash Redis 环境变量
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    kv = Redis.fromEnv();
-    console.log('✅ Vercel KV连接成功');
-  } else {
-    throw new Error('Vercel KV环境变量未配置');
-  }
-} catch (error) {
-  console.log('⚠️  Vercel KV未配置，使用内存存储（仅限测试）');
-  // 如果没有配置KV，使用内存存储（仅用于测试）
-  const memoryStore = {};
-  kv = {
-    hget: async (key, field) => memoryStore[`${key}:${field}`],
-    hset: async (key, data) => {
-      Object.entries(data).forEach(([field, value]) => {
-        memoryStore[`${key}:${field}`] = value;
-      });
-      return 1;
-    },
-    hgetall: async (key) => {
-      const result = {};
-      Object.keys(memoryStore).forEach(k => {
-        const i = k.split(':');
-        const j = i.pop();
-        if (i.join(':') == key) {
-          const field = j;
-          result[field] = memoryStore[k];
-        }
-      });
-      return result;
-    },
-    del: async (key) => {
-      Object.keys(memoryStore).forEach(k => {
-        if (k.startsWith(`${key}:`)) {
-          delete memoryStore[k];
-        }
-      });
-      return 1;
-    },
-    hdel: async (key, field) => {
-      Object.keys(memoryStore).forEach(k => {
-        if (k.startsWith(`${key}:`)) {
-          if (field == k.split(':')[1]) {
-            delete memoryStore[k];
-          }
-        }
-      });
-      return 1;
-    }
-  };
-}
+//创建supabase客户端
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+
 
 //1. 存储提交的价格数据
 router.post('/submitprice', async (req, res) => {
@@ -111,7 +57,12 @@ router.post('/submitprice', async (req, res) => {
     }
     
     // 从token获取账号名验证
-    username = await kv.hget('tokens', token);
+    const { data:username1, error:error } = await supabase
+      .from('price_users')
+      .select('username')
+      .eq('token', token)
+      .single();
+    username = username1.username;
     if (!username) {
       return res.json({ 
         success: false, 
@@ -127,30 +78,10 @@ router.post('/submitprice', async (req, res) => {
       message: '提交的价格不能为空' 
     });
   }
-
-    // 创建对象
-    const marketpriceData = {
-      username,
-      market:marketInput,
-      ware:wareInput,
-      price:priceInput,
-      unit,
-      createdAt: new Date().toLocaleString('zh-CN'),
-    };
-    // const userpriceData = {
-    //   market:marketInput,
-    //   price:priceInput,
-    //   unit,
-    //   createdAt: new Date().toLocaleString(),
-    // };
-    // 按超市保存
-    await kv.hset(`wareprice:${marketInput}`, { [wareInput]: marketpriceData });
-
-    //此功能暂时封存
-    // 按用户保存
-    // await kv.hset(`wareprice:${username}`, { [wareInput]: userpriceData });
-
-    console.log(`${username}存储的价格数据：`, marketpriceData)
+    const { data, error } = await supabase
+      .from('price_datas')
+      .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
+      .select();
 
     res.json({ 
       success: true, 
@@ -190,9 +121,15 @@ router.post('/getpricenote', async (req, res) => {
           message: '请先登录' 
         });
       }
+      console.log(token)
       // 从token获取账号名验证
-      const username = await kv.hget('tokens', token);
-      if (!username) {
+      const { data:userJson, error:error } = await supabase
+        .from('price_users')
+        .select('*')
+        .eq('token', token);
+
+
+      if (!userJson) {
         return res.json({ 
           success: false, 
           message: '无效的token' 
@@ -213,7 +150,12 @@ router.post('/getpricenote', async (req, res) => {
     //获取KV
     const data = [];
     for (let i of markets){
-      const datai = await kv.hgetall(`wareprice:${i}`);
+
+      const { data:datai, error:error } = await supabase
+        .from('price_datas')
+        .select('*')
+        .eq('market', i);
+
       if(datai){
         data.push(datai);
       }
@@ -244,7 +186,14 @@ router.delete('/delware', async (req, res) => {
   }
   
   // 从token获取管理员账号名
-  const username = await kv.hget('tokens', token);
+
+  const { data:username1, error:error } = await supabase
+    .from('price_users')
+    .select('username')
+    .eq('token', token)
+    .single();
+  const username = username1.username;
+
   if (username !== global.managename) {
     return res.json({ 
       success: false, 
@@ -258,7 +207,13 @@ router.delete('/delware', async (req, res) => {
     // 删除商品
     const data = [];
     for (let i of markets){
-      await kv.hdel(`wareprice:${i}`, delware);
+      const { data, error1 } = await supabase
+        .from('price_users')
+        .delete()
+        .eq('market',i)
+        .eq('ware', delware);
+
+
     }
     
     res.json({ 
@@ -276,35 +231,4 @@ router.delete('/delware', async (req, res) => {
 });
 
 
-//此功能暂时封存
-//5. 获取用户提交过的价格记录
-// router.post('/getmypricenote', async (req, res) => {
-//   console.log('服务器开始获取用户价格记录')
-//   const { username } = req.body;
-//   if (!username) {
-//     return res.json({ 
-//       success: false, 
-//       message: '需要先登录' 
-//     });
-//   }
-
-//   try {
-//     //获取KV
-//     const data = await kv.hgetall(`wareprice:${username}`);
-
-//     res.json({ 
-//       success: true, 
-//       data: data,
-//     });
-
-//   } catch (error) {
-//     console.error('获取价格记录错误:', error);
-//     res.json({ 
-//       success: false, 
-//       message: '获取价格记录失败' 
-//     });
-//   }
-// })
-
-// module.exports = router;
 export default router;

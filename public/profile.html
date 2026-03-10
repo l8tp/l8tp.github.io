@@ -88,11 +88,6 @@
                 <button class="btn-danger" onclick="delware()">删除此商品的价格</button>
             </div>
         </div>
-        <!-- 此功能暂时封存
-        <div class="getarea">
-            <button class="btn" onclick="getmypricenote()">我的提交价格记录</button>
-            <a id="pricenote"></a>
-        </div> -->
         <div style="margin-bottom: 20px; background: #f7fafc; padding: 15px; border-radius: 8px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                 <span style="color: #718096;">用户名:</span>
@@ -131,7 +126,8 @@
             avatar.textContent = username.charAt(0).toUpperCase();
             
             //显示用户面板
-            if (user.id.split(':')[0] == 'manage') {
+            // if (user.id.split(':')[0] == 'manage') {
+            if(user.id < 0){
                 document.querySelector('.managepanel').style.display = 'flex'
             };
         }
@@ -236,46 +232,7 @@
 
         }
         
-        //此功能暂时封存
-        //获取用户提交过的价格记录
-        // async function getmypricenote() {
-        //     const pricenote = document.getElementById('pricenote');
-        //     const username = JSON.parse( localStorage.getItem('user')).username || '';
-        //     pricenote.innerHTML = '加载中...'
-        //     console.log(username)
-        //     try {
-        //         const response = await fetch(`${API_URL}/products/getmypricenote`, {
-        //             method: 'POST',
-        //             headers: { 'Content-Type': 'application/json' },
-        //             body: JSON.stringify({ username })
-        //         });
-        //         const result = await response.json();
-                
-        //         if (result.success) {
-        //             console.log('获取到了用户提交的价格记录')
-        //             console.log(result)
-                    
-        //             if (result.data) {
-        //                 const data = Object.entries(result.data);
-        //                 pricenote.innerHTML = `共${data.length}条记录：`
-        //                 for (const [ware, priceJson] of data) {
-        //                     const market = priceJson.market;
-        //                     const price = priceJson.price;
-        //                     const unit = priceJson.unit;
-        //                     const createdAt = priceJson.createdAt
-        //                     pricenote.innerHTML += `<p>${createdAt}</p>`
-        //                     pricenote.innerHTML += `<p>${market}的${ware}是${price}${unit}</p>`
-        //                 }
-        //             }
-        //         } else {
-        //             alert(result.message);
-        //         }
-        //      } catch (error) {
-        //         alert('网络错误，请检查服务器是否运行');
-        //     }
-        // }
-
-        // 退出登录
+                // 退出登录
         async function logout() {
             if (currentToken) {
                 try {
