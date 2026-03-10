@@ -24,6 +24,7 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+global.managename = 'ltp-ptl';
 
 
 //1. 存储提交的价格数据
