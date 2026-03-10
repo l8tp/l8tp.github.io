@@ -1,9 +1,21 @@
-require('dotenv').config();
-const {Redis} = require('@upstash/redis');
-const express = require('express');
-const bcrypt = require('bcrypt');
+import dotenv from 'dotenv';
+dotenv.config();
 
+// require('dotenv').config();
+// const {Redis} = require('@upstash/redis');
+// const express = require('express');
+// const bcrypt = require('bcrypt');
+
+import express from 'express';
+import {Redis} from '@upstash/redis';
+import bcrypt from 'bcrypt';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const PORT = process.env.PORT || 3000;
 
 // 中间件
@@ -11,15 +23,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 //导入路由模块
-const poductRouter = require('./routes/products');
+// const poductRouter = require('./routes/products');
+import productRouter from './routes/products.js';
 //挂载路由
-app.use('/api/products', poductRouter);
+app.use('/api/products', productRouter);
 
 // 创建Vercel KV客户端
 let kv;
 try {
-  kv = Redis.fromEnv();
-  console.log('✅ Vercel KV连接成功');
+  // 检查是否存在 Upstash Redis 环境变量
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    kv = Redis.fromEnv();
+    console.log('✅ Vercel KV连接成功');
+  } else {
+    throw new Error('Vercel KV环境变量未配置');
+  }
 } catch (error) {
   console.log('⚠️  Vercel KV未配置，使用内存存储（仅限测试）');
   // 如果没有配置KV，使用内存存储（仅用于测试）
@@ -61,6 +79,15 @@ try {
         }
       });
       return 1;
+    },
+    hlen: async (key) => {
+      let count = 0;
+      Object.keys(memoryStore).forEach(k => {
+        if (k.startsWith(`${key}:`)) {
+          count++;
+        }
+      });
+      return count;
     }
   };
 }
@@ -253,7 +280,7 @@ app.post('/api/verify', async (req, res) => {
     
     // 从KV检查token
     const username = await kv.hget('tokens', token);
-    
+    console.log(username, token)
     if (!username) {
       return res.json({ 
         success: false, 
@@ -422,11 +449,11 @@ app.delete('/api/deluser', async (req, res) => {
 
 
 // 本地开发服务器
-if (require.main === module) {
+if (import.meta.main) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 服务器启动成功！`);
     console.log(`🌐 访问地址: http://localhost:${PORT}`);
-    console.log(`🔐 数据库: ${Redis.fromEnv() ? 'Vercel KV' : '内存存储（测试用）'}`);
+    console.log(`🔐 数据库: ${process.env.UPSTASH_REDIS_REST_URL ? 'Vercel KV' : '内存存储（测试用）'}`);
     console.log('\n📡 API接口:');
     console.log(`  POST /api/register  - 注册用户`);
     console.log(`  POST /api/login     - 用户登录`);
@@ -436,5 +463,8 @@ if (require.main === module) {
   });
 }
 
-// 导出给Vercel使用
-module.exports = app;
+//包装函数给vercel
+const handler = async (req, res)=>{
+  return app(req, res);
+}
+export default handler;

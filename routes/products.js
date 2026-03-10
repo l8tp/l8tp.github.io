@@ -1,8 +1,22 @@
 // routes/products.js
-const express = require('express');
+// const express = require('express');
+// const app = express();
+// const {Redis} = require('@upstash/redis');
+// const bcrypt = require('bcrypt');
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import {Redis} from '@upstash/redis';
+import bcrypt from 'bcrypt';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 const app = express();
-const {Redis} = require('@upstash/redis');
-const bcrypt = require('bcrypt');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 // 中间件
 app.use(express.json());
@@ -11,7 +25,60 @@ app.use(express.static('.'));
 
 const router = express.Router();
 
-const kv = Redis.fromEnv();
+// 创建Vercel KV客户端
+let kv;
+try {
+  // 检查是否存在 Upstash Redis 环境变量
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    kv = Redis.fromEnv();
+    console.log('✅ Vercel KV连接成功');
+  } else {
+    throw new Error('Vercel KV环境变量未配置');
+  }
+} catch (error) {
+  console.log('⚠️  Vercel KV未配置，使用内存存储（仅限测试）');
+  // 如果没有配置KV，使用内存存储（仅用于测试）
+  const memoryStore = {};
+  kv = {
+    hget: async (key, field) => memoryStore[`${key}:${field}`],
+    hset: async (key, data) => {
+      Object.entries(data).forEach(([field, value]) => {
+        memoryStore[`${key}:${field}`] = value;
+      });
+      return 1;
+    },
+    hgetall: async (key) => {
+      const result = {};
+      Object.keys(memoryStore).forEach(k => {
+        const i = k.split(':');
+        const j = i.pop();
+        if (i.join(':') == key) {
+          const field = j;
+          result[field] = memoryStore[k];
+        }
+      });
+      return result;
+    },
+    del: async (key) => {
+      Object.keys(memoryStore).forEach(k => {
+        if (k.startsWith(`${key}:`)) {
+          delete memoryStore[k];
+        }
+      });
+      return 1;
+    },
+    hdel: async (key, field) => {
+      Object.keys(memoryStore).forEach(k => {
+        if (k.startsWith(`${key}:`)) {
+          if (field == k.split(':')[1]) {
+            delete memoryStore[k];
+          }
+        }
+      });
+      return 1;
+    }
+  };
+}
 
 //1. 存储提交的价格数据
 router.post('/submitprice', async (req, res) => {
@@ -239,4 +306,5 @@ router.delete('/delware', async (req, res) => {
 //   }
 // })
 
-module.exports = router;
+// module.exports = router;
+export default router;
