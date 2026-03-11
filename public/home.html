@@ -81,22 +81,22 @@
             background-color: transparent;
             border-width:0 0 0 2px;
             border-radius: 0;
-            border-color: #ffffff;
+            border-color: #3b3b3b;
             max-height: 150px;
         }
         #filter .bluelist a{background-color: rgba(255, 255, 255, 0.3);}
 
         .Xwinpop{
+            background-color: #ffffff;
             position: absolute;
             z-index: 997;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             font-size: 30px;
-            background-color: transparent;
             width: 40px;
             height: 40px;
             padding: 0;
-            border-radius: 0;
+            border-radius: 5px;
             border: #000000 solid 1px;
             cursor: pointer;
             color: #852626;
@@ -104,10 +104,10 @@
         .winpop{
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 10px; 
             flex-wrap: wrap;
-            padding: 10px;
+            padding: 5px;
             min-height: 650px;
             background-color: #eaf5ff;
             border: 2px solid #e2e8f0;
@@ -116,6 +116,11 @@
             position: absolute; 
             top: 50px;
             z-index: 998;
+        }
+        .popSubArea{
+            background-color: #fff8eb;
+            border-radius: 10px;
+            padding: 5px;
         }
         #edit{
             min-height: auto;
@@ -164,24 +169,28 @@
     <div id="filter" class="winpop" style="display: none;">
         <button id="Xfilter" class="Xwinpop">×</button>
         <h1>请选择输入框下方的列表</h1>
-        <div class="inputarea">
-            <label id="marketLable">超市: </label>
-            <div>
-                <button id="clearMarketLabel" type="button">清空标签</button>
-                <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市↓">
+        <div id="marketArea" class="popSubArea">
+            <div class="inputarea">
+                <label id="marketLable">超市: </label>
+                <div>
+                    <button id="clearMarketLabel" type="button">清空标签</button>
+                    <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市↓">
 
+                </div>
             </div>
+            <div id="marketList" class="bluelist"></div>
         </div>
-        <div id="marketList" class="bluelist"></div>
-        <hr>
-        <div class="inputarea">
-            <label id="wareLable">商品: </label>
-            <div>
-                <button id="clearWareLabel" type="button">清空标签</button>
-                <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品↓">
+        <!-- <hr> -->
+        <div id="wareArea" class="popSubArea">
+            <div class="inputarea">
+                <label id="wareLable">商品: </label>
+                <div>
+                    <button id="clearWareLabel" type="button">清空标签</button>
+                    <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品↓">
+                </div>
             </div>
+            <div id="wareList" class="bluelist"></div>
         </div>
-        <div id="wareList" class="bluelist"></div>
         <button id="submitselect" style="background-color: #287e49;">选择完成</button>
     </div>
     <div id="edit" class="winpop" style="display: none;">
@@ -229,7 +238,6 @@
             theth.appendChild(btn);
             theadtr.appendChild(theth);
             btn.addEventListener('click', filter);
-            console.log('添加监听')
             const markets = delAlias(ware.market.slice(0,2));
             for (let i of markets){
                 const th = document.createElement('th');
@@ -314,7 +322,6 @@
         let poptimes = 0;
         //筛选超市和商品
         async function filter (){
-            console.log('开始筛选')
             poptimes++;
             const filter = document.querySelector('#filter')
             filter.style.display = 'flex'
@@ -505,8 +512,10 @@
             let form2Th, form1Tr;
             let editpoptimes = 0;
             tbody.addEventListener('click', (e)=>{
-                const ware = e.target.closest('tr').querySelector('th').innerHTML;
+                const firstTh = e.target.closest('tr').querySelector('th');
                 const th = e.target.closest('th');
+                if(th === firstTh){return};
+                const ware = firstTh.innerHTML;
                 const p = th.querySelector('p');
                 const editHint = th.querySelector('.editHint');
                 let thForm = th.className;
@@ -538,6 +547,8 @@
                         //第二次点击，提示再次点击开始编辑
                         th.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + th.innerHTML
                         th.style.color = 'red';
+                        const theP =  th.querySelector('p');
+                        if(theP){theP.style.display = 'none'};
                         th.className = 'form_2';
                         if (form2Th && form2Th !== th) {
                             if (form2Th.className !== 'form_1'){

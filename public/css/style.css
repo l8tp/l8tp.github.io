@@ -64,7 +64,9 @@ button:disabled {
 /* 蓝天白云列表框 */
 .bluelist{
     display: flex; 
-    gap: 10px; 
+    /* gap: 15px;  */
+    row-gap: 12px;
+    column-gap: 18px;
     flex-wrap: wrap;
     padding: 10px;
     background-color: #c0e2ff;
@@ -79,7 +81,7 @@ button:disabled {
     justify-content: center;
     border-radius: 5px;
     position: relative; 
-    background-color: #ffffff;
+    background: linear-gradient(to top, #acf7ff 0%, transparent 50%);
     font-size: 20px;
 }
 
