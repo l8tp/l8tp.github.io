@@ -122,7 +122,6 @@ router.post('/getpricenote', async (req, res) => {
           message: '请先登录' 
         });
       }
-      console.log(token)
       // 从token获取账号名验证
       const { data:userJson, error:error } = await supabase
         .from('price_users')

@@ -257,11 +257,6 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({  token: currentToken, userIdTemp, markets })
                 });
-                //更新userIdTemp
-                let IdTempArray = userIdTemp.split('_');
-                let IdTimesStamp =  IdTempArray.pop();
-                userIdTemp = IdTempArray.join('_') + '_' + (IdTimesStamp +1);
-                localStorage.setItem('userIdTemp', userIdTemp);
 
                 const result = await response.json();
                 
