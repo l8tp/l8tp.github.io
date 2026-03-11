@@ -1,4 +1,4 @@
-(async function () {
+async function loadBottomBar (token) {
     const param = new URLSearchParams(window.location.search);
     const grup = param.get("name") || 'home'; //获取URL数据
 
@@ -10,6 +10,10 @@
     for (let i in bottomdata){
         let tabclass = 'tab-item'
         if (i == grup){tabclass += ' active'}
-        bottombar.innerHTML += `<a href="${i}.html?name=${i}" class="${tabclass}"><i class="${bottomdata[i][1]}"></i>${bottomdata[i][0]}</a>`
+        if(i !== 'profile' || token){
+            bottombar.innerHTML += `<a href="${i}.html?name=${i}" class="${tabclass}"><i class="${bottomdata[i][1]}"></i>${bottomdata[i][0]}</a>`
+        }
     }
-})();
+};
+
+export {loadBottomBar};

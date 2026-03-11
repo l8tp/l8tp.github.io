@@ -20,3 +20,4 @@ async function unitList() {
         const closelist = setTimeout(()=>{unitList.style.display = 'none'}, 10)
     });
 };
+export {unitList};

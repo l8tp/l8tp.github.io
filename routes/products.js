@@ -106,10 +106,25 @@ router.post('/user/submitprice', async (req, res) => {
       message: '提交的价格不能为空' 
     });
   }
-    const { data, error } = await supabase
+    const { data:priceJson, error:error1 } = await supabase
       .from('price_datas')
-      .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
-      .select();
+      .select('*')
+      .eq('market', marketInput)
+      .eq('ware', wareInput)
+      .single();
+    if(priceJson){
+      const { data, error } = await supabase
+        .from('price_datas')
+        .update({price:priceInput, unit, username})
+        .eq('market', marketInput)
+        .eq('ware', wareInput)
+        .select();
+    }else{
+      const { data, error } = await supabase
+        .from('price_datas')
+        .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
+        .select();
+    }
 
     res.json({ 
       success: true, 

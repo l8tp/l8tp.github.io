@@ -64,19 +64,20 @@
             <label for="priceInput">价格：</label>
             <input type="number" id="priceInput" name="price" placeholder="输入价格" autocomplete="off">
             <div style="display: flex; flex-direction: column; justify-content: center; position: relative;">
-                <a id="unit" onclick=unitList()>元/斤 ▼</a>
+                <a id="unit">元/斤 ▼</a>
                 <li id="unitList" class="bluelist">
                     <!-- 此处加载单位列表 -->
                 </li>
             </div>
         </div>
     </div>
-    <button type="submit" id="submitBtn" disabled onclick="submitprice()">提交</button>
+    <button type="submit" id="submitBtn" disabled>提交</button>
 
     <div class="bottom-tab-bar"></div>
-    <script src="js/elements.js"></script>
-    <script src="js/bottombar.js"></script>
-    <script>
+    <script type="module">
+        import {loadBottomBar} from './js/bottombar.mjs';
+        import {unitList} from './js/elements.mjs';
+
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
@@ -87,7 +88,8 @@
 
 
         //异步加载超市和商品列表
-        (async function () {
+        async function loadwares () {
+            loadBottomBar(currentToken);
             const marketInput = document.getElementById('marketInput');
             const marketList = document.getElementById('marketList');
             const wareInput = document.getElementById('wareInput');
@@ -99,7 +101,7 @@
             localStorage.setItem('ware', JSON.stringify(ware));
             InputFilter(marketInput, marketList, ware.market);
             InputFilter(wareInput, wareList, ware.ware);
-        })();
+        };
 
         //加载候选列表函数
         function loadlist(Input, List, data, delAlias=true){
@@ -253,6 +255,12 @@
             }
 
         }
+        //页面加载完成时启动
+        window.addEventListener('DOMContentLoaded', async ()=>{
+            document.querySelector('#unit').addEventListener('click',unitList);
+            document.querySelector('#submitBtn').addEventListener('click',submitprice);
+            loadwares();
+        })
     </script>
 </body>
 </html>

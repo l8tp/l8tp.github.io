@@ -193,15 +193,15 @@
                 <li id="unitList" class="bluelist">
                     <!-- 此处加载单位列表 -->
                 </li>
-                <a id="unit" onclick=unitList()>元/斤 ▼</a>
+                <a id="unit">元/斤 ▼</a>
             </div>
             <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
         </div>
     </div>
     <div class="bottom-tab-bar"></div>
-    <script src="js/elements.js"></script>
-    <script src="js/bottombar.js"></script>
-    <script>
+    <script type="module">
+        import {loadBottomBar} from './js/bottombar.mjs';
+        import {unitList} from './js/elements.mjs';
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
@@ -211,7 +211,8 @@
         }
 
         //第一次渲染表格
-        (async function renderTable() {
+        async function renderTable() {
+            loadBottomBar(currentToken);
             const container = document.getElementById('tablecontainer');
             const theadtr = container.querySelector('thead > tr');
             const tbody = container.querySelector('tbody');
@@ -220,11 +221,20 @@
 
             const  response = await fetch('/json/ware.json');
             const ware = await response.json();
-            theadtr.innerHTML = `<th class='xtitle' onclick='filter()'><button>筛选▼</button></th>`
-
+            const btn = document.createElement('button');
+            btn.innerText = '筛选▼';
+            const theth = document.createElement('th');
+            theth.classList.add('xtitle');
+            theth.id = 'xtitle';
+            theth.appendChild(btn);
+            theadtr.appendChild(theth);
+            btn.addEventListener('click', filter);
+            console.log('添加监听')
             const markets = delAlias(ware.market.slice(0,2));
             for (let i of markets){
-                theadtr.innerHTML += `<th>${i}</th>`
+                const th = document.createElement('th');
+                th.innerHTML = i;
+                theadtr.appendChild(th);
             };
             tbody.innerHTML = ''
             for (let i of delAlias(ware.ware)){
@@ -234,7 +244,7 @@
             getpricenote(tbodytrs, markets);
             toggleBottomTabBar();
 
-        })();
+        };
 
 
         //去除#后面别名的函数
@@ -278,7 +288,7 @@
                                     const time = priceJson.created_at;
                                     if (ware === i.querySelector('th').innerHTML){
                                         containware = true;
-                                        i.innerHTML += `<th><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split(' ')[0]}</p></th>`
+                                        i.innerHTML += `<th><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split('T')[0]}</p></th>`
                                     }
                                 }
                                 if (!containware){i.innerHTML += '<th></th>'}
@@ -304,6 +314,7 @@
         let poptimes = 0;
         //筛选超市和商品
         async function filter (){
+            console.log('开始筛选')
             poptimes++;
             const filter = document.querySelector('#filter')
             filter.style.display = 'flex'
@@ -433,8 +444,8 @@
         }
 
         //关闭筛选弹窗开始重新渲染表格
-        function closefilter(filter, marketLable, wareLable, ware){
-            filter.style.display = 'none';
+        function closefilter(thefilter, marketLable, wareLable, ware){
+            thefilter.style.display = 'none';
             
             const marketnodes = marketLable.querySelectorAll('span');
             const warenodes = wareLable.querySelectorAll('span');
@@ -447,9 +458,21 @@
             const tbody = container.querySelector('tbody');
 
             let markets = []
-            theadtr.innerHTML = `<th class='xtitle' onclick='filter()'><button>筛选▼</button></th>`
+            const btn = document.createElement('button');
+            btn.innerText = '筛选▼';
+            const theth = document.createElement('th');
+            theth.classList.add('xtitle');
+            theth.id = 'xtitle';
+            theth.appendChild(btn);
+            theadtr.innerHTML = '';
+            theadtr.appendChild(theth);
+            btn.addEventListener('click', filter);
+            console.log('添加监听')
+            btn.addEventListener('click',filter);
             for (let i of marketnodes){
-                theadtr.innerHTML += `<th>${i.innerHTML.split('#')[0]}</th>`
+                const th = document.createElement('th');
+                th.innerHTML = i.innerHTML.split('#')[0];
+                theadtr.appendChild(th);
                 markets.push(i.innerHTML.split('#')[0]);
             };
             tbody.innerHTML = ''
@@ -519,7 +542,8 @@
                         if (form2Th && form2Th !== th) {
                             if (form2Th.className !== 'form_1'){
                                 form2Th.style.color = 'black';
-                                form2Th.querySelector('.editHint').remove();
+                                const thehint = form2Th.querySelector('.editHint');
+                                if(thehint){thehint.remove()};
                                 form2Th.className = 'form_1';
                             }
                         }
@@ -572,10 +596,14 @@
 
             //上传数据并更新表格
             if(editpoptimes > 1){ return };
-            edit.querySelector('#submitEdit').addEventListener('click', async ()=>{
+            edit.querySelector('#submitEdit').addEventListener('click', async (e)=>{
+                const btn = e.target;
+                const btntext = btn.innerText;
+                btn.innerText = '正在提交。。。'
                 const newPrice = newpriceInput.value;
                 const newUnit = unitText.innerHTML.split(' ')[0];
-                const subdata = new Date().toLocaleString('zh-CN').split(' ')[0];
+                const subdata = new Date().toISOString();
+                console.log(subdata);
                 try {
                     const response = await fetch(`${API_URL}/products/user/submitprice`, {
                         method: 'POST',
@@ -584,8 +612,9 @@
                     });
                     const result = await response.json();
                     if (result.success) {
+                        btn.innerText = btntext;
                         alert('修改成功');
-                        th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata}</p>`;
+                        th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata.split('T')[0]}</p>`;
                         edit.style.display = 'none';
                     } else {
                         alert(result.message);
@@ -603,6 +632,10 @@
             })
         }
 
+	window.addEventListener('DOMContentLoaded', async ()=>{
+        document.querySelector('#unit').addEventListener('click',unitList);
+        renderTable();
+    })
     </script>
 </body>
 </html>
