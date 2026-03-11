@@ -16,6 +16,35 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
+
+//验证身份中间件
+app.use( '/api/:degree/*path', async (req, res, next) => {
+  const {degree, path} = req.params;
+  const token = req.headers['authorization'] || '';
+  if(degree !== 'manage'){ next() }else{
+    //验证管理员身份
+    if (token) {
+      const { data:userJson, error:error } = await supabase
+        .from('price_users')
+        .select('username')
+        .eq('token', token)
+        .single();
+      if(userJson){//账号存在
+        if(userJson.username === global.managename){ next();//是管理员账号   
+        }else{
+          res.status(401).json({  success: false, message: '错误，不是管理员账号' });
+        }
+      }else{
+        res.status(401).json({ success: false, message: '请先登录_token无效' });
+      }
+    } else {
+      res.status(401).json({ success: false, message: '请先登录_未提供token' });
+    }    
+  }
+});
+
+
+
 //导入路由模块
 import productRouter from './routes/products.js';
 //挂载路由
@@ -63,7 +92,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
 // 1. 注册接口
-app.post('/api/register', async (req, res) => {
+app.post('/api/user/register', async (req, res) => {
   try {
     const { username, password, email } = req.body;
     // const count = await kv.hlen('users');
@@ -154,7 +183,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 // 2. 登录接口
-app.post('/api/login', async (req, res) => {
+app.post('/api/user/login', async (req, res) => {
   try {
     const { username, password,} = req.body;
     
@@ -190,7 +219,6 @@ app.post('/api/login', async (req, res) => {
       const token = Buffer.from(`${user.id}:${Date.now()}`).toString('base64');
       
       // 保存token
-      console.log('登录成功，token：' + token)
       const { data, error } = await supabase
         .from('price_users')
         .update({ token })
@@ -225,7 +253,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // 3. 验证token接口
-app.post('/api/verify', async (req, res) => {
+app.post('/api/user/verify', async (req, res) => {
   try {
     const { token } = req.body;
     
@@ -272,7 +300,7 @@ app.post('/api/verify', async (req, res) => {
 });
 
 // 4. 退出登录接口
-app.post('/api/logout', async (req, res) => {
+app.post('/api/user/logout', async (req, res) => {
   try {
     const { token } = req.body;
     
@@ -308,30 +336,7 @@ app.get('/login', (req, res) => {
 });
 
 // 10. 管理员获取所有用户
-app.post('/api/getalluser', async (req, res) => {
-  const { token } = req.body;
-  if (!token) {
-    return res.json({ 
-      success: false, 
-      message: '请先登录' 
-    });
-  }
-  
-  // 从token获取管理员账号名  
-  const { data:username1, error:error } = await supabase
-    .from('price_users')
-    .select('username')
-    .eq('token', token)
-    .single();
-  const username = username1.username;
-
-  if (username !== global.managename) {
-    return res.json({ 
-      success: false, 
-      message: '不是管理员账号' 
-    });
-  }
-
+app.get('/api/manage/getalluser', async (req, res) => {
   try {
 
   const { data:userJson, error:error } = await supabase
@@ -366,29 +371,8 @@ app.post('/api/getalluser', async (req, res) => {
 });
 
 // 11. 管理员删除用户账号
-app.delete('/api/deluser', async (req, res) => {
-  const { token, delusername } = req.body;
-  if (!token) {
-    return res.json({ 
-      success: false, 
-      message: '请先登录' 
-    });
-  }
-  
-  // 从token获取管理员账号名
-    const { data:username1, error:error } = await supabase
-    .from('price_users')
-    .select('username')
-    .eq('token', token)
-    .single();
-    const username = username1.username;
-
-  if (username !== global.managename) {
-    return res.json({ 
-      success: false, 
-      message: '不是管理员账号' 
-    });
-  }
+app.delete('/api/manage/deluser', async (req, res) => {
+  const { delusername } = req.body;
 
   try {
     console.log(`删除的用户: ${delusername}`)

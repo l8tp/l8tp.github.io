@@ -137,10 +137,10 @@
             const showalluser = document.getElementById('showalluser');
             showalluser.innerHTML = `<p>加载中...</p>`
             try {
-                const response = await fetch(`${API_URL}/getalluser`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken })
+                const response = await fetch(`${API_URL}/manage/getalluser`, {
+                    method: 'GET',
+                    headers: {'authorization': currentToken }
+                    // body: JSON.stringify({ token: currentToken })
                 });
 
                 const result = await response.json();
@@ -176,10 +176,10 @@
             }
 
             try {
-                const response = await fetch(`${API_URL}/deluser`, {
+                const response = await fetch(`${API_URL}/manage/deluser`, {
                     method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken, delusername })
+                    headers: { 'Content-Type': 'application/json', 'authorization': currentToken },
+                    body: JSON.stringify({ delusername })
                 });
                 const result = await response.json();
 
@@ -211,10 +211,10 @@
             }
 
             try {
-                const response = await fetch(`${API_URL}/products/delware`, {
+                const response = await fetch(`${API_URL}/products/manage/delware`, {
                     method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken, markets: newmarkets, delware })
+                    headers: { 'Content-Type': 'application/json', 'authorization': currentToken },
+                    body: JSON.stringify({ markets: newmarkets, delware })
                 });
                 const result = await response.json();
 
@@ -236,7 +236,7 @@
         async function logout() {
             if (currentToken) {
                 try {
-                    await fetch(`${API_URL}/logout`, {
+                    await fetch(`${API_URL}/user/logout`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ token: currentToken })
@@ -258,7 +258,7 @@
             if (!currentToken) return false;
             
             try {
-                const response = await fetch(`${API_URL}/verify`, {
+                const response = await fetch(`${API_URL}/user/verify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: currentToken })

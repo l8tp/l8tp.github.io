@@ -11,6 +11,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+global.managename = 'ltp-ptl';
 
 // 中间件
 app.use(express.json());
@@ -19,16 +20,42 @@ app.use(express.static('.'));
 
 const router = express.Router();
 
+//验证身份中间件
+router.use( '/:degree/:action', async (req, res, next) => {
+  const {degree, action} = req.params;
+  const token = req.headers['authorization'] || '';
+  if(degree !== 'manage'){ next() }else{
+    //验证管理员身份
+    if (token) {
+      const { data:userJson, error:error } = await supabase
+        .from('price_users')
+        .select('username')
+        .eq('token', token)
+        .single();
+      if(userJson){//账号存在
+        if(userJson.username === global.managename){ next();//是管理员账号   
+        }else{
+          res.status(401).json({  success: false, message: '错误，不是管理员账号' });
+        }
+      }else{
+        res.status(401).json({ success: false, message: '请先登录_token无效' });
+      }
+    } else {
+      res.status(401).json({ success: false, message: '请先登录_未提供token' });
+    }    
+  }
+});
+
+
+
 //创建supabase客户端
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-global.managename = 'ltp-ptl';
-
 
 //1. 存储提交的价格数据
-router.post('/submitprice', async (req, res) => {
+router.post('/user/submitprice', async (req, res) => {
   const { token, userIdTemp, marketInput, wareInput, priceInput, unit } = req.body;
   let username = '';
 
@@ -93,7 +120,7 @@ router.post('/submitprice', async (req, res) => {
 
 
 //2. 获取超市的价格记录
-router.post('/getpricenote', async (req, res) => {
+router.post('/user/getpricenote', async (req, res) => {
   console.log('服务器开始获取所有超市价格记录')
   const { token, userIdTemp, markets } = req.body;
   
@@ -176,30 +203,8 @@ router.post('/getpricenote', async (req, res) => {
 })
 
 //3. 管理员删除商品
-router.delete('/delware', async (req, res) => {
-  const { token, markets, delware } = req.body;
-  if (!token) {
-    return res.json({ 
-      success: false, 
-      message: '请先登录' 
-    });
-  }
-  
-  // 从token获取管理员账号名
-
-  const { data:username1, error:error } = await supabase
-    .from('price_users')
-    .select('username')
-    .eq('token', token)
-    .single();
-  const username = username1.username;
-
-  if (username !== global.managename) {
-    return res.json({ 
-      success: false, 
-      message: '不是管理员账号' 
-    });
-  }
+router.delete('/manage/delware', async (req, res) => {
+  const { markets, delware } = req.body;
 
   try {
     console.log(`删除的商品: ${delware}`)

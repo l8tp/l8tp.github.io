@@ -252,7 +252,7 @@
             const message = document.getElementById('message');
             message.innerHTML = '价格加载中...'
             try {
-                const response = await fetch(`${API_URL}/products/getpricenote`, {
+                const response = await fetch(`${API_URL}/products/user/getpricenote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({  token: currentToken, userIdTemp, markets })
@@ -577,7 +577,7 @@
                 const newUnit = unitText.innerHTML.split(' ')[0];
                 const subdata = new Date().toLocaleString('zh-CN').split(' ')[0];
                 try {
-                    const response = await fetch(`${API_URL}/products/submitprice`, {
+                    const response = await fetch(`${API_URL}/products/user/submitprice`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ token: currentToken, userIdTemp, marketInput: market, wareInput: ware, priceInput: newPrice, unit: newUnit })
