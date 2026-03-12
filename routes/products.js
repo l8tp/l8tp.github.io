@@ -191,12 +191,10 @@ router.post('/user/getpricenote', async (req, res) => {
     //获取KV
     const data = [];
     for (let i of markets){
-
       const { data:datai, error:error } = await supabase
         .from('price_datas')
         .select('*')
         .eq('market', i);
-
       if(datai){
         data.push(datai);
       }

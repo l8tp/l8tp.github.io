@@ -15,13 +15,26 @@
         }
         table{
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
             margin: 10px 0;
             font-size: 18px;
-            font-family: sans-serif;
             min-width: 300px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 20px #000000;
         }
+        th, td{
+            padding: 2px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #000000 #ffffff;
+        }
+        /* tr{
+            border-width:1px;
+            border-style: solid;
+            border-color: #000000;
+        } */
         table thead tr{
             background-color: #f1cd83;
             text-align: left;
@@ -32,15 +45,9 @@
         table p {
             font-size: 15px;
         }
-        table th, table td{
-            padding: 2px;
-            border-width:0 2px;
-            border-style: solid;
-            border-color: #ffffff;
-        }
-        table tbody tr{
+        /* table tbody tr{
             border-bottom: 1px solid rgb(0, 0, 0);
-        }
+        } */
         table tbody tr:nth-of-type(even) {
             background-color: #f3f3f3;
         }
@@ -228,15 +235,8 @@
         }
 
         //第一次渲染表格
-        async function renderTable() {
-            loadBottomBar(currentToken);
-            const container = document.getElementById('tablecontainer');
-            const theadtr = container.querySelector('thead > tr');
-            const tbody = container.querySelector('tbody');
-            //监听点击后展开此行的时间
-            spreadEdit(tbody)
-
-            const  response = await fetch('/json/ware.json');
+        async function renderTable(theadtr, tbody) {
+            const response = await fetch('/json/ware.json');
             const ware = await response.json();
             const btn = document.createElement('button');
             btn.innerText = '筛选▼';
@@ -254,7 +254,7 @@
             };
             tbody.innerHTML = ''
             for (let i of delAlias(ware.ware)){
-                tbody.innerHTML += `<tr><th>${i}</th></tr>`
+                tbody.innerHTML += `<tr><th><a target="_blank" href="https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=${i}">${i}</a></th></tr>`
             };
             const tbodytrs = tbody.querySelectorAll('tr');
             getpricenote(tbodytrs, markets);
@@ -277,53 +277,52 @@
         async function getpricenote(tbodytrs, markets) {
             const message = document.getElementById('message');
             message.innerHTML = '价格加载中...'
+            let result;
             try {
                 const response = await fetch(`${API_URL}/products/user/getpricenote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({  token: currentToken, userIdTemp, markets })
                 });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    console.log('获取到了所有超市的价格记录')
-                    
-                    if (result.data) {
-                        message.innerHTML = `共${result.data.length}个超市的记录：`
-                        //遍历每个超市
-                        for (let j of result.data){
-                            //遍历表格体的每一行
-                            for (let i of tbodytrs){
-                                //遍历超市的商品
-                                let containware = false;
-                                for(const priceJson of j){
-                                    const ware = priceJson.ware
-                                    const price = priceJson.price;
-                                    const unit = priceJson.unit;
-                                    const time = priceJson.created_at;
-                                    if (ware === i.querySelector('th').innerHTML){
-                                        containware = true;
-                                        i.innerHTML += `<th><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split('T')[0]}</p></th>`
-                                    }
-                                }
-                                if (!containware){i.innerHTML += '<th></th>'}
-                            }
-                        }
-                    }
-                } else {
-                    alert(result.message);
-                    if (result.message === '请先登录或注册，试用次数结束') {
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
-                        currentToken = '';
-                        
-                        window.location.href = '/login';
-                    }
-                }
+                result = await response.json();
              } catch (error) {
                 alert('请求服务器错误');
                 message.innerHTML=error
+            }
+
+            if (result.success) {
+                console.log('获取到了所有超市的价格记录')
+                let wareCount = 0;
+                //遍历每个超市
+                for (let j of result.data){
+                    //遍历表格体的每一行
+                    for (let i of tbodytrs){
+                        //遍历超市的商品
+                        let containware = false;
+                        for(const priceJson of j){
+                            const ware = priceJson.ware
+                            if (ware === i.querySelector('th a').innerHTML){
+                                containware = true;
+                                wareCount++;
+                                const price = priceJson.price;
+                                const unit = priceJson.unit;
+                                const time = priceJson.created_at;
+                                i.innerHTML += `<td><span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split('T')[0]}</p></td>`
+                            }
+                        }
+                        if (!containware){i.innerHTML += '<td></td>'}
+                    }
+                }
+                message.innerHTML = `共${wareCount}个记录：`;
+            } else {
+                alert(result.message);
+                if (result.message === '请先登录或注册，试用次数结束') {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    currentToken = '';
+                    
+                    window.location.href = '/login';
+                }
             }
         }
 
@@ -416,7 +415,6 @@
                         return message.innerHTML = '只能选择三个超市'
                     }
                 }
-
                 const i = e.target;
                 if (i !== List){ listToLabel(i, label) };
             })
@@ -482,8 +480,6 @@
             theadtr.innerHTML = '';
             theadtr.appendChild(theth);
             btn.addEventListener('click', filter);
-            console.log('添加监听')
-            btn.addEventListener('click',filter);
             for (let i of marketnodes){
                 const th = document.createElement('th');
                 th.innerHTML = i.innerHTML.split('#')[0];
@@ -493,7 +489,7 @@
             tbody.innerHTML = ''
             const wares = []
             for (let i of warenodes){
-                tbody.innerHTML += `<tr><th>${i.innerHTML.split('#')[0]}</th></tr>`
+                tbody.innerHTML += `<tr><th><a target="_blank" href="https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=${i.innerHTML.split('#')[0]}">${i.innerHTML.split('#')[0]}</a></th></tr>`
                 wares.push(i.innerHTML.split('#')[0]);
             };
             //存储筛选条件到本地，下次打开弹窗自动加载
@@ -521,12 +517,12 @@
             let editpoptimes = 0;
             tbody.addEventListener('click', (e)=>{
                 const firstTh = e.target.closest('tr').querySelector('th');
-                const th = e.target.closest('th');
-                if(th === firstTh){return};
-                const ware = firstTh.innerHTML;
-                const p = th.querySelector('p');
-                const editHint = th.querySelector('.editHint');
-                let thForm = th.className;
+                const td = e.target.closest('td');
+                if(!td){return};
+                const ware = firstTh.querySelector('a').innerText;
+                const p = td.querySelector('p');
+                const editHint = td.querySelector('.editHint');
+                let thForm = td.className;
                 switch (thForm) {
                     case '':
                         //第一次点击，展开时间
@@ -534,14 +530,14 @@
                         tr.querySelectorAll('p').forEach(element => {
                             element.style.display = 'block';
                         });
-                        tr.querySelectorAll('th').forEach(element => {
+                        tr.querySelectorAll('td').forEach(element => {
                             element.className = 'form_1';
                         });
                         if (form1Tr) {
                             form1Tr.querySelectorAll('p').forEach(element => {
                                 element.style.display = 'none';
                             });
-                            form1Tr.querySelectorAll('th').forEach(element => {
+                            form1Tr.querySelectorAll('td').forEach(element => {
                                 element.className = '';
                                 element.style.color = 'black';
                             });
@@ -553,12 +549,12 @@
                         break;
                     case 'form_1':
                         //第二次点击，提示再次点击开始编辑
-                        th.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + th.innerHTML
-                        th.style.color = 'red';
-                        const theP =  th.querySelector('p');
+                        td.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + td.innerHTML
+                        td.style.color = 'red';
+                        const theP =  td.querySelector('p');
                         if(theP){theP.style.display = 'none'};
-                        th.className = 'form_2';
-                        if (form2Th && form2Th !== th) {
+                        td.className = 'form_2';
+                        if (form2Th && form2Th !== td) {
                             if (form2Th.className !== 'form_1'){
                                 form2Th.style.color = 'black';
                                 const thehint = form2Th.querySelector('.editHint');
@@ -566,34 +562,34 @@
                                 form2Th.className = 'form_1';
                             }
                         }
-                        form2Th = th;
+                        form2Th = td;
                         break;
                     case 'form_2':
                         //第三次点击，启动编辑弹窗
                         editHint.remove();
-                        th.style.color = 'black';
-                        th.className = 'form_1';
+                        td.style.color = 'black';
+                        td.className = 'form_1';
                         editpoptimes++;
-                        edit(ware, th, editpoptimes);
+                        edit(ware, td, editpoptimes);
                         break;
                     default:
-                        console.error('th的class异常')
+                        console.error('td的class异常')
                         return;
                 }
             })
         }
 
         //启动编辑弹窗
-        function edit(ware, th, editpoptimes){
+        function edit(ware, td, editpoptimes){
             //显示编辑弹窗
             const edit = document.querySelector('#edit');
             edit.style.display = 'flex';
             edit.querySelector('.Xwinpop').addEventListener('click', ()=>{
                 edit.style.display = 'none';
             });
-            const thBottom = th.getBoundingClientRect().bottom + window.pageYOffset;
-            const thViewBottom = th.getBoundingClientRect().bottom;
-            const thTop = th.getBoundingClientRect().top + window.pageYOffset;
+            const thBottom = td.getBoundingClientRect().bottom + window.pageYOffset;
+            const thViewBottom = td.getBoundingClientRect().bottom;
+            const thTop = td.getBoundingClientRect().top + window.pageYOffset;
             if (thViewBottom + edit.getBoundingClientRect().height > window.innerHeight){
                 edit.style.top = (thTop - edit.getBoundingClientRect().height) + 'px';
             } else {
@@ -602,13 +598,13 @@
             
             //编辑弹窗赋值
             let price, unit;
-            if (th.innerHTML){
-                price = th.querySelector('.price').innerHTML;
-                unit = th.querySelector('.unit').innerHTML;
+            if (td.innerHTML){
+                price = td.querySelector('.price').innerHTML;
+                unit = td.querySelector('.unit').innerHTML;
             }
             const newpriceInput = edit.querySelector('#priceInput');
             const unitText = edit.querySelector('#unit');
-            const market = document.querySelectorAll('#tablecontainer thead th')[th.cellIndex].innerHTML;
+            const market = document.querySelectorAll('#tablecontainer thead th')[td.cellIndex].innerHTML;
             edit.querySelector('label').innerHTML = `${market}：${ware}`;
             newpriceInput.value = price || '';
             unitText.innerHTML = (unit || '元/斤') + ' ▼';
@@ -621,7 +617,6 @@
                 btn.innerText = '正在提交。。。'
                 const newPrice = newpriceInput.value;
                 const newUnit = unitText.innerHTML.split(' ')[0];
-                const subdata = new Date().toISOString();
                 let result;
                 try {
                     const response = await fetch(`${API_URL}/products/user/submitprice`, {
@@ -635,10 +630,8 @@
                 }
 
                 if (result.success) {
-                    btn.innerText = btntext;
                     alert('修改成功');
-                    th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata.split('T')[0]}</p>`;
-                    edit.style.display = 'none';
+                    location.reload();
                 } else {
                     alert(result.message);
                     if (result.message === '请先登录或注册，试用次数结束') {
@@ -654,7 +647,12 @@
 
 	window.addEventListener('DOMContentLoaded', async ()=>{
         document.querySelector('#unit').addEventListener('click',unitList);
-        renderTable();
+        const container = document.getElementById('tablecontainer');
+        const theadtr = container.querySelector('thead > tr');
+        const tbody = container.querySelector('tbody');
+        loadBottomBar(currentToken);
+        renderTable(theadtr, tbody);
+        spreadEdit(tbody);//监听点击单元格不同次数出现不同效果
     })
     </script>
 </body>
