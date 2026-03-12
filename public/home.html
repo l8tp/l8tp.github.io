@@ -23,7 +23,7 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
         table thead tr{
-            background-color: #7db1ff;
+            background-color: #f1cd83;
             text-align: left;
             font-size: 20px;
             line-height: 22px;
@@ -87,6 +87,9 @@
         #filter .bluelist a{
             background: linear-gradient(to top, #adecff 0%, transparent 50%);
         }
+        #submitselect{
+            width: 300px;
+        }
 
         .Xwinpop{
             background-color: #ffffff;
@@ -107,11 +110,13 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            align-items: center;
             gap: 10px; 
             flex-wrap: wrap;
             padding: 5px;
             min-height: 650px;
             background-color: #eaf5ff;
+            box-shadow: 3px 3px 3px #000;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             margin: 0 10px 500px 10px;
@@ -121,6 +126,7 @@
         }
         .popSubArea{
             background-color: #fff8eb;
+            width: 100%;
             border-radius: 10px;
             padding: 5px;
         }
@@ -153,7 +159,7 @@
             gap: 3px;
         }
         .inputarea button{ width: 100px; background-color:#4e7188}
-        .xtitle button{font-size: 20px; padding: 2px; height: 100%;}
+        .xtitle button{background-color: #f1ea83; color: #000000; font-size: 20px; padding: 2px; height: 100%;}
         .xtitle button:hover{color: #000000;}
     </style>
 </head>
@@ -193,7 +199,7 @@
             </div>
             <div id="wareList" class="bluelist"></div>
         </div>
-        <button id="submitselect" style="background-color: #287e49;">选择完成</button>
+        <button id="submitselect" style="background-color: #002a5a;">选择完成</button>
     </div>
     <div id="edit" class="winpop" style="display: none;">
         <button id="Xedit" class="Xwinpop">×</button>

@@ -6,10 +6,14 @@ import express from 'express';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const app = express();
+import { dirname, join } from 'path';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// 读取 ware.json 文件
+const wareData = JSON.parse(fs.readFileSync(join(__dirname, '../public/json/ware.json'), 'utf8'));
+const app = express();
 
 global.managename = 'ltp-ptl';
 
@@ -68,22 +72,8 @@ router.post('/user/submitprice', async (req, res) => {
         message: '请先登录' 
       });
     }
-    const tempTimestamp = userIdTemp.split('_').pop();
-    if (tempTimestamp < 0 || tempTimestamp > 9) {
-      return res.json({ 
-        success: false, 
-        message: '请先登录或注册，试用次数结束' 
-      });
-    }
     username = userIdTemp; // 使用userIdTemp作为临时用户名
-  }else{
-    if (!token) {
-      return res.json({ 
-        success: false, 
-        message: '无token请重新登录' 
-      });
-    }
-    
+  }else{    
     // 从token获取账号名验证
     const { data:username1, error:error } = await supabase
       .from('price_users')
@@ -100,12 +90,21 @@ router.post('/user/submitprice', async (req, res) => {
   }
 
 
-  if (!priceInput) {
-    return res.json({ 
-      success: false, 
-      message: '提交的价格不能为空' 
-    });
-  }
+    if (!priceInput) {
+      return res.json({ 
+        success: false, 
+        message: '提交的价格不能为空' 
+      });
+    }
+
+    if(!wareData.market.includes(marketInput) || !wareData.ware.includes(wareInput)){
+      return res.json({
+        success: false, 
+        message: '提交的超市或商品不在列表内' 
+      });
+    }
+
+    //检查提交的数据是否已经存在
     const { data:priceJson, error:error1 } = await supabase
       .from('price_datas')
       .select('*')
