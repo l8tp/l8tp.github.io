@@ -421,12 +421,6 @@ if (import.meta.main) {
     console.log(`🚀 服务器启动成功！`);
     console.log(`🌐 访问地址: http://localhost:${PORT}`);
     console.log(`🔐 数据库: ${supabaseUrl ? '在线数据库' : '内存存储（测试用）'}`);
-    console.log('\n📡 API接口:');
-    console.log(`  POST /api/register  - 注册用户`);
-    console.log(`  POST /api/login     - 用户登录`);
-    console.log(`  POST /api/verify    - 验证token`);
-    console.log(`  POST /api/logout    - 退出登录`);
-    console.log(`  GET  /api/health    - 健康检查`);
   });
 }
 

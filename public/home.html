@@ -72,7 +72,7 @@
             font-weight: 800; 
             margin-left: 10px; 
             cursor: pointer;
-            width: 70px;
+            font-size: 20px;
         }
         #unitList{
             border-radius: 10px 10px 0 0;
@@ -84,7 +84,9 @@
             border-color: #3b3b3b;
             max-height: 150px;
         }
-        #filter .bluelist a{background-color: rgba(255, 255, 255, 0.3);}
+        #filter .bluelist a{
+            background: linear-gradient(to top, #adecff 0%, transparent 50%);
+        }
 
         .Xwinpop{
             background-color: #ffffff;
@@ -614,31 +616,32 @@
                 const newPrice = newpriceInput.value;
                 const newUnit = unitText.innerHTML.split(' ')[0];
                 const subdata = new Date().toISOString();
-                console.log(subdata);
+                let result;
                 try {
                     const response = await fetch(`${API_URL}/products/user/submitprice`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ token: currentToken, userIdTemp, marketInput: market, wareInput: ware, priceInput: newPrice, unit: newUnit })
                     });
-                    const result = await response.json();
-                    if (result.success) {
-                        btn.innerText = btntext;
-                        alert('修改成功');
-                        th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata.split('T')[0]}</p>`;
-                        edit.style.display = 'none';
-                    } else {
-                        alert(result.message);
-                        if (result.message === '请先登录或注册，试用次数结束') {
-                            localStorage.removeItem('token');
-                            localStorage.removeItem('user');
-                            currentToken = '';
-                            
-                            window.location.href = '/login';
-                        }
-                    }
+                    result = await response.json();
                 } catch (error) {
                     alert('请求服务器错误');
+                }
+
+                if (result.success) {
+                    btn.innerText = btntext;
+                    alert('修改成功');
+                    th.innerHTML = `<span class="price">${newPrice}</span><span class="unit">${newUnit}</span><p style='display:block'>时间：${subdata.split('T')[0]}</p>`;
+                    edit.style.display = 'none';
+                } else {
+                    alert(result.message);
+                    if (result.message === '请先登录或注册，试用次数结束') {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        currentToken = '';
+                        
+                        window.location.href = '/login';
+                    }
                 }
             })
         }

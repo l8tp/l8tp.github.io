@@ -18,6 +18,8 @@
         }
         #unitList{
             border-radius: 10px;
+            transform: translateY(0px);
+            
         }
         .form-group{
             display: flex;
@@ -255,9 +257,20 @@
             }
 
         }
+
+        function adjustUnitList(){
+            console.log('开始调整单位列表位置')
+            const unit = document.querySelector('#unit');
+            const unitList = document.querySelector('#unitList');
+            unitList.style.transform = `translateY(${(unitList.offsetHeight / -2)+(unit.offsetHeight / -2)}px)`;
+        }
+
         //页面加载完成时启动
         window.addEventListener('DOMContentLoaded', async ()=>{
-            document.querySelector('#unit').addEventListener('click',unitList);
+            document.querySelector('#unit').addEventListener('click', async ()=>{
+                await unitList();
+                adjustUnitList();
+            } );
             document.querySelector('#submitBtn').addEventListener('click',submitprice);
             loadwares();
         })

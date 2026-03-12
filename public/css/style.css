@@ -61,7 +61,7 @@ button:disabled {
 
 
 
-/* 蓝天白云列表框 */
+/* 蓝天黄土列表框 */
 .bluelist{
     display: flex; 
     /* gap: 15px;  */
@@ -81,7 +81,7 @@ button:disabled {
     justify-content: center;
     border-radius: 5px;
     position: relative; 
-    background: linear-gradient(to top, #acf7ff 0%, transparent 50%);
+    background: linear-gradient(to top, #fff5ac 0%, transparent 50%);
     font-size: 20px;
 }
 
