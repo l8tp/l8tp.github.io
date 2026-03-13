@@ -30,11 +30,6 @@
             border-style: solid;
             border-color: #000000 #ffffff;
         }
-        /* tr{
-            border-width:1px;
-            border-style: solid;
-            border-color: #000000;
-        } */
         table thead tr{
             background-color: #f1cd83;
             text-align: left;
@@ -45,9 +40,6 @@
         table p {
             font-size: 15px;
         }
-        /* table tbody tr{
-            border-bottom: 1px solid rgb(0, 0, 0);
-        } */
         table tbody tr:nth-of-type(even) {
             background-color: #f3f3f3;
         }
@@ -126,7 +118,7 @@
             box-shadow: 3px 3px 3px #000;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
-            margin: 0 10px 500px 10px;
+            margin: 0 10px;
             position: absolute; 
             top: 50px;
             z-index: 998;
@@ -262,7 +254,6 @@
             };
             const tbodytrs = tbody.querySelectorAll('tr');
             getpricenote(tbodytrs, markets);
-            toggleBottomTabBar();
 
         };
 
@@ -336,6 +327,7 @@
             poptimes++;
             const filter = document.querySelector('#filter')
             filter.style.display = 'flex'
+            document.querySelector('.bottom-tab-bar').style.display = 'none';
             const  response = await fetch('/json/ware.json');
             const ware = await response.json();
             const marketLable = document.getElementById('marketLable');
@@ -348,6 +340,7 @@
             if (poptimes < 2){
                 filter.querySelector('.Xwinpop').addEventListener('click', ()=>{
                     filter.style.display = 'none';
+                    document.querySelector('.bottom-tab-bar').style.display = 'flex';
                 });
                 const button = document.getElementById('submitselect');
                 button.addEventListener('click', ()=>{closefilter(filter, marketLable, wareLable, ware)})
@@ -463,6 +456,7 @@
         //关闭筛选弹窗开始重新渲染表格
         function closefilter(thefilter, marketLable, wareLable, ware){
             thefilter.style.display = 'none';
+            document.querySelector('.bottom-tab-bar').style.display = 'flex';
             
             const marketnodes = marketLable.querySelectorAll('span');
             const warenodes = wareLable.querySelectorAll('span');
@@ -505,7 +499,7 @@
 
         // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
         function toggleBottomTabBar() {
-            document.querySelectorAll('input').forEach(input => {
+            document.querySelectorAll('#edit input').forEach(input => {
                 input.addEventListener('focus', ()=>{
                     document.querySelector('.bottom-tab-bar').style.display = 'none';
                 });
@@ -624,6 +618,8 @@
         renderTable(theadtr, tbody);
         spreadTime(tbody);//监听点击单元格
         popEdit(tbody);//监听点双击单元格
+        toggleBottomTabBar();
+
     })
     </script>
 </body>
