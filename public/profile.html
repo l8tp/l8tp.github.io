@@ -106,7 +106,7 @@
         <button  id="logoutBtn" class="btn-danger">退出登录</button>
     </div>
 
-    <div class="bottom-tab-bar"></div>
+    <nav id="bottom-tab-bar"></nav>
     <script type="module">
         import {loadBottomBar} from './js/bottombar.mjs';
         const API_URL = window.location.origin + '/api';
@@ -280,10 +280,10 @@
         function addInputListener(){
             document.querySelector('.managepanel').querySelectorAll('input').forEach(input => {
                 input.addEventListener('focus', ()=>{
-                    document.querySelector('.bottom-tab-bar').style.display = 'none';
+                    document.querySelector('#bottom-tab-bar').style.display = 'none';
                 });
                 input.addEventListener('blur', ()=>{
-                    document.querySelector('.bottom-tab-bar').style.display = 'flex';
+                    document.querySelector('#bottom-tab-bar').style.display = 'flex';
                 });
             })
         }
@@ -308,7 +308,7 @@
                 btn.innerText = '去登录';
                 btn.classList.remove('btn-danger');
             }else{
-                loadBottomBar(currentToken);
+                loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
                 showUserInfo();
                 addInputListener();
                 addBtnListener();

@@ -11,7 +11,13 @@
         body {
             padding: 15px 10px 100px 10px;
         }
-        
+        header{
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
         h1 {
             text-align: center;
             font-size: 20px;
@@ -105,6 +111,11 @@
         
         #submitselect {
             width: 300px;
+        }
+        .help{
+            position: absolute;
+            right: 0;
+            font-size: 30px;
         }
 
         .Xwinpop {
@@ -202,10 +213,32 @@
         .xtitle button:hover {
             color: #000000;
         }
+        .helpPage{
+            position: absolute;
+            top: 10px;
+            background-color: #e2fde4;
+            border-radius: 10px;
+            border: #000 1px solid;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .hidden{display: none;}
     </style>
 </head>
 <body>
-    <div id="message"></div>
+    <header>
+        <div class="help"><i class="fas fa-question-circle" ></i></div>
+        <div id="message"></div>
+    </header>
+    <div id="helpPage" class="helpPage hidden">
+        <button class="Xwinpop">×</button>
+        <article>
+            <h1>使用说明</h1>
+            <p>点击单元格：显示价格时间。</p>
+            <p>双击单元格：编辑价格。</p>
+        </article>
+    </div>
     <div id="tablecontainer">
         <table>
             <thead>
@@ -254,7 +287,7 @@
             <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
         </div>
     </div>
-    <div class="bottom-tab-bar"></div>
+    <nav id="bottom-tab-bar"></nav>
     <script type="module">
         import { loadBottomBar } from './js/bottombar.mjs';
         import { unitList } from './js/elements.mjs';
@@ -262,11 +295,12 @@
         // 全局常量和变量
         const API_URL = window.location.origin + '/api';
         const DOM = {
+            helpPage: document.querySelector('#helpPage'),
             message: document.getElementById('message'),
             tablecontainer: document.getElementById('tablecontainer'),
             filter: document.querySelector('#filter'),
             edit: document.querySelector('#edit'),
-            bottomTabBar: document.querySelector('.bottom-tab-bar')
+            bottomTabBar: document.querySelector('#bottom-tab-bar')
         };
         
         let currentToken = localStorage.getItem('token') || '';
@@ -332,7 +366,7 @@
                 });
                 
                 const result = await response.json();
-                
+
                 if (result.success) {
                     console.log('获取到了所有超市的价格记录');
                     let wareCount = 0;
@@ -739,12 +773,16 @@
         function delAlias(data) {
             return data.map(item => item.split('#')[0]);
         }
+        function showHelp (){
+
+        };
 
         // 页面加载完成后执行
         window.addEventListener('DOMContentLoaded', async () => {
             // 初始化单位列表点击事件
             document.querySelector('#unit').addEventListener('click', unitList);
-            
+            document.querySelector('header .help').addEventListener('click', ()=>{DOM.helpPage.classList.remove('hidden')})
+            DOM.helpPage.querySelector('.Xwinpop').addEventListener('click', ()=>{DOM.helpPage.classList.add('hidden')});
             // 获取商品数据
             wareData = await fetchWareData();
             
@@ -753,7 +791,7 @@
             const wares = delAlias(wareData.ware);
 
             // 加载底部导航栏
-            loadBottomBar(currentToken);
+            loadBottomBar(currentToken, DOM.bottomTabBar);
             
             // 渲染表格
             await renderTable(markets, wares);

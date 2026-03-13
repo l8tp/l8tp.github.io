@@ -1,11 +1,10 @@
-async function loadBottomBar (token) {
+async function loadBottomBar (token, bottombar) {
     const param = new URLSearchParams(window.location.search);
     const grup = param.get("name") || 'home'; //获取URL数据
 
     const  response = await fetch('json/bottombar.json');
     const bottomdata = await response.json();
     console.log('获取到导航栏数据');
-    const bottombar = document.querySelector('.bottom-tab-bar');
     bottombar.innerHTML = ''
     for (let i in bottomdata){
         let tabclass = 'tab-item'

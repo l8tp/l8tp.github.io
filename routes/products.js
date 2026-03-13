@@ -114,15 +114,18 @@ router.post('/user/submitprice', async (req, res) => {
     if(priceJson){
       const { data, error } = await supabase
         .from('price_datas')
-        .update({price:priceInput, unit, username})
+        .update({price:priceInput, unit, username, created_at:new Date().toISOString()})
         .eq('market', marketInput)
         .eq('ware', wareInput)
         .select();
+      console.log('更新数据：', `${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
     }else{
       const { data, error } = await supabase
         .from('price_datas')
         .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
         .select();
+      console.log('创建数据：',`${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
+      
     }
 
     res.json({ 

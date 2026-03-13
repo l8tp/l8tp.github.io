@@ -75,7 +75,7 @@
     </div>
     <button type="submit" id="submitBtn" disabled>提交</button>
 
-    <div class="bottom-tab-bar"></div>
+    <nav id="bottom-tab-bar"></nav>
     <script type="module">
         import {loadBottomBar} from './js/bottombar.mjs';
         import {unitList} from './js/elements.mjs';
@@ -91,7 +91,7 @@
 
         //异步加载超市和商品列表
         async function loadwares () {
-            loadBottomBar(currentToken);
+            loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
             const marketInput = document.getElementById('marketInput');
             const marketList = document.getElementById('marketList');
             const wareInput = document.getElementById('wareInput');
@@ -149,7 +149,7 @@
             Input.addEventListener('focus', ()=>{
                 List.style.display = 'flex';
                 closelist = true;
-                document.querySelector('.bottom-tab-bar').style.display = 'none';
+                document.querySelector('#bottom-tab-bar').style.display = 'none';
             });
             List.addEventListener('mousedown', ()=>{
                 closelist = false;
@@ -164,7 +164,7 @@
                 }else{
                     if (Input.value){Input.style.border = '2px solid #0dff00';}
                 }
-                document.querySelector('.bottom-tab-bar').style.display = 'flex';
+                document.querySelector('#bottom-tab-bar').style.display = 'flex';
             });
         }
 

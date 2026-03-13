@@ -3,7 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+p{
+    text-indent: 2em;
+}
 body {
     min-height: 100vh;
     display: flex;
@@ -88,7 +90,7 @@ button:disabled {
 
 /* #底部导航栏样式 */
 /* 底部选项卡栏样式 */
-.bottom-tab-bar {
+#bottom-tab-bar {
     position: fixed;
     bottom: 0;
     width: 100%;
