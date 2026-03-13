@@ -773,16 +773,15 @@
         function delAlias(data) {
             return data.map(item => item.split('#')[0]);
         }
-        function showHelp (){
-
-        };
+        function toggleHelp (){DOM.helpPage.classList.toggle('hidden')};
 
         // 页面加载完成后执行
         window.addEventListener('DOMContentLoaded', async () => {
             // 初始化单位列表点击事件
             document.querySelector('#unit').addEventListener('click', unitList);
-            document.querySelector('header .help').addEventListener('click', ()=>{DOM.helpPage.classList.remove('hidden')})
-            DOM.helpPage.querySelector('.Xwinpop').addEventListener('click', ()=>{DOM.helpPage.classList.add('hidden')});
+            //点击显示和隐藏帮助页面
+            document.querySelector('header .help').addEventListener('click', toggleHelp)
+            DOM.helpPage.querySelector('.Xwinpop').addEventListener('click', toggleHelp);
             // 获取商品数据
             wareData = await fetchWareData();
             
