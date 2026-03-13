@@ -139,6 +139,10 @@
         }
         #edit{
             min-height: auto;
+            position: fixed;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
         }
         .priceEdit{
             display: flex;
@@ -511,73 +515,47 @@
             })
         }
 
-        //展开时间和编辑弹窗
-        function spreadEdit(tbody){
-            let form2Th, form1Tr;
-            let editpoptimes = 0;
+        function spreadTime(tbody){
+            let timeTr;
             tbody.addEventListener('click', (e)=>{
-                const firstTh = e.target.closest('tr').querySelector('th');
+                const tr = e.target.closest('tr');
+                if (!tr.classList.contains('showTime')){
+                    console.log('显示时间',tr)
+                    //第一次点击，展开时间
+                    tr.classList.add('showTime');
+                    tr.querySelectorAll('p').forEach(element => {
+                        element.style.display = 'block';
+                    });
+                    if (timeTr && timeTr !== tr) {
+                        timeTr.classList.remove('showTime');
+                        timeTr.querySelectorAll('p').forEach(element => {
+                            element.style.display = 'none';
+                        });
+                    }
+                    timeTr = tr;
+                }else{
+                    console.log('隐藏时间')
+                    //第二次点击，隐藏时间
+                    tr.classList.remove('showTime');
+                    tr.querySelectorAll('p').forEach(element => {
+                        element.style.display = 'none';
+                    });
+                }
+            });
+        }
+
+        function popEdit(tbody){
+            let editpoptimes = 0;
+            tbody.addEventListener('dblclick', (e)=>{
                 const td = e.target.closest('td');
                 if(!td){return};
+                const firstTh = e.target.closest('tr').querySelector('th');
                 const ware = firstTh.querySelector('a').innerText;
-                const p = td.querySelector('p');
-                const editHint = td.querySelector('.editHint');
-                let thForm = td.className;
-                switch (thForm) {
-                    case '':
-                        //第一次点击，展开时间
-                        const tr = e.target.closest('tr');
-                        tr.querySelectorAll('p').forEach(element => {
-                            element.style.display = 'block';
-                        });
-                        tr.querySelectorAll('td').forEach(element => {
-                            element.className = 'form_1';
-                        });
-                        if (form1Tr) {
-                            form1Tr.querySelectorAll('p').forEach(element => {
-                                element.style.display = 'none';
-                            });
-                            form1Tr.querySelectorAll('td').forEach(element => {
-                                element.className = '';
-                                element.style.color = 'black';
-                            });
-                            form1Tr.querySelectorAll('.editHint').forEach(element => {
-                                element.remove();
-                            });
-                        }
-                        form1Tr = tr;
-                        break;
-                    case 'form_1':
-                        //第二次点击，提示再次点击开始编辑
-                        td.innerHTML = '<span class="editHint">再点击开始编辑：</span>' + td.innerHTML
-                        td.style.color = 'red';
-                        const theP =  td.querySelector('p');
-                        if(theP){theP.style.display = 'none'};
-                        td.className = 'form_2';
-                        if (form2Th && form2Th !== td) {
-                            if (form2Th.className !== 'form_1'){
-                                form2Th.style.color = 'black';
-                                const thehint = form2Th.querySelector('.editHint');
-                                if(thehint){thehint.remove()};
-                                form2Th.className = 'form_1';
-                            }
-                        }
-                        form2Th = td;
-                        break;
-                    case 'form_2':
-                        //第三次点击，启动编辑弹窗
-                        editHint.remove();
-                        td.style.color = 'black';
-                        td.className = 'form_1';
-                        editpoptimes++;
-                        edit(ware, td, editpoptimes);
-                        break;
-                    default:
-                        console.error('td的class异常')
-                        return;
-                }
-            })
-        }
+                editpoptimes++;
+                edit(ware, td, editpoptimes);
+            });
+            
+        };
 
         //启动编辑弹窗
         function edit(ware, td, editpoptimes){
@@ -587,14 +565,6 @@
             edit.querySelector('.Xwinpop').addEventListener('click', ()=>{
                 edit.style.display = 'none';
             });
-            const thBottom = td.getBoundingClientRect().bottom + window.pageYOffset;
-            const thViewBottom = td.getBoundingClientRect().bottom;
-            const thTop = td.getBoundingClientRect().top + window.pageYOffset;
-            if (thViewBottom + edit.getBoundingClientRect().height > window.innerHeight){
-                edit.style.top = (thTop - edit.getBoundingClientRect().height) + 'px';
-            } else {
-                edit.style.top = thBottom + 'px';
-            }
             
             //编辑弹窗赋值
             let price, unit;
@@ -652,7 +622,8 @@
         const tbody = container.querySelector('tbody');
         loadBottomBar(currentToken);
         renderTable(theadtr, tbody);
-        spreadEdit(tbody);//监听点击单元格不同次数出现不同效果
+        spreadTime(tbody);//监听点击单元格
+        popEdit(tbody);//监听点双击单元格
     })
     </script>
 </body>
