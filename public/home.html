@@ -230,45 +230,31 @@
             localStorage.setItem('userIdTemp', userIdTemp);
         }
 
-        //第一次渲染表格
-        async function renderTable(theadtr, tbody) {
-            const response = await fetch('/json/ware.json');
-            const ware = await response.json();
+        //渲染表格
+        async function renderTable(theadtr, tbody, markets, wares) {
             const btn = document.createElement('button');
             btn.innerText = '筛选▼';
             const theth = document.createElement('th');
             theth.classList.add('xtitle');
             theth.id = 'xtitle';
             theth.appendChild(btn);
+            theadtr.innerHTML = '';
             theadtr.appendChild(theth);
             btn.addEventListener('click', filter);
-            const markets = delAlias(ware.market.slice(0,2));
             for (let i of markets){
                 const th = document.createElement('th');
                 th.innerHTML = i;
                 theadtr.appendChild(th);
             };
             tbody.innerHTML = ''
-            for (let i of delAlias(ware.ware)){
+            for (let i of wares){
                 tbody.innerHTML += `<tr><th><a target="_blank" href="https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=${i}">${i}</a></th></tr>`
             };
             const tbodytrs = tbody.querySelectorAll('tr');
             getpricenote(tbodytrs, markets);
-
         };
 
-
-        //去除#后面别名的函数
-        function delAlias(data){
-            let newdata = [];
-            for (let i of data){
-                i = i.split('#')[0];
-                newdata.push(i);
-            }
-            return newdata;
-        }
-
-        //获取价格数据
+        //获取价格数据，继续渲染表格
         async function getpricenote(tbodytrs, markets) {
             const message = document.getElementById('message');
             message.innerHTML = '价格加载中...'
@@ -336,6 +322,10 @@
             const wareLable = document.getElementById('wareLable');
             const wareInput = document.getElementById('wareInput');
             const wareList = document.getElementById('wareList');
+            
+            const container = document.getElementById('tablecontainer');
+            const theadtr = container.querySelector('thead>tr');
+            const tbody = container.querySelector('tbody');
 
             if (poptimes < 2){
                 filter.querySelector('.Xwinpop').addEventListener('click', ()=>{
@@ -343,7 +333,10 @@
                     document.querySelector('.bottom-tab-bar').style.display = 'flex';
                 });
                 const button = document.getElementById('submitselect');
-                button.addEventListener('click', ()=>{closefilter(filter, marketLable, wareLable, ware)})
+                button.addEventListener('click', ()=>{
+                    const {markets, wares} = closefilter(filter, marketLable, wareLable);
+                    renderTable(theadtr, tbody, markets, wares);
+                });
                 document.getElementById('clearMarketLabel').addEventListener('click', ()=>{
                     lableToList(marketLable, marketList);
                 });
@@ -454,7 +447,7 @@
         }
 
         //关闭筛选弹窗开始重新渲染表格
-        function closefilter(thefilter, marketLable, wareLable, ware){
+        function closefilter(thefilter, marketLable, wareLable){
             thefilter.style.display = 'none';
             document.querySelector('.bottom-tab-bar').style.display = 'flex';
             
@@ -464,37 +457,19 @@
                 message.innerHTML = '请选择超市和商品';
                 return
             }
-            const container = document.getElementById('tablecontainer');
-            const theadtr = container.querySelector('thead > tr');
-            const tbody = container.querySelector('tbody');
 
             let markets = []
-            const btn = document.createElement('button');
-            btn.innerText = '筛选▼';
-            const theth = document.createElement('th');
-            theth.classList.add('xtitle');
-            theth.id = 'xtitle';
-            theth.appendChild(btn);
-            theadtr.innerHTML = '';
-            theadtr.appendChild(theth);
-            btn.addEventListener('click', filter);
             for (let i of marketnodes){
-                const th = document.createElement('th');
-                th.innerHTML = i.innerHTML.split('#')[0];
-                theadtr.appendChild(th);
                 markets.push(i.innerHTML.split('#')[0]);
             };
-            tbody.innerHTML = ''
-            const wares = []
-            for (let i of warenodes){
-                tbody.innerHTML += `<tr><th><a target="_blank" href="https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=${i.innerHTML.split('#')[0]}">${i.innerHTML.split('#')[0]}</a></th></tr>`
+            const wares = [];
+            for(let i of warenodes){
                 wares.push(i.innerHTML.split('#')[0]);
-            };
+            }
             //存储筛选条件到本地，下次打开弹窗自动加载
-            let filters = {markets, wares};
+            const filters = {markets, wares};
             localStorage.setItem('filters', JSON.stringify(filters));
-            const tbodytrs = tbody.querySelectorAll('tr');
-            getpricenote(tbodytrs, markets);
+            return {markets, wares};
         }
 
         // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
@@ -609,18 +584,35 @@
             })
         }
 
-	window.addEventListener('DOMContentLoaded', async ()=>{
-        document.querySelector('#unit').addEventListener('click',unitList);
-        const container = document.getElementById('tablecontainer');
-        const theadtr = container.querySelector('thead > tr');
-        const tbody = container.querySelector('tbody');
-        loadBottomBar(currentToken);
-        renderTable(theadtr, tbody);
-        spreadTime(tbody);//监听点击单元格
-        popEdit(tbody);//监听点双击单元格
-        toggleBottomTabBar();
+        //去除#后面别名的函数
+        function delAlias(data){
+            let newdata = [];
+            for (let i of data){
+                i = i.split('#')[0];
+                newdata.push(i);
+            }
+            return newdata;
+        }
 
-    })
+        window.addEventListener('DOMContentLoaded', async ()=>{
+            document.querySelector('#unit').addEventListener('click',unitList);
+            const container = document.getElementById('tablecontainer');
+            const theadtr = container.querySelector('thead > tr');
+            const tbody = container.querySelector('tbody');
+            const response = await fetch('/json/ware.json');
+            const wareJson = await response.json();
+            const markets = delAlias(wareJson.market.slice(0,2));
+            const wares = delAlias(wareJson.ware);
+
+
+            loadBottomBar(currentToken);
+            renderTable(theadtr, tbody, markets, wares);
+            spreadTime(tbody);//监听点击单元格，展开数据时间
+            popEdit(tbody);//监听双击单元格，编辑弹窗
+            
+            toggleBottomTabBar();
+
+        })
     </script>
 </body>
 </html>
