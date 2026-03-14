@@ -78,12 +78,24 @@
     <nav id="bottom-tab-bar" class="bottom-tab-bar"></nav>
     <script type="module">
         import {loadBottomBar} from './js/bottombar.mjs';
-        import {unitList} from './js/elements.mjs';
+        import {unitList} from './js/showunitlist.mjs';
         import {fetchWareData} from './js/getwaredata.mjs';
 
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
+
+        const DOM = {
+            message:document.getElementById('message'),
+            marketInput:document.getElementById('marketInput'),
+            marketList:document.getElementById('marketList'),
+            wareInput:document.getElementById('wareInput'),
+            wareList:document.getElementById('wareList'),
+            priceInput:document.getElementById('priceInput'),
+            unit:document.getElementById('unit'),
+            bottomTabBar:document.querySelector('#bottom-tab-bar')
+        }
+
         if (!userIdTemp) {
             userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_1';
             localStorage.setItem('userIdTemp', userIdTemp);
@@ -91,16 +103,11 @@
 
         //异步加载超市和商品列表
         async function loadwares (ware) {
-            loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
-            const marketInput = document.getElementById('marketInput');
-            const marketList = document.getElementById('marketList');
-            const wareInput = document.getElementById('wareInput');
-            const wareList = document.getElementById('wareList');
-            loadlist(marketInput, marketList, ware.market);
-            loadlist(wareInput, wareList, ware.ware);
+            loadlist(DOM.marketInput, DOM.marketList, ware.market);
+            loadlist(DOM.wareInput, DOM.wareList, ware.ware);
             localStorage.setItem('ware', JSON.stringify(ware));
-            InputFilter(marketInput, marketList, ware.market);
-            InputFilter(wareInput, wareList, ware.ware);
+            InputFilter(DOM.marketInput, DOM.marketList, ware.market);
+            InputFilter(DOM.wareInput, DOM.wareList, ware.ware);
         };
 
         //加载候选列表函数
@@ -128,7 +135,7 @@
                     }
                     List.style.display = 'none';
                     Input.style.border = '2px solid #0dff00';
-                    message.innerHTML = '';
+                    DOM.message.innerHTML = '';
                     setTimeout(validateInput, 10)
                 }
             })
@@ -158,7 +165,7 @@
                 }
                 closelist = true;
                 if (!newdata.includes(Input.value) && Input.value){
-                    message.innerHTML = `（${Input.value}）不在列表内`
+                    DOM.message.innerHTML = `（${Input.value}）不在列表内`
                 }else{
                     if (Input.value){Input.style.border = '2px solid #0dff00';}
                 }
@@ -179,9 +186,9 @@
                     }
                 }
                 if (!newdata.length){
-                    message.innerHTML = `（${inputValue}）不在列表中`
+                    DOM.message.innerHTML = `（${inputValue}）不在列表中`
                 }else{
-                    message.innerHTML=''
+                    DOM.message.innerHTML=''
                     }
                 loadlist(Input, list, newdata, false)
                 validateInput();
@@ -190,8 +197,8 @@
 
         //验证输入激活提交按钮
         function validateInput (){
-            const wareinputValue = document.getElementById('wareInput').value.trim();
-            const marketinputValue = document.getElementById('marketInput').value.trim();
+            const wareinputValue = DOM.wareInput.value.trim();
+            const marketinputValue = DOM.marketInput.value.trim();
             const ware = JSON.parse(localStorage.getItem('ware')).ware;
             let newware = [];
             for (let i of ware){newware.push(i.split('#')[0])};
@@ -211,11 +218,11 @@
         async function submitprice() {
             const user = JSON.parse( localStorage.getItem('user')) || '';
             const username = user.username || userIdTemp;
-            const marketInput = document.getElementById('marketInput').value.trim();
-            const wareInput = document.getElementById('wareInput').value.trim();
-            const priceInput = document.getElementById('priceInput').value;
-            const unit = document.getElementById('unit').innerHTML.slice(0, -1)
-            const Message = document.getElementById('message')
+            const marketInput = DOM.marketInput.value.trim();
+            const wareInput = DOM.wareInput.value.trim();
+            const priceInput = DOM.priceInput.value;
+            const unit = DOM.unit.innerHTML.slice(0, -1)
+            const Message = DOM.message;
 
             if (!marketInput){
                 Message.innerHTML = '请输入超市'
@@ -271,6 +278,7 @@
                 adjustUnitList();
             } );
             document.querySelector('#submitBtn').addEventListener('click',submitprice);
+            loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
             loadwares(wareData);
         })
     </script>
