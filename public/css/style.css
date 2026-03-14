@@ -5,6 +5,7 @@
 }
 p{
     text-indent: 2em;
+    font-size: 20px;
 }
 body {
     min-height: 100vh;
@@ -90,7 +91,7 @@ button:disabled {
 
 /* #底部导航栏样式 */
 /* 底部选项卡栏样式 */
-#bottom-tab-bar {
+.bottom-tab-bar {
     position: fixed;
     bottom: 0;
     width: 100%;

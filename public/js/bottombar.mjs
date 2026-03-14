@@ -1,3 +1,4 @@
+//加载底部导航栏
 async function loadBottomBar (token, bottombar) {
     const param = new URLSearchParams(window.location.search);
     const grup = param.get("name") || 'home'; //获取URL数据

@@ -75,10 +75,11 @@
     </div>
     <button type="submit" id="submitBtn" disabled>提交</button>
 
-    <nav id="bottom-tab-bar"></nav>
+    <nav id="bottom-tab-bar" class="bottom-tab-bar"></nav>
     <script type="module">
         import {loadBottomBar} from './js/bottombar.mjs';
         import {unitList} from './js/elements.mjs';
+        import {fetchWareData} from './js/getwaredata.mjs';
 
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
@@ -88,16 +89,13 @@
             localStorage.setItem('userIdTemp', userIdTemp);
         }
 
-
         //异步加载超市和商品列表
-        async function loadwares () {
+        async function loadwares (ware) {
             loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
             const marketInput = document.getElementById('marketInput');
             const marketList = document.getElementById('marketList');
             const wareInput = document.getElementById('wareInput');
             const wareList = document.getElementById('wareList');
-            const response = await fetch('/json/ware.json');
-            const ware = await response.json();
             loadlist(marketInput, marketList, ware.market);
             loadlist(wareInput, wareList, ware.ware);
             localStorage.setItem('ware', JSON.stringify(ware));
@@ -267,12 +265,13 @@
 
         //页面加载完成时启动
         window.addEventListener('DOMContentLoaded', async ()=>{
-            document.querySelector('#unit').addEventListener('click', async ()=>{
-                await unitList();
+            const wareData = await fetchWareData();
+            document.querySelector('#unit').addEventListener('click', async (e)=>{
+                await unitList(e, wareData.unit);
                 adjustUnitList();
             } );
             document.querySelector('#submitBtn').addEventListener('click',submitprice);
-            loadwares();
+            loadwares(wareData);
         })
     </script>
 </body>

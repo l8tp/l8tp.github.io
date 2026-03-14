@@ -66,10 +66,10 @@ router.post('/user/submitprice', async (req, res) => {
   //跳过登录验证
   if (!token) {
     // 无token时，使用userIdTemp作为标识
-    if (!userIdTemp) {
+    if (!userIdTemp || userIdTemp.length > 50) {
       return res.json({ 
         success: false, 
-        message: '请先登录' 
+        message: '临时ID错误' 
       });
     }
     username = userIdTemp; // 使用userIdTemp作为临时用户名
@@ -125,7 +125,6 @@ router.post('/user/submitprice', async (req, res) => {
         .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
         .select();
       console.log('创建数据：',`${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
-      
     }
 
     res.json({ 
@@ -144,10 +143,10 @@ router.post('/user/getpricenote', async (req, res) => {
   //跳过登录验证
   if (!token) {
     // 无token时，使用userIdTemp作为标识
-    if (!userIdTemp) {
+    if (!userIdTemp || userIdTemp.length > 50) {
       return res.json({ 
         success: false, 
-        message: '请先登录' 
+        message: '临时ID错误' 
       });
     }
     const tempTimestamp = userIdTemp.split('_').pop();
