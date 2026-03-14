@@ -79,6 +79,7 @@
         }
         
         table p {
+            text-indent: 0;
             font-size: 15px;
         }
         
@@ -240,10 +241,9 @@
         <button class="Xwinpop">×</button>
         <article>
             <h1>使用说明</h1>
-            <p>点击单元格：显示价格时间。</p>
+            <p>点击左侧：显示价格时间。</p>
             <p>双击单元格：编辑价格。</p>
             <p>点击筛选：弹窗筛选窗格。</p>
-            <p>点击左侧：搜索图片。</p>
             <p>点击问号：弹窗帮助窗格。</p>
         </article>
     </div>
@@ -343,7 +343,7 @@
             theth.appendChild(btn);
             theadtr.appendChild(theth);
             
-            // 添加市场表头
+            // 添加超市表头
             for (const market of markets) {
                 const th = document.createElement('th');
                 th.textContent = market;
@@ -354,7 +354,7 @@
             tbody.innerHTML = '';
             for (const ware of wares) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<th><a target="_blank" href="https://image.baidu.com/search/index?tn=baiduimage&fm=result&ie=utf-8&word=${encodeURIComponent(ware)}">${ware}</a></th>`;
+                tr.innerHTML = `<th><a>${ware}</a></th>`;
                 tbody.appendChild(tr);
             }
             
@@ -653,7 +653,8 @@
         function spreadTime(tbody) {
             tbody.addEventListener('click', (e) => {
                 const tr = e.target.closest('tr');
-                if (!tr) return;
+                const th = e.target.closest('th');
+                if (!th) return;
                 
                 if (!tr.classList.contains('showTime')) {
                     // 展开时间
