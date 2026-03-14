@@ -433,12 +433,8 @@
             
             DOM.filter.classList.remove('hidden');
             DOM.bottomTabBar.classList.add('hidden');
-            
-            // 确保商品数据已加载
-            if (!wareData) {
-                wareData = await fetchWareData();
-            }
-            
+            if (poptimes > 1) { return};
+                        
             // 获取DOM元素
             const marketLable = document.getElementById('marketLable');
             const marketInput = document.getElementById('marketInput');
@@ -450,17 +446,11 @@
             const tbody = DOM.tablecontainer.querySelector('tbody');
 
             // 首次加载时添加事件监听器
-            if (poptimes < 2) {
-                setupFilterEventListeners(marketLable, wareLable, marketList, wareList, theadtr, tbody);
-                loadSavedFilters(marketLable, marketList, wareLable, wareList);
-            } else {
-                // 重置输入框
-                marketInput.value = '';
-                wareInput.value = '';
-                // 重新应用筛选
-                InputFilter(marketLable, marketInput, marketList);
-                InputFilter(wareLable, wareInput, wareList);
-            }
+            setupFilterEventListeners(marketLable, wareLable, marketList, wareList, theadtr, tbody);
+            loadSavedFilters(marketLable, marketList, wareLable, wareList);
+            // 应用筛选
+            InputFilter(marketLable, marketInput, marketList);
+            InputFilter(wareLable, wareInput, wareList);
         }
 
         // 设置筛选弹窗的事件监听器
@@ -505,15 +495,10 @@
 
         // 根据输入筛选列表
         function InputFilter(label, input, list) {
-            // 移除之前的事件监听器，避免重复绑定
-            const newInput = input.cloneNode(true);
-            input.replaceWith(newInput);
-            
-            newInput.addEventListener('input', () => {
-                const inputValue = newInput.value.trim();
-
+            input.addEventListener('input', () => {
+                const inputValue = input.value.trim();
                 // 获取标签列表
-                const spannodes = lable.querySelectorAll('span');
+                const spannodes = label.querySelectorAll('span');
                 const spans = [];
                 for (let span of spannodes) {
                     spans.push(span.textContent);
@@ -792,7 +777,7 @@
             
             // 渲染表格
             await renderTable(markets, wares);
-            
+
             // 设置事件监听
             const tbody = DOM.tablecontainer.querySelector('tbody');
             spreadTime(tbody); // 监听点击单元格，展开数据时间
