@@ -14,5 +14,6 @@ async function unitList(e, units) {
             unitList.style.display = 'none';
         }
     })
+    return unitList;
 };
 export {unitList};

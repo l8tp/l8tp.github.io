@@ -22,56 +22,69 @@
             
         }
         .form-group{
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 50px auto 80px;
+            row-gap: 5px;
+            column-gap: 0;
+            grid-template-areas: "sl si si"
+                                 "wl wi wi"
+                                 "pl pi ui";
             width: 100%;
-            gap: 5px;
             margin-bottom: 10px;
         }
+        /* 网格区域分配 */
+        .sl { grid-area: sl; }
+        .si { grid-area: si; }
+        .wl { grid-area: wl; }
+        .wi { grid-area: wi; }
+        .pl { grid-area: pl; }
+        .pi { grid-area: pi; }
+        .ui {
+            grid-area: ui;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            position: relative;
+        }
         .inputarea{
-            display: flex;
+            display: flex; 
+            position: relative;        
         }
         .bluelist{
-            display: none;
             position: absolute; 
             z-index: 999;
             transform: translateY(60px);
-        }        
+        }
+        .hidden{display: none;}
     </style>
 </head>
 <body>
     <div id="message"></div>
     <div class="form-group">
-        <div class="inputarea">
-            <label for="marketInput">超市：</label>
-            <div style="display: flex; flex: 1; position: relative;">
+            <label for="marketInput" class="sl">超市：</label>
+            <div class="si inputarea">
                 <input value="邛崃发到家" type="text" id="marketInput" name="marketInput" placeholder="从下拉列表选择" autocomplete="off">
-                <li id="marketList" class="bluelist">
+                <li id="marketList" class="bluelist hidden">
                     <!-- 此处加载超市列表 -->
                 </li>
 
             </div>
             
-        </div>
-        <div class="inputarea">
-            <label for="wareInput">商品：</label>
-            <div style="display: flex; flex: 1; position: relative;">
+            <label for="wareInput" class="wl">商品：</label>
+            <div class="wi inputarea">
                 <input type="text" id="wareInput" name="ware" placeholder="从下拉列表选择" autocomplete="off">
-                <li id="wareList" class="bluelist">
+                <li id="wareList" class="bluelist hidden">
                     <!-- 此处加载商品列表 -->
                 </li>
             </div>
-        </div>
-        <div class="inputarea">
-            <label for="priceInput">价格：</label>
-            <input type="number" id="priceInput" name="price" placeholder="输入价格" autocomplete="off">
-            <div style="display: flex; flex-direction: column; justify-content: center; position: relative;">
+            <label for="priceInput" class="pl">价格：</label>
+            <input type="number" id="priceInput" class="pi" name="price" placeholder="输入价格" autocomplete="off">
+            <div class="ui">
                 <a id="unit">元/斤 ▼</a>
-                <li id="unitList" class="bluelist">
+                <li id="unitList" class="bluelist hidden">
                     <!-- 此处加载单位列表 -->
                 </li>
             </div>
-        </div>
     </div>
     <button type="submit" id="submitBtn" disabled>提交</button>
 
@@ -93,6 +106,8 @@
             wareList:document.getElementById('wareList'),
             priceInput:document.getElementById('priceInput'),
             unit:document.getElementById('unit'),
+            unitList:document.getElementById('unitList'),
+            submitBtn:document.getElementById('submitBtn'),
             bottomTabBar:document.querySelector('#bottom-tab-bar')
         }
 
@@ -101,81 +116,63 @@
             localStorage.setItem('userIdTemp', userIdTemp);
         }
 
-        //异步加载超市和商品列表
-        async function loadwares (ware) {
-            loadlist(DOM.marketInput, DOM.marketList, ware.market);
-            loadlist(DOM.wareInput, DOM.wareList, ware.ware);
-            localStorage.setItem('ware', JSON.stringify(ware));
-            InputFilter(DOM.marketInput, DOM.marketList, ware.market);
-            InputFilter(DOM.wareInput, DOM.wareList, ware.ware);
+        //加载超市和商品列表
+        async function loadwares (input, list, data) {
+            loadlist(list, data);
+            InputFilter(input, list, data);
+
+            //设置监听函数
+            showHidelist(input, list, delAlias(data));
+            listToInput(list, input);
         };
 
         //加载候选列表函数
-        function loadlist(Input, List, data, delAlias=true){
+        function loadlist(List, data, delAlias=true){
             List.innerHTML = ''
             if(delAlias){
                 for (let i of data){
-                    i = i.split('#')[0];
-                    List.innerHTML += `<a>${i}</a>`
+                    const a = document.createElement('a');
+                    a.textContent = i.split('#')[0];
+                    List.appendChild(a);
                 }
             }else{
                 for (let i of data){
-                    List.innerHTML += `<a>${i}</a>`
+                    const a = document.createElement('a');
+                    a.textContent = i;
+                    List.appendChild(a);
                 }
             }
-
-            //监视列表点击赋值给输入框
-            List.addEventListener('click', (e)=>{
-                const i = e.target;
-                if (i !== List){
-                    if(delAlias){
-                        Input.value = i.innerHTML;
-                    }else{
-                        Input.value = i.innerHTML.split('#')[0];
-                    }
-                    List.style.display = 'none';
-                    Input.style.border = '2px solid #0dff00';
-                    DOM.message.innerHTML = '';
-                    setTimeout(validateInput, 10)
-                }
-            })
         }
 
         //监视输入框显示或隐藏列表
         function showHidelist(Input, List, data){
-            //去除#后面的别名
-            const newdata = [];
-            for (let i of data){
-                i = i.split('#')[0];
-                newdata.push(i);
-            }
-
             let closelist;
             Input.addEventListener('focus', ()=>{
-                List.style.display = 'flex';
+                List.classList.remove('hidden');
                 closelist = true;
-                document.querySelector('#bottom-tab-bar').style.display = 'none';
+                DOM.bottomTabBar.classList.add('hidden');
             });
             List.addEventListener('mousedown', ()=>{
-                closelist = false;
+                closelist = false;//确保list被点击后才关闭
             });
+
             Input.addEventListener('blur', ()=>{
                 if (closelist){
-                    List.style.display = 'none';
-                }
-                closelist = true;
-                if (!newdata.includes(Input.value) && Input.value){
-                    DOM.message.innerHTML = `（${Input.value}）不在列表内`
+                    List.classList.add('hidden');
                 }else{
-                    if (Input.value){Input.style.border = '2px solid #0dff00';}
+                    setTimeout(()=>{
+                        List.classList.add('hidden');
+                    },100);
                 }
-                document.querySelector('#bottom-tab-bar').style.display = 'flex';
+                if (!data.includes(Input.value) && Input.value){
+                    DOM.message.innerHTML = `（${Input.value}）不在列表内`
+                }
+                DOM.bottomTabBar.classList.remove('hidden');
             });
         }
 
         //根据输入筛选下拉列表
         function InputFilter(Input, list, data){
-            showHidelist(Input, list, data)
             Input.addEventListener('input', ()=>{
                 Input.style.border = '2px solid #e0e6ed';
                 const inputValue = Input.value.trim();
@@ -190,7 +187,7 @@
                 }else{
                     DOM.message.innerHTML=''
                     }
-                loadlist(Input, list, newdata, false)
+                loadlist(list, newdata, false)
                 validateInput();
             });
         }
@@ -200,19 +197,36 @@
             const wareinputValue = DOM.wareInput.value.trim();
             const marketinputValue = DOM.marketInput.value.trim();
             const ware = JSON.parse(localStorage.getItem('ware')).ware;
-            let newware = [];
-            for (let i of ware){newware.push(i.split('#')[0])};
+            const newware = delAlias(ware);
             const market = JSON.parse(localStorage.getItem('ware')).market;
-            let newmarket = [];
-            for (let i of market){newmarket.push(i.split('#')[0])};
+            const newmarket = delAlias(market);
             
             if (newware.includes(wareinputValue) && newmarket.includes(marketinputValue)){
-                document.getElementById('submitBtn').disabled = false
+                DOM.submitBtn.disabled = false
             }else{
-                document.getElementById('submitBtn').disabled = true
+                DOM.submitBtn.disabled = true
             }
         }
 
+        // 去除#后面别名的函数
+        function delAlias(data) {
+            return data.map(item => item.split('#')[0]);
+        }
+
+        //监视列表点击赋值给输入框
+        function listToInput (List, Input){
+            List.addEventListener('click', (e)=>{
+                const i = e.target;
+                if (i !== List){
+                    Input.value = i.innerHTML.split('#')[0];
+                    List.classList.add('hidden');
+                    
+                    Input.style.border = '2px solid #0dff00';
+                    DOM.message.innerHTML = '';
+                    setTimeout(validateInput, 10)
+                }
+            })
+        }
 
         //提交价格数据
         async function submitprice() {
@@ -263,23 +277,28 @@
 
         }
 
-        function adjustUnitList(){
-            console.log('开始调整单位列表位置')
-            const unit = document.querySelector('#unit');
-            const unitList = document.querySelector('#unitList');
-            unitList.style.transform = `translateY(${(unitList.offsetHeight / -2)+(unit.offsetHeight / -2)}px)`;
+        //调整单位列表的位置
+        function adjustUnitList(list){
+            list.style.transform = `translateY(${(DOM.unitList.offsetHeight / -2)+(DOM.unit.offsetHeight / -2)}px)`;
         }
 
         //页面加载完成时启动
         window.addEventListener('DOMContentLoaded', async ()=>{
+            //加载导航栏
+            loadBottomBar(currentToken, DOM.bottomTabBar);
+            //加载商品数据
             const wareData = await fetchWareData();
-            document.querySelector('#unit').addEventListener('click', async (e)=>{
-                await unitList(e, wareData.unit);
-                adjustUnitList();
+            localStorage.setItem('ware', JSON.stringify(wareData));
+            //监听单位和提交按钮
+            DOM.unit.addEventListener('click', async (e)=>{
+                const list =  await unitList(e, wareData.unit);
+                adjustUnitList(list);
             } );
-            document.querySelector('#submitBtn').addEventListener('click',submitprice);
-            loadBottomBar(currentToken, document.querySelector('#bottom-tab-bar'));
-            loadwares(wareData);
+            DOM.submitBtn.addEventListener('click',submitprice);
+
+            //加载列表和监听函数
+            loadwares(DOM.marketInput, DOM.marketList, wareData.market);
+            loadwares(DOM.wareInput, DOM.wareList, wareData.ware);
         })
     </script>
 </body>
