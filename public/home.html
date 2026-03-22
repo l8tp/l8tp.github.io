@@ -179,6 +179,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 250px;
         }
         
         .priceEdit {
@@ -716,22 +717,25 @@
                 const originalText = btn.textContent;
                 btn.textContent = '正在提交...';
                 btn.disabled = true;
-                
+
                 const newPrice = priceInput.value;
                 const newUnit = unitText.textContent.split(' ')[0];
+
+                const formData = new FormData();
+                // formData.append('image', theImg);
+                formData.append('jsonData', JSON.stringify({
+                    token:currentToken, 
+                    userIdTemp, 
+                    marketInput:market, 
+                    wareInput:ware, 
+                    priceInput:newPrice, 
+                    unit:newUnit 
+                }));
                 
                 try {
                     const response = await fetch(`${API_URL}/products/user/submitprice`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            token: currentToken, 
-                            userIdTemp, 
-                            marketInput: market, 
-                            wareInput: ware, 
-                            priceInput: newPrice, 
-                            unit: newUnit 
-                        })
+                        body: formData
                     });
                     
                     const result = await response.json();

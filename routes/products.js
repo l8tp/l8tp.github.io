@@ -4,6 +4,7 @@ dotenv.config();
 
 import express from 'express';
 import { createClient } from '@supabase/supabase-js';
+import multer from 'multer';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -14,6 +15,10 @@ const __dirname = dirname(__filename);
 // 读取 ware.json 文件
 const wareData = JSON.parse(fs.readFileSync(join(__dirname, '../public/json/ware.json'), 'utf8'));
 const app = express();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {fileSize: 1024*1024}
+});
 
 global.managename = 'ltp-ptl';
 
@@ -59,10 +64,11 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 
 //1. 存储提交的价格数据
-router.post('/user/submitprice', async (req, res) => {
-  const { token, userIdTemp, marketInput, wareInput, priceInput, unit } = req.body;
+router.post('/user/submitprice', upload.single('image'), async (req, res) => {
+  const file = req.file;
+  const jsonData = JSON.parse(req.body.jsonData);
+  const { token, userIdTemp, marketInput, wareInput, priceInput, unit } = jsonData;
   let username = '';
-
   //跳过登录验证
   if (!token) {
     // 无token时，使用userIdTemp作为标识
@@ -80,13 +86,14 @@ router.post('/user/submitprice', async (req, res) => {
       .select('username')
       .eq('token', token)
       .single();
-    username = username1.username;
-    if (!username) {
+
+    if (!username1) {
       return res.json({ 
         success: false, 
         message: '无效的token' 
       });
     }
+    username = username1.username;
   }
 
 
@@ -104,32 +111,43 @@ router.post('/user/submitprice', async (req, res) => {
       });
     }
 
-    //检查提交的数据是否已经存在
-    const { data:priceJson, error:error1 } = await supabase
+    // 使用 upsert 实现存在则更新，不存在则插入
+    const { data, error } = await supabase
       .from('price_datas')
-      .select('*')
-      .eq('market', marketInput)
-      .eq('ware', wareInput)
-      .single();
-    if(priceJson){
-      const { data, error } = await supabase
-        .from('price_datas')
-        .update({price:priceInput, unit, username, created_at:new Date().toISOString()})
-        .eq('market', marketInput)
-        .eq('ware', wareInput)
-        .select();
-      console.log('更新数据：', `${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
-    }else{
-      const { data, error } = await supabase
-        .from('price_datas')
-        .insert({ market:marketInput, ware:wareInput, price:priceInput, unit, username})
-        .select();
-      console.log('创建数据：',`${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
+      .upsert({ 
+        market: marketInput, 
+        ware: wareInput, 
+        price: priceInput, 
+        unit, 
+        username,
+        created_at: new Date().toISOString()
+      }, {
+        onConflict: 'market,ware'  // 指定唯一性约束字段
+      })
+      .select();
+    
+    console.log('提交数据：', `${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
+    
+    // 使用 Base64 编码确保文件名安全，同时保持唯一性
+    const safeFileName = Buffer.from(`${marketInput}_${wareInput}`).toString('base64');
+    // 上传图片（如果有图片）
+    if (file && file.buffer) {
+        const {data:imgdata, error:imgerr} = await supabase.storage
+          .from('price_images')
+          .upload(safeFileName, file.buffer, {
+            contentType: file.mimetype,
+            upsert: true
+          });
     }
 
+    const {data:{publicUrl}} = supabase.storage
+      .from('price_images')
+      .getPublicUrl(safeFileName);
+      
     res.json({ 
       success: true, 
       message: '提交成功！',
+      publicUrl
     });
 
 });

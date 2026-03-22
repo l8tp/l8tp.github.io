@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        
+        img{
+            height: 250px;
+        }
         #unit{
             text-decoration: underline 2px;
             text-underline-offset: 5px;
@@ -23,12 +25,13 @@
         }
         .form-group{
             display: grid;
-            grid-template-columns: 50px auto 80px;
+            grid-template-columns: 50px 1fr 80px;
             row-gap: 5px;
             column-gap: 0;
             grid-template-areas: "sl si si"
                                  "wl wi wi"
-                                 "pl pi ui";
+                                 "pl pi ui"
+                                 "il ii ii";
             width: 100%;
             margin-bottom: 10px;
         }
@@ -46,6 +49,8 @@
             justify-content: center; 
             position: relative;
         }
+        .il { grid-area: il; }
+        .ii { grid-area: ii; }
         .inputarea{
             display: flex; 
             position: relative;        
@@ -61,38 +66,41 @@
 <body>
     <div id="message"></div>
     <div class="form-group">
-            <label for="marketInput" class="sl">超市：</label>
-            <div class="si inputarea">
-                <input value="邛崃发到家" type="text" id="marketInput" name="marketInput" placeholder="从下拉列表选择" autocomplete="off">
-                <li id="marketList" class="bluelist hidden">
-                    <!-- 此处加载超市列表 -->
-                </li>
+        <label for="marketInput" class="sl">超市：</label>
+        <div class="si inputarea">
+            <input value="邛崃发到家" type="text" id="marketInput" name="marketInput" placeholder="从下拉列表选择" autocomplete="off">
+            <li id="marketList" class="bluelist hidden">
+                <!-- 此处加载超市列表 -->
+            </li>
 
-            </div>
-            
-            <label for="wareInput" class="wl">商品：</label>
-            <div class="wi inputarea">
-                <input type="text" id="wareInput" name="ware" placeholder="从下拉列表选择" autocomplete="off">
-                <li id="wareList" class="bluelist hidden">
-                    <!-- 此处加载商品列表 -->
-                </li>
-            </div>
-            <label for="priceInput" class="pl">价格：</label>
-            <input type="number" id="priceInput" class="pi" name="price" placeholder="输入价格" autocomplete="off">
-            <div class="ui">
-                <a id="unit">元/斤 ▼</a>
-                <li id="unitList" class="bluelist hidden">
-                    <!-- 此处加载单位列表 -->
-                </li>
-            </div>
+        </div>
+        
+        <label for="wareInput" class="wl">商品：</label>
+        <div class="wi inputarea">
+            <input type="text" id="wareInput" name="ware" placeholder="从下拉列表选择" autocomplete="off">
+            <li id="wareList" class="bluelist hidden">
+                <!-- 此处加载商品列表 -->
+            </li>
+        </div>
+        <label for="priceInput" class="pl">价格：</label>
+        <input type="number" id="priceInput" class="pi" name="price" placeholder="输入价格" autocomplete="off">
+        <div class="ui">
+            <a id="unit">元/斤 ▼</a>
+            <li id="unitList" class="bluelist hidden">
+                <!-- 此处加载单位列表 -->
+            </li>
+        </div>
+        <label for="imgInput" class="il">图片：</label>
+        <input type="file" id="imgInput" class="ii" name="image" accept="image/*">
     </div>
     <button type="submit" id="submitBtn" disabled>提交</button>
-
+    <div id="showimg"></div>
     <nav id="bottom-tab-bar" class="bottom-tab-bar"></nav>
     <script type="module">
         import {loadBottomBar} from './js/bottombar.mjs';
         import {unitList} from './js/showunitlist.mjs';
         import {fetchWareData} from './js/getwaredata.mjs';
+        import {compressImage} from './js/compressimage.mjs';
 
         const API_URL = window.location.origin + '/api';
         let currentToken = localStorage.getItem('token') || '';
@@ -107,9 +115,11 @@
             priceInput:document.getElementById('priceInput'),
             unit:document.getElementById('unit'),
             unitList:document.getElementById('unitList'),
+            imgInput:document.querySelector('#imgInput'),
             submitBtn:document.getElementById('submitBtn'),
             bottomTabBar:document.querySelector('#bottom-tab-bar')
         }
+        let theImg;
 
         if (!userIdTemp) {
             userIdTemp = 'userIdTemp_' + new Date().toLocaleString('zh-CN') + '_' + Math.random().toString(36).slice(2, 9) + '_1';
@@ -227,6 +237,37 @@
                 }
             })
         }
+        
+        async function imgSelected(e){
+            const img = e.target.files[0];
+            if(!img) return;
+
+            // 压缩图片
+            const compressedFile = await compressImage(img);
+            theImg = compressedFile;
+            
+            // 显示图片
+            const imgUrl = URL.createObjectURL(compressedFile);
+            const showimg = document.querySelector('#showimg');
+            showimg.innerHTML = `
+                <h4>预览：</h4>
+                <img src="${imgUrl}">
+                <p>文件名：${compressedFile.name}</p>
+                <p>文件类型：${compressedFile.type}</p>
+                <p>文件大小：${(compressedFile.size / 1024).toFixed(2)} KB</p>
+            `;
+
+        }
+        
+        //上传图片
+        function uploadImg(){
+            const img = theImg;
+            const formData = new FormData();
+            formData.append('image', img);
+            formData.append('uploader', '前端用户');
+            console.log(img);
+            return formData;
+        }
 
         //提交价格数据
         async function submitprice() {
@@ -235,8 +276,12 @@
             const marketInput = DOM.marketInput.value.trim();
             const wareInput = DOM.wareInput.value.trim();
             const priceInput = DOM.priceInput.value;
-            const unit = DOM.unit.innerHTML.slice(0, -1)
+            const unit = DOM.unit.innerHTML.slice(0, -1);
             const Message = DOM.message;
+
+            const formData = new FormData();
+            formData.append('image', theImg);
+            formData.append('jsonData', JSON.stringify({token:currentToken, userIdTemp, marketInput, wareInput, priceInput, unit }));
 
             if (!marketInput){
                 Message.innerHTML = '请输入超市'
@@ -249,30 +294,29 @@
 
             console.log(`${username}开始提交${wareInput}:${priceInput}${unit}`)
             Message.innerHTML = `开始提交${wareInput}:${priceInput}${unit}`
-
+            let result;
             try {
                 const response = await fetch(`${API_URL}/products/user/submitprice`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: currentToken, userIdTemp, marketInput, wareInput, priceInput, unit })
+                    body: formData
                 });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    Message.innerHTML = `${wareInput}:${priceInput}${unit} 提交成功！`
-                } else {
-                    Message.innerHTML = result.message;
-                    if (result.message === '请先登录或注册，试用次数结束') {
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
-                        currentToken = '';
-                        alert(result.message);
-                        window.location.href = '/login';
-                    }
-                }
+                result = await response.json();
             } catch (error) {
                 Message.innerHTML = '服务器网络错误'
+            }
+
+            if (result.success) {
+                Message.innerHTML = `${wareInput}:${priceInput}${unit} 提交成功！`
+                console.log(result.publicUrl)
+            } else {
+                Message.innerHTML = result.message;
+                if (result.message === '请先登录或注册，试用次数结束') {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    currentToken = '';
+                    alert(result.message);
+                    window.location.href = '/login';
+                }
             }
 
         }
@@ -289,12 +333,13 @@
             //加载商品数据
             const wareData = await fetchWareData();
             localStorage.setItem('ware', JSON.stringify(wareData));
-            //监听单位和提交按钮
+            //监听单位和提交按钮和图片输入框
             DOM.unit.addEventListener('click', async (e)=>{
                 const list =  await unitList(e, wareData.unit);
                 adjustUnitList(list);
             } );
             DOM.submitBtn.addEventListener('click',submitprice);
+            DOM.imgInput.addEventListener('change', (e)=>{imgSelected(e)});
 
             //加载列表和监听函数
             loadwares(DOM.marketInput, DOM.marketList, wareData.market);

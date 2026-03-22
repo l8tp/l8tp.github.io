@@ -27,7 +27,7 @@ label {
 }
 
 input {
-    width: auto;
+    width: 100%;
     flex: 1;
     padding: 14px 16px;
     border: 2px solid #e0e6ed;
