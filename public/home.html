@@ -22,7 +22,9 @@
         article{
             line-height: 40px;
         }
-        
+        img{
+            width: 100%;
+        }
         .help {
             position: absolute;
             right: 0;
@@ -77,12 +79,16 @@
         table tbody tr:last-of-type {
             border-bottom: 2px solid #009879;
         }
-        
+        table tbody tr:hover{
+            background-color: #e4f7b4;
+        }
         table p {
             text-indent: 0;
             font-size: 15px;
         }
-        
+        table .wares{
+            width: 80px;
+        }
         label {
             justify-content: flex-start;
             font-size: 20px;
@@ -355,7 +361,7 @@
             tbody.innerHTML = '';
             for (const ware of wares) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<th><a>${ware}</a></th>`;
+                tr.innerHTML = `<th class="wares"><a>${ware}</a></th>`;
                 tbody.appendChild(tr);
             }
             
@@ -393,9 +399,16 @@
                                 if (priceJson.ware === wareName) {
                                     containware = true;
                                     wareCount++;
-                                    const { price, unit, created_at: time } = priceJson;
+                                    const { price, unit, url, created_at: time } = priceJson;
                                     const td = document.createElement('td');
-                                    td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span><p style='display:none'>时间：${time.split('T')[0]}</p>`;
+                                    td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span><p class='hidden'>时间：${time.split('T')[0]}</p>`;
+                                    if(url){
+                                        const a = document.createElement('a');
+                                        a.className = "wareImg hidden";
+                                        a.href = url;
+                                        a.target = "_blank";
+                                        td.appendChild(a);
+                                    }
                                     tr.appendChild(td);
                                 }
                             }
@@ -646,14 +659,24 @@
                     // 展开时间
                     tr.classList.add('showTime');
                     tr.querySelectorAll('p').forEach(element => {
-                        element.style.display = 'block';
+                        element.classList.remove('hidden');
+                    });
+                    tr.querySelectorAll('.wareImg').forEach(element => {
+                        element.classList.remove('hidden');
+                        element.innerHTML = `<img src="${element.href}">`
+                        element.removeAttribute('href');
                     });
                     
                     // 关闭其他行
                     if (timeTr && timeTr !== tr) {
                         timeTr.classList.remove('showTime');
                         timeTr.querySelectorAll('p').forEach(element => {
-                            element.style.display = 'none';
+                            element.classList.add('hidden');
+                        });
+                        timeTr.querySelectorAll('.wareImg').forEach(element => {
+                            element.classList.add('hidden');
+                            element.href = element.querySelector('img').src;
+                            element.innerHTML = "";
                         });
                     }
                     
@@ -662,7 +685,12 @@
                     // 隐藏时间
                     tr.classList.remove('showTime');
                     tr.querySelectorAll('p').forEach(element => {
-                        element.style.display = 'none';
+                        element.classList.add('hidden');
+                    });
+                    tr.querySelectorAll('.wareImg').forEach(element => {
+                        element.classList.add('hidden');
+                        element.href = element.querySelector('img').src;
+                        element.innerHTML = "";
                     });
                 }
             });
@@ -722,7 +750,6 @@
                 const newUnit = unitText.textContent.split(' ')[0];
 
                 const formData = new FormData();
-                // formData.append('image', theImg);
                 formData.append('jsonData', JSON.stringify({
                     token:currentToken, 
                     userIdTemp, 

@@ -111,23 +111,6 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
       });
     }
 
-    // 使用 upsert 实现存在则更新，不存在则插入
-    const { data, error } = await supabase
-      .from('price_datas')
-      .upsert({ 
-        market: marketInput, 
-        ware: wareInput, 
-        price: priceInput, 
-        unit, 
-        username,
-        created_at: new Date().toISOString()
-      }, {
-        onConflict: 'market,ware'  // 指定唯一性约束字段
-      })
-      .select();
-    
-    console.log('提交数据：', `${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
-    
     // 使用 Base64 编码确保文件名安全，同时保持唯一性
     const safeFileName = Buffer.from(`${marketInput}_${wareInput}`).toString('base64');
     // 上传图片（如果有图片）
@@ -139,11 +122,29 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
             upsert: true
           });
     }
-
     const {data:{publicUrl}} = supabase.storage
       .from('price_images')
       .getPublicUrl(safeFileName);
       
+    // 使用 upsert 实现存在则更新，不存在则插入
+    const { data, error } = await supabase
+      .from('price_datas')
+      .upsert({ 
+        market: marketInput, 
+        ware: wareInput, 
+        price: priceInput, 
+        unit, 
+        url: publicUrl,
+        username,
+        created_at: new Date().toISOString()
+      }, {
+        onConflict: 'market,ware'  // 指定唯一性约束字段
+      })
+      .select();
+    
+    console.log('提交数据：', `${new Date().toISOString() +':'+ username}提交${marketInput+':'+wareInput}${priceInput + unit}`)
+    
+
     res.json({ 
       success: true, 
       message: '提交成功！',
