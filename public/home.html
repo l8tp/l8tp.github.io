@@ -22,9 +22,21 @@
         article{
             line-height: 40px;
         }
-        img{
-            width: 100%;
+        .wareImg{
+            display: flex;
+            position: relative;
         }
+        .wareImg img{
+            width: 100%;
+            border-radius: 10px;
+        }
+        .wareImg::before{
+            content: "图片加载中...";
+        }
+        .wareImg.loaded::before{
+            display: none;
+        }
+        
         .help {
             position: absolute;
             right: 0;
@@ -89,28 +101,10 @@
         table .wares{
             width: 80px;
         }
-        label {
-            justify-content: flex-start;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        label span {
-            color: green;
-            cursor: pointer;
-        }
-        
-        label span::after {
-            content: '×';
-            color: #852626;
-            cursor: pointer;
-        }
                 
         #unit {
             text-decoration: underline 2px;
             text-underline-offset: 5px;
-            font-weight: 800;
-            margin-left: 10px;
             cursor: pointer;
             font-size: 20px;
         }
@@ -128,6 +122,23 @@
         
         #filter .bluelist a {
             background: linear-gradient(to top, #adecff 0%, transparent 50%);
+        }
+
+        #filter label {
+            justify-content: flex-start;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        #filter label span {
+            color: green;
+            cursor: pointer;
+        }
+        
+        #filter label span::after {
+            content: '×';
+            color: #852626;
+            cursor: pointer;
         }
         
         #submitselect {
@@ -187,13 +198,27 @@
             transform: translate(-50%, -50%);
             width: 250px;
         }
-        
+        #edit label{
+           font-size: 20px;
+        }
+        #editWareImg{
+            width: 150px;
+        }
+        #editWareImg img{
+            width: 100%;
+        }
+        #edit .popSubArea{
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
         .priceEdit {
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             margin-top: 50px;
-            gap: 20px;
+            gap: 5px;
         }
         
         .priceEdit .unitarea {
@@ -291,14 +316,21 @@
     <div id="edit" class="winpop hidden">
         <button id="Xedit" class="Xwinpop">×</button>
         <div class="priceEdit">
-            <label for="priceInput">价格</label>
-            <input type="number" id="priceInput" name="priceInput" placeholder="请输入价格">
+            <label for="priceInput"></label>
             <div class="unitarea">
                 <li id="unitList" class="bluelist">
                     <!-- 此处加载单位列表 -->
                 </li>
-                <a id="unit">元/斤 ▼</a>
+                <li class="popSubArea">
+                    <input type="number" id="priceInput" name="priceInput" placeholder="请输入价格">
+                    <a id="unit">元/斤 ▼</a>
+                </li>
             </div>
+            <div class="popSubArea">
+                <label for="imgInput">图片:</label>
+                <input type="file" id="imgInput" name="image" accept="image/*">
+            </div>
+            <a id="editWareImg" class="hidden"><img src="#"><p></p></a>
             <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
         </div>
     </div>
@@ -307,6 +339,7 @@
         import { loadBottomBar } from './js/bottombar.mjs';
         import { unitList } from './js/showunitlist.mjs';
         import {fetchWareData} from './js/getwaredata.mjs';
+        import {compressImage} from './js/compressimage.mjs';
 
         // 全局常量和变量
         const API_URL = window.location.origin + '/api';
@@ -325,6 +358,7 @@
         let editpoptimes = 0;
         let timeTr = null;
         let wareData = null;
+        let theImg;
         
         // 初始化临时用户ID
         if (!userIdTemp) {
@@ -405,7 +439,7 @@
                                     if(url){
                                         const a = document.createElement('a');
                                         a.className = "wareImg hidden";
-                                        a.href = url;
+                                        a.href = `${url}?${new Date().getTime()}`;
                                         a.target = "_blank";
                                         td.appendChild(a);
                                     }
@@ -663,8 +697,13 @@
                     });
                     tr.querySelectorAll('.wareImg').forEach(element => {
                         element.classList.remove('hidden');
-                        element.innerHTML = `<img src="${element.href}">`
-                        element.removeAttribute('href');
+                        if(element.href){
+                            const img = document.createElement('img');
+                            img.src = element.href;
+                            element.appendChild(img);
+                            img.addEventListener('load', (e)=> { e.target.closest('a').classList.add('loaded'); });
+                            element.removeAttribute('href');
+                        }
                     });
                     
                     // 关闭其他行
@@ -675,8 +714,6 @@
                         });
                         timeTr.querySelectorAll('.wareImg').forEach(element => {
                             element.classList.add('hidden');
-                            element.href = element.querySelector('img').src;
-                            element.innerHTML = "";
                         });
                     }
                     
@@ -689,8 +726,6 @@
                     });
                     tr.querySelectorAll('.wareImg').forEach(element => {
                         element.classList.add('hidden');
-                        element.href = element.querySelector('img').src;
-                        element.innerHTML = "";
                     });
                 }
             });
@@ -720,25 +755,52 @@
             });
             
             // 编辑弹窗赋值
-            let price = '';
-            let unit = '';
+            let price, unit, imgSrc;
             
             if (td.innerHTML) {
                 price = td.querySelector('.price').textContent;
                 unit = td.querySelector('.unit').textContent;
+                const wareImg = td.querySelector('.wareImg');
+                if(wareImg){
+                    imgSrc = wareImg.href;
+                    if(!imgSrc){
+                        imgSrc = wareImg.querySelector('img').src;
+                    }
+                }
             }
             
             const priceInput = DOM.edit.querySelector('#priceInput');
             const unitText = DOM.edit.querySelector('#unit');
+            const imgInput = DOM.edit.querySelector('#imgInput');
+            const imgContainer = DOM.edit.querySelector('#editWareImg');
+            const editWareImg = imgContainer.querySelector('img');
             const market = DOM.tablecontainer.querySelectorAll('thead th')[td.cellIndex].textContent;
             
             DOM.edit.querySelector('label').textContent = `${market}：${ware}`;
             priceInput.value = price || '';
             unitText.textContent = (unit || '元/斤') + ' ▼';
+            if(imgSrc){
+                imgContainer.classList.remove('hidden');
+                editWareImg.src = imgSrc;
+            }else{
+                imgContainer.classList.add('hidden')
+            }
 
             // 上传数据并更新表格
             if (editpoptimes > 1) return;
-            
+            imgInput.addEventListener('change', async (e)=>{
+                const img = e.target.files[0];
+                if(!img) return;
+
+                imgContainer.classList.remove('hidden');
+                const imgSize = imgContainer.querySelector('p');
+                // 压缩图片
+                const compressedFile = await compressImage(img);
+                imgSize.textContent = `${(compressedFile.size / 1024).toFixed(2)} KB`
+                theImg = compressedFile;
+                // 显示图片
+                editWareImg.src = URL.createObjectURL(compressedFile);
+            });
             const submitButton = DOM.edit.querySelector('#submitEdit');
             submitButton.addEventListener('click', async (e) => {
                 const btn = e.target;
@@ -750,6 +812,7 @@
                 const newUnit = unitText.textContent.split(' ')[0];
 
                 const formData = new FormData();
+                formData.append('image', theImg);
                 formData.append('jsonData', JSON.stringify({
                     token:currentToken, 
                     userIdTemp, 

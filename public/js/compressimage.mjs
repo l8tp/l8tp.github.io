@@ -1,6 +1,6 @@
 // 图片压缩函数（裁剪为正方形）
 async function compressImage(img, options = {}) {
-    const { maxSize = 800, quality = 0.6 } = options;
+    const { maxSize = 600, quality = 0.6 } = options;
     
     const bitmap = await createImageBitmap(img);
     
