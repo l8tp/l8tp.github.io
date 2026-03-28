@@ -340,6 +340,7 @@
         import { unitList } from './js/showunitlist.mjs';
         import {fetchWareData} from './js/getwaredata.mjs';
         import {compressImage} from './js/compressimage.mjs';
+        import {LoadAndListenFilter, closeFilter} from './js/home_modles.mjs';
 
         // 全局常量和变量
         const API_URL = window.location.origin + '/api';
@@ -380,7 +381,9 @@
             theth.id = 'xtitle';
             const btn = document.createElement('button');
             btn.innerText = '筛选▼';
-            btn.addEventListener('click', filter);
+            btn.addEventListener('click', ()=>{
+                filter(DOM.filter, DOM.bottomTabBar);
+            } );
             theth.appendChild(btn);
             theadtr.appendChild(theth);
             
@@ -476,197 +479,36 @@
         }
 
         // 筛选超市和商品
-        async function filter() {
+        async function filter(filterNode, bottomTabBarNode) {
             poptimes++;
             
-            DOM.filter.classList.remove('hidden');
-            DOM.bottomTabBar.classList.add('hidden');
-            if (poptimes > 1) { return};
-                        
+            filterNode.classList.remove('hidden');
+            bottomTabBarNode.classList.add('hidden');
+            if (poptimes > 1)  return ;
+
             // 获取DOM元素
-            const marketLable = document.getElementById('marketLable');
-            const marketInput = document.getElementById('marketInput');
-            const marketList = document.getElementById('marketList');
-            const wareLable = document.getElementById('wareLable');
-            const wareInput = document.getElementById('wareInput');
-            const wareList = document.getElementById('wareList');
-            const theadtr = DOM.tablecontainer.querySelector('thead > tr');
-            const tbody = DOM.tablecontainer.querySelector('tbody');
+            const marketLable = filterNode.querySelector('#marketLable');
+            const wareLable = filterNode.querySelector('#wareLable');
+            const submitBtn = filterNode.querySelector('#submitselect');
 
             // 首次加载时添加事件监听器
-            setupFilterEventListeners(marketLable, wareLable, marketList, wareList, theadtr, tbody);
-            loadSavedFilters(marketLable, marketList, wareLable, wareList);
-            // 应用筛选
-            InputFilter(marketLable, marketInput, marketList);
-            InputFilter(wareLable, wareInput, wareList);
-        }
-
-        // 设置筛选弹窗的事件监听器
-        function setupFilterEventListeners(marketLable, wareLable, marketList, wareList, theadtr, tbody) {
-            // 关闭按钮
-            DOM.filter.querySelector('.Xwinpop').addEventListener('click', () => {
-                DOM.filter.classList.add('hidden');
-                DOM.bottomTabBar.classList.remove('hidden');
-            });
-            
             // 选择完成按钮
-            document.getElementById('submitselect').addEventListener('click', () => {
+            submitBtn.addEventListener('click', () => {
+                filterNode.classList.add('hidden');
+                bottomTabBarNode.classList.remove('hidden');
                 const { markets, wares } = closeFilter(marketLable, wareLable);
                 if (markets && wares) {
                     renderTable(markets, wares);
-                }
-            });
-            
-            // 清空标签按钮
-            document.getElementById('clearMarketLabel').addEventListener('click', () => {
-                labelToList(marketLable, marketList);
-            });
-            
-            document.getElementById('clearWareLabel').addEventListener('click', () => {
-                labelToList(wareLable, wareList);
-            });
-        }
-
-        // 加载保存的筛选条件
-        function loadSavedFilters(marketLable, marketList, wareLable, wareList) {
-            const filters = JSON.parse(localStorage.getItem('filters') || null);
-            if (filters) {
-                console.log('加载了上次的筛选条件');
-                loadList(marketLable, marketList, wareData.market, filters.markets);
-                loadList(wareLable, wareList, wareData.ware, filters.wares);
-            } else {
-                // 默认加载
-                loadList(marketLable, marketList, wareData.market);
-                loadList(wareLable, wareList, wareData.ware);
-            }
-        }
-
-        // 根据输入筛选列表
-        function InputFilter(label, input, list) {
-            input.addEventListener('input', () => {
-                const inputValue = input.value.trim();
-                // 获取标签列表
-                const spannodes = label.querySelectorAll('span');
-                const spans = [];
-                for (let span of spannodes) {
-                    spans.push(span.textContent);
-                }
-                
-                // 筛选候选列表
-                const anodes = list.querySelectorAll('a');
-                for (const a of anodes) {
-                    a.style.display = 'block';
-                    
-                    // 剔除标签列表中的项
-                    if (spans.includes(a.textContent)) {
-                        a.style.display = 'none';
-                    }
-                    
-                    // 剔除不符合输入的项
-                    if (!a.textContent.includes(inputValue)) {
-                        a.style.display = 'none';
-                    }
-                }
-            });
-        }
-
-        // 加载候选列表的函数
-        function loadList(label, list, data, selectedData = null) {
-            // 清空列表
-            list.innerHTML = '';
-            
-            // 添加列表项
-            for (const item of data) {
-                const a = document.createElement('a');
-                a.textContent = item;
-                list.appendChild(a);
-            }
-
-            // 监视列表点击赋值给标签
-            list.addEventListener('click', (e) => {
-                if (list === document.getElementById('marketList')) {
-                    const spans = label.querySelectorAll('span');
-                    if (spans.length > 2) {
-                        DOM.message.textContent = '只能选择三个超市';
-                        return;
-                    }
-                }
-                
-                const target = e.target;
-                if (target !== list && target.tagName === 'A') {
-                    listToLabel(target, label);
+                }else{
+                    DOM.message.textContent = '请选择超市和商品';
                 }
             });
 
-            // 加载上次选择的标签
-            if (selectedData) {
-                const anodes = list.querySelectorAll('a');
-                for (const a of anodes) {
-                    if (selectedData.includes(a.textContent.split('#')[0])) {
-                        listToLabel(a, label);
-                    }
-                }
-            }
+            //加载列表和设置其他监听
+            LoadAndListenFilter(filterNode, bottomTabBarNode, wareData)
         }
 
-        // 列表赋值给标签并隐藏列表项，点击标签删除标签并显示列表项
-        function listToLabel(anode, label) {
-            const span = document.createElement('span');
-            span.textContent = anode.textContent;
-            label.appendChild(span);
-            anode.style.display = 'none';
-            
-            // 点击标签删除
-            span.addEventListener('click', () => {
-                span.remove();
-                anode.style.display = 'block';
-            });
-        }
 
-        // 删除标签并显示列表项的函数
-        function labelToList(label, list) {
-            const spans = label.querySelectorAll('span');
-            for (const span of spans) {
-                const anodes = list.querySelectorAll('a');
-                for (let a of anodes) {
-                    if (span.textContent === a.textContent) {
-                        a.style.display = 'block';
-                    }
-                }
-                span.remove();
-            }
-        }
-
-        // 关闭筛选弹窗开始重新渲染表格
-        function closeFilter(marketLable, wareLable) {
-            DOM.filter.classList.add('hidden');
-            DOM.bottomTabBar.classList.remove('hidden');
-            
-            const marketNodes = marketLable.querySelectorAll('span');
-            const wareNodes = wareLable.querySelectorAll('span');
-            
-            if (!marketNodes.length || !wareNodes.length) {
-                DOM.message.textContent = '请选择超市和商品';
-                return { markets: null, wares: null };
-            }
-
-            // 提取选择的超市和商品
-            const markets = [];
-            for (let span of marketNodes) {
-                markets.push(span.innerHTML.split('#')[0]);
-            }
-            
-            const wares = [];
-            for (let span of wareNodes) {
-                wares.push(span.innerHTML.split('#')[0]);
-            }
-            
-            // 存储筛选条件到本地
-            const filters = { markets, wares };
-            localStorage.setItem('filters', JSON.stringify(filters));
-            
-            return { markets, wares };
-        }
 
         // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
         function toggleBottomTabBar() {
