@@ -6,6 +6,7 @@
     <title>超市自助比价</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home_popwin.css">
 
     <style>
         body {
@@ -37,6 +38,14 @@
             display: none;
         }
         
+        .timeAndImg{
+            display: none;;
+        }
+        .showTime .timeAndImg {
+            display: block;
+        }
+
+
         .help {
             position: absolute;
             right: 0;
@@ -100,152 +109,7 @@
         }
         table .wares{
             width: 80px;
-        }
-                
-        #unit {
-            text-decoration: underline 2px;
-            text-underline-offset: 5px;
-            cursor: pointer;
-            font-size: 20px;
-        }
-        
-        #unitList {
-            border-radius: 10px 10px 0 0;
-        }
-        
-        #filter .bluelist {
-            background-color: transparent;
-            border: 0 0 0 2px solid #3b3b3b;
-            border-radius: 0;
-            max-height: 150px;
-        }
-        
-        #filter .bluelist a {
-            background: linear-gradient(to top, #adecff 0%, transparent 50%);
-        }
-
-        #filter label {
-            justify-content: flex-start;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        #filter label span {
-            color: green;
-            cursor: pointer;
-        }
-        
-        #filter label span::after {
-            content: '×';
-            color: #852626;
-            cursor: pointer;
-        }
-        
-        #submitselect {
-            width: 300px;
-        }
-        
-        .Xwinpop {
-            background-color: #fff;
-            position: absolute;
-            z-index: 997;
-            top: 5px;
-            right: 5px;
-            font-size: 30px;
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            border-radius: 5px;
-            border: 1px solid #000;
-            cursor: pointer;
-            color: #852626;
-        }
-        
-        .winpop {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            padding: 5px;
-            min-height: 650px;
-            background-color: #eaf5ff;
-            box-shadow: 3px 3px 3px #000;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            margin: 0 10px;
-            position: absolute;
-            top: 50px;
-            z-index: 998;
-        }
-        .winpop h1{
-            font-size: 20px;
-        }
-        
-        .popSubArea {
-            background-color: #fff8eb;
-            width: 100%;
-            border-radius: 10px;
-            padding: 5px;
-        }
-        
-        #edit {
-            min-height: auto;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-        }
-        #edit label{
-           font-size: 20px;
-        }
-        #editWareImg{
-            width: 150px;
-        }
-        #editWareImg img{
-            width: 100%;
-        }
-        #edit .popSubArea{
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .priceEdit {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: 50px;
-            gap: 5px;
-        }
-        
-        .priceEdit .unitarea {
-            display: flex;
-            flex-direction: column;
-            gap: inherit;
-            justify-content: center;
-        }
-        
-        .priceEdit .bluelist {
-            display: none;
-        }
-        
-        .inputarea {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .inputarea > div {
-            display: flex;
-            gap: 3px;
-        }
-        
-        .inputarea button {
-            width: 100px;
-            background-color: #4e7188;
-        }
+        }                
         
         .xtitle button {
             background-color: #f1ea83;
@@ -311,7 +175,7 @@
             </div>
             <div id="wareList" class="bluelist"></div>
         </div>
-        <button id="submitselect" style="background-color: #287e49;">选择完成</button>
+        <button id="submitselect" >选择完成</button>
     </div>
     <div id="edit" class="winpop hidden">
         <button id="Xedit" class="Xwinpop">×</button>
@@ -330,7 +194,7 @@
                 <label for="imgInput">图片:</label>
                 <input type="file" id="imgInput" name="image" accept="image/*">
             </div>
-            <a id="editWareImg" class="hidden"><img src="#"><p></p></a>
+            <a id="editImgContainer" class="hidden"><img src="#"><p></p></a>
             <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
         </div>
     </div>
@@ -340,7 +204,7 @@
         import { unitList } from './js/showunitlist.mjs';
         import {fetchWareData} from './js/getwaredata.mjs';
         import {compressImage} from './js/compressimage.mjs';
-        import {LoadAndListenFilter, closeFilter} from './js/home_modles.mjs';
+        import {LoadAndListenFilter, closeFilter, editAndListen} from './js/home_modules/modules.mjs';
 
         // 全局常量和变量
         const API_URL = window.location.origin + '/api';
@@ -355,11 +219,8 @@
         
         let currentToken = localStorage.getItem('token') || '';
         let userIdTemp = localStorage.getItem('userIdTemp');
-        let poptimes = 0;
-        let editpoptimes = 0;
-        let timeTr = null;
-        let wareData = null;
-        let theImg;
+        let lastTr;
+        let wareData;
         
         // 初始化临时用户ID
         if (!userIdTemp) {
@@ -438,14 +299,18 @@
                                     wareCount++;
                                     const { price, unit, url, created_at: time } = priceJson;
                                     const td = document.createElement('td');
-                                    td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span><p class='hidden'>时间：${time.split('T')[0]}</p>`;
+                                    td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span>`;
+                                    const li = document.createElement('li');
+                                    li.innerHTML = `<p>时间：${time.split('T')[0]}</p>`;
+                                    li.className = 'timeAndImg';
                                     if(url){
                                         const a = document.createElement('a');
-                                        a.className = "wareImg hidden";
+                                        a.className = "wareImg";
                                         a.href = `${url}?${new Date().getTime()}`;
                                         a.target = "_blank";
-                                        td.appendChild(a);
+                                        li.appendChild(a);
                                     }
+                                    td.appendChild(li);
                                     tr.appendChild(td);
                                 }
                             }
@@ -480,19 +345,18 @@
 
         // 筛选超市和商品
         async function filter(filterNode, bottomTabBarNode) {
-            poptimes++;
-            
             filterNode.classList.remove('hidden');
             bottomTabBarNode.classList.add('hidden');
-            if (poptimes > 1)  return ;
+
+            if (filterNode.dataset.loading)  return ;
+            filterNode.dataset.loading = true;
 
             // 获取DOM元素
             const marketLable = filterNode.querySelector('#marketLable');
             const wareLable = filterNode.querySelector('#wareLable');
             const submitBtn = filterNode.querySelector('#submitselect');
 
-            // 首次加载时添加事件监听器
-            // 选择完成按钮
+            // 选择完成按钮添加事件监听器
             submitBtn.addEventListener('click', () => {
                 filterNode.classList.add('hidden');
                 bottomTabBarNode.classList.remove('hidden');
@@ -508,22 +372,6 @@
             LoadAndListenFilter(filterNode, bottomTabBarNode, wareData)
         }
 
-
-
-        // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
-        function toggleBottomTabBar() {
-            const inputs = document.querySelectorAll('#edit input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', () => {
-                    DOM.bottomTabBar.classList.add('hidden');
-                });
-                
-                input.addEventListener('blur', () => {
-                    DOM.bottomTabBar.classList.remove('hidden');
-                });
-            });
-        }
-
         // 展开/隐藏时间信息
         function spreadTime(tbody) {
             tbody.addEventListener('click', (e) => {
@@ -534,159 +382,41 @@
                 if (!tr.classList.contains('showTime')) {
                     // 展开时间
                     tr.classList.add('showTime');
-                    tr.querySelectorAll('p').forEach(element => {
-                        element.classList.remove('hidden');
-                    });
-                    tr.querySelectorAll('.wareImg').forEach(element => {
-                        element.classList.remove('hidden');
-                        if(element.href){
+                    tr.querySelectorAll('.wareImg').forEach(wareImg => {
+                        if(wareImg && wareImg.href){
                             const img = document.createElement('img');
-                            img.src = element.href;
-                            element.appendChild(img);
+                            img.src = wareImg.href;
+                            wareImg.appendChild(img);
                             img.addEventListener('load', (e)=> { e.target.closest('a').classList.add('loaded'); });
-                            element.removeAttribute('href');
+                            wareImg.removeAttribute('href');
                         }
                     });
                     
                     // 关闭其他行
-                    if (timeTr && timeTr !== tr) {
-                        timeTr.classList.remove('showTime');
-                        timeTr.querySelectorAll('p').forEach(element => {
-                            element.classList.add('hidden');
-                        });
-                        timeTr.querySelectorAll('.wareImg').forEach(element => {
-                            element.classList.add('hidden');
-                        });
-                    }
-                    
-                    timeTr = tr;
+                    if (lastTr && lastTr !== tr) { lastTr.classList.remove('showTime')};
+                    lastTr = tr;
                 } else {
-                    // 隐藏时间
-                    tr.classList.remove('showTime');
-                    tr.querySelectorAll('p').forEach(element => {
-                        element.classList.add('hidden');
-                    });
-                    tr.querySelectorAll('.wareImg').forEach(element => {
-                        element.classList.add('hidden');
-                    });
+                    tr.classList.remove('showTime'); // 隐藏时间和图片
                 }
             });
         }
 
         // 双击单元格弹出编辑窗口
-        function popEdit(tbody) {
+        function popEdit(tbody, editNode) {
             tbody.addEventListener('dblclick', (e) => {
                 const td = e.target.closest('td');
                 if (!td) return;
-                
+                // 显示编辑弹窗
+                editNode.classList.remove('hidden');
+
+                const market = DOM.tablecontainer.querySelectorAll('thead th')[td.cellIndex].textContent;
                 const firstTh = e.target.closest('tr').querySelector('th');
                 const ware = firstTh.querySelector('a').textContent;
-                editpoptimes++;
-                edit(ware, td, editpoptimes);
+                //编辑窗口赋值和监听
+                editAndListen(compressImage, market, ware, td, editNode, DOM.bottomTabBar, API_URL, currentToken, userIdTemp);
             });
         }
 
-        // 启动编辑弹窗
-        function edit(ware, td, editpoptimes) {
-            // 显示编辑弹窗
-            DOM.edit.classList.remove('hidden');
-            
-            // 关闭按钮
-            DOM.edit.querySelector('.Xwinpop').addEventListener('click', () => {
-                DOM.edit.classList.add('hidden');
-            });
-            
-            // 编辑弹窗赋值
-            let price, unit, imgSrc;
-            
-            if (td.innerHTML) {
-                price = td.querySelector('.price').textContent;
-                unit = td.querySelector('.unit').textContent;
-                const wareImg = td.querySelector('.wareImg');
-                if(wareImg){
-                    imgSrc = wareImg.href;
-                    if(!imgSrc){
-                        imgSrc = wareImg.querySelector('img').src;
-                    }
-                }
-            }
-            
-            const priceInput = DOM.edit.querySelector('#priceInput');
-            const unitText = DOM.edit.querySelector('#unit');
-            const imgInput = DOM.edit.querySelector('#imgInput');
-            const imgContainer = DOM.edit.querySelector('#editWareImg');
-            const editWareImg = imgContainer.querySelector('img');
-            const market = DOM.tablecontainer.querySelectorAll('thead th')[td.cellIndex].textContent;
-            
-            DOM.edit.querySelector('label').textContent = `${market}：${ware}`;
-            priceInput.value = price || '';
-            unitText.textContent = (unit || '元/斤') + ' ▼';
-            if(imgSrc){
-                imgContainer.classList.remove('hidden');
-                editWareImg.src = imgSrc;
-            }else{
-                imgContainer.classList.add('hidden')
-            }
-
-            // 上传数据并更新表格
-            if (editpoptimes > 1) return;
-            imgInput.addEventListener('change', async (e)=>{
-                const img = e.target.files[0];
-                if(!img) return;
-
-                imgContainer.classList.remove('hidden');
-                const imgSize = imgContainer.querySelector('p');
-                // 压缩图片
-                const compressedFile = await compressImage(img);
-                imgSize.textContent = `${(compressedFile.size / 1024).toFixed(2)} KB`
-                theImg = compressedFile;
-                // 显示图片
-                editWareImg.src = URL.createObjectURL(compressedFile);
-            });
-            const submitButton = DOM.edit.querySelector('#submitEdit');
-            submitButton.addEventListener('click', async (e) => {
-                const btn = e.target;
-                const originalText = btn.textContent;
-                btn.textContent = '正在提交...';
-                btn.disabled = true;
-
-                const newPrice = priceInput.value;
-                const newUnit = unitText.textContent.split(' ')[0];
-
-                const formData = new FormData();
-                formData.append('image', theImg);
-                formData.append('jsonData', JSON.stringify({
-                    token:currentToken, 
-                    userIdTemp, 
-                    marketInput:market, 
-                    wareInput:ware, 
-                    priceInput:newPrice, 
-                    unit:newUnit 
-                }));
-                
-                try {
-                    const response = await fetch(`${API_URL}/products/user/submitprice`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                        alert('修改成功');
-                        location.reload();
-                    } else {
-                        handleError(result.message);
-                    }
-                } catch (error) {
-                    console.error('提交价格失败:', error);
-                    alert('请求服务器错误');
-                } finally {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }
-            });
-        }
 
         // 去除#后面别名的函数
         function delAlias(data) {
@@ -703,7 +433,7 @@
             wareData = await fetchWareData();
             
             // 初始化单位列表点击事件
-            document.querySelector('#unit').addEventListener('click', (e)=>{unitList(e, wareData.unit)} );
+            DOM.edit.querySelector('#unit').addEventListener('click', (e)=>{unitList(e, wareData.unit)} );
             // 默认加载前两个超市和所有商品
             const markets = delAlias(wareData.market.slice(0, 2));
             const wares = delAlias(wareData.ware);
@@ -717,8 +447,7 @@
             // 设置事件监听
             const tbody = DOM.tablecontainer.querySelector('tbody');
             spreadTime(tbody); // 监听点击单元格，展开数据时间
-            popEdit(tbody); // 监听双击单元格，编辑弹窗
-            toggleBottomTabBar(); // 输入框聚焦时隐藏底部导航栏
+            popEdit(tbody, DOM.edit); // 监听双击单元格，编辑弹窗
         });
     </script>
 </body>

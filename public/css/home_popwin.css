@@ -1,0 +1,149 @@
+.winpop {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 5px;
+    min-height: 650px;
+    background-color: #eaf5ff;
+    box-shadow: 3px 3px 3px #000;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    margin: 0 10px;
+    position: absolute;
+    top: 50px;
+    z-index: 998;
+}
+.winpop h1{
+    font-size: 20px;
+}
+.Xwinpop {
+    background-color: #fff;
+    position: absolute;
+    z-index: 997;
+    top: 5px;
+    right: 5px;
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 5px;
+    border: 1px solid #000;
+    cursor: pointer;
+    color: #852626;
+}
+.popSubArea {
+    background-color: #fff8eb;
+    width: 100%;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
+
+#filter .bluelist {
+    background-color: transparent;
+    border: 0 0 0 2px solid #3b3b3b;
+    border-radius: 0;
+    max-height: 150px;
+}
+
+#filter .bluelist a {
+    background: linear-gradient(to top, #adecff 0%, transparent 50%);
+}
+
+#filter label {
+    justify-content: flex-start;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+#filter label span {
+    color: green;
+    cursor: pointer;
+}
+
+#filter label span::after {
+    content: '×';
+    color: #852626;
+    cursor: pointer;
+}
+
+.inputarea {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputarea > div {
+    display: flex;
+    gap: 3px;
+}
+
+.inputarea button {
+    width: 100px;
+    background-color: #4e7188;
+}
+
+#submitselect {
+    width: 300px;
+    background-color: #287e49;
+}
+
+
+
+#edit {
+    min-height: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+}
+#edit label{
+    font-size: 20px;
+}
+#editImgContainer{
+    width: 150px;
+}
+#editImgContainer img{
+    width: 100%;
+}
+#edit .popSubArea{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.priceEdit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    gap: 5px;
+}
+
+.priceEdit .unitarea {
+    display: flex;
+    flex-direction: column;
+    gap: inherit;
+    justify-content: center;
+}
+
+.priceEdit .bluelist {
+    display: none;
+}
+
+#unit {
+    text-decoration: underline 2px;
+    text-underline-offset: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+#unitList {
+    border-radius: 10px 10px 0 0;
+}
+
