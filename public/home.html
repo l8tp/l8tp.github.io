@@ -241,7 +241,7 @@
             theth.classList.add('xtitle');
             theth.id = 'xtitle';
             const btn = document.createElement('button');
-            btn.innerText = '筛选▼';
+            btn.textContent = '筛选▼';
             btn.addEventListener('click', ()=>{
                 filter(DOM.filter, DOM.bottomTabBar);
             } );
@@ -271,7 +271,7 @@
         // 获取价格数据，继续渲染表格
         async function getPriceData(tbodytrs, markets) {
             DOM.message.textContent = '价格加载中...';
-            
+            let result;
             try {
                 const response = await fetch(`${API_URL}/products/user/getpricenote`, {
                     method: 'POST',
@@ -279,67 +279,62 @@
                     body: JSON.stringify({ token: currentToken, userIdTemp, markets })
                 });
                 
-                const result = await response.json();
-
-                if (result.success) {
-                    console.log('获取到了所有超市的价格记录');
-                    let wareCount = 0;
-                    
-                    // 遍历每个超市
-                    for (const marketData of result.data) {
-                        // 遍历表格体的每一行
-                        for (const tr of tbodytrs) {
-                            let containware = false;
-                            const wareName = tr.querySelector('th a').textContent;
-                            
-                            // 遍历超市的商品
-                            for (const priceJson of marketData) {
-                                if (priceJson.ware === wareName) {
-                                    containware = true;
-                                    wareCount++;
-                                    const { price, unit, url, created_at: time } = priceJson;
-                                    const td = document.createElement('td');
-                                    td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span>`;
-                                    const li = document.createElement('li');
-                                    li.innerHTML = `<p>时间：${time.split('T')[0]}</p>`;
-                                    li.className = 'timeAndImg';
-                                    if(url){
-                                        const a = document.createElement('a');
-                                        a.className = "wareImg";
-                                        a.href = `${url}?${new Date().getTime()}`;
-                                        a.target = "_blank";
-                                        li.appendChild(a);
-                                    }
-                                    td.appendChild(li);
-                                    tr.appendChild(td);
-                                }
-                            }
-                            
-                            if (!containware) {
-                                const td = document.createElement('td');
-                                tr.appendChild(td);
-                            }
-                        }
-                    }
-                    
-                    DOM.message.textContent = `共${wareCount}个记录：`;
-                } else {
-                    handleError(result.message);
-                }
+                result = await response.json();
             } catch (error) {
                 alert('请求服务器错误');
                 DOM.message.textContent = `错误: ${error.message}`;
             }
-        }
 
-        // 处理错误信息
-        function handleError(message) {
-            alert(message);
-            if (message === '请先登录或注册，试用次数结束') {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                currentToken = '';
-                window.location.href = '/login';
+            if (result.success) {
+                console.log('获取到了所有超市的价格记录');
+                let wareCount = 0;
+                
+                // 遍历每个超市
+                for (const marketData of result.data) {
+                    // 遍历表格体的每一行
+                    for (const tr of tbodytrs) {
+                        let containware = false;
+                        const wareName = tr.querySelector('th a').textContent;
+                        
+                        // 遍历超市的商品
+                        for (const priceJson of marketData) {
+                            if (priceJson.ware === wareName) {
+                                containware = true;
+                                wareCount++;
+                                const { price, unit, url, created_at: time } = priceJson;
+                                const td = document.createElement('td');
+                                td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span>`;
+                                const li = document.createElement('li');
+                                li.innerHTML = `<p>时间：${time.split('T')[0]}</p>`;
+                                li.className = 'timeAndImg';
+                                if(url){
+                                    const a = document.createElement('a');
+                                    a.className = "wareImg";
+                                    a.href = `${url}?${new Date().getTime()}`;
+                                    a.target = "_blank";
+                                    li.appendChild(a);
+                                }
+                                td.appendChild(li);
+                                tr.appendChild(td);
+                            }
+                        }
+                        
+                        if (!containware) {
+                            const td = document.createElement('td');
+                            tr.appendChild(td);
+                        }
+                    }
+                }
+                
+                DOM.message.textContent = `共${wareCount}个记录：`;
+            } else {
+                alert(result.message);
+                if (result.message === '请先登录或注册，试用次数结束') {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    currentToken = '';
+                    window.location.href = '/login';
+                }
             }
         }
 
@@ -412,6 +407,8 @@
                 const market = DOM.tablecontainer.querySelectorAll('thead th')[td.cellIndex].textContent;
                 const firstTh = e.target.closest('tr').querySelector('th');
                 const ware = firstTh.querySelector('a').textContent;
+                // 初始化单位列表点击事件
+                editNode.querySelector('#unit').addEventListener('click', (e)=>{unitList(e, wareData.unit)} );
                 //编辑窗口赋值和监听
                 editAndListen(compressImage, market, ware, td, editNode, DOM.bottomTabBar, API_URL, currentToken, userIdTemp);
             });
@@ -432,8 +429,6 @@
             // 获取商品数据
             wareData = await fetchWareData();
             
-            // 初始化单位列表点击事件
-            DOM.edit.querySelector('#unit').addEventListener('click', (e)=>{unitList(e, wareData.unit)} );
             // 默认加载前两个超市和所有商品
             const markets = delAlias(wareData.market.slice(0, 2));
             const wares = delAlias(wareData.ware);
