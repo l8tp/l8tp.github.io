@@ -99,7 +99,7 @@
 <body>
     <header>
         <div class="priceNav"><i class="fas fa-bars" ></i></div>
-        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal"></nav>
+        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal hidden"></nav>
         <div class="help"><i class="fas fa-question-circle" ></i></div>
         <div id="message"></div>
     </header>
@@ -108,10 +108,10 @@
             <button class="Xwinpop">×</button>
             <article>
                 <h1>使用说明</h1>
-                <p>点击左侧：显示价格时间。</p>
-                <p>双击单元格：编辑价格。</p>
-                <p>点击筛选：弹窗筛选窗格。</p>
-                <p>点击问号：弹窗帮助窗格。</p>
+                <p>点击左侧商品名称：显示商品时间和图片。</p>
+                <p>双击商品价格：编辑商品价格。</p>
+                <p>点击筛选按钮：显示筛选弹窗。</p>
+                <p>点击问号：显示帮助弹窗。</p>
             </article>
         </div>
         <div id="tablecontainer">
@@ -402,9 +402,9 @@
             const wares = delAlias(wareData.ware);
 
             // 加载底部导航栏
-            loadBottomBar(currentToken, DOM.bottomTabBar);
-            document.querySelector('header .priceNav').addEventListener('click', ()=>{ DOM.bottomTabBar.classList.toggle('conceal'); });
-            
+            const navBtn = document.querySelector('header .priceNav');
+            loadBottomBar(currentToken, navBtn, DOM.bottomTabBar);
+
             // 渲染表格
             await renderTable(markets, wares);
 

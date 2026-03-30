@@ -70,7 +70,7 @@
 <body>
     <header>
         <div class="priceNav"><i class="fas fa-bars" ></i></div>
-        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal"></nav>
+        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal hidden"></nav>
     </header>
     <main>
         <div id="message"></div>
@@ -335,8 +335,8 @@
         //页面加载完成时启动
         window.addEventListener('DOMContentLoaded', async ()=>{
             //加载导航栏
-            loadBottomBar(currentToken, DOM.bottomTabBar);
-            document.querySelector('header .priceNav').addEventListener('click', ()=>{ DOM.bottomTabBar.classList.toggle('conceal'); });
+            const navBtn = document.querySelector('header .priceNav');
+            loadBottomBar(currentToken, navBtn, DOM.bottomTabBar);
             //加载商品数据
             const wareData = await fetchWareData();
             localStorage.setItem('ware', JSON.stringify(wareData));

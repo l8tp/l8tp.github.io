@@ -11,7 +11,7 @@ async function fetchWareData() {
 }
 
 //加载底部导航栏
-async function loadBottomBar (token, bottombar) {
+async function loadBottomBar (token, navBtn, bottombar) {
     const param = new URLSearchParams(window.location.search);
     const grup = param.get("name") || 'home'; //获取URL数据
 
@@ -30,9 +30,21 @@ async function loadBottomBar (token, bottombar) {
     a.className = "Xnav";
     a.innerHTML = `<i class="fas fa-caret-up"></i>`;
     a.addEventListener('click', ()=>{
-        bottombar.classList.toggle('conceal');
+        bottombar.classList.add('conceal');
+        setTimeout(()=>{bottombar.classList.add('hidden')}, 300);
     });
     bottombar.appendChild(a);
+
+    navBtn.addEventListener('click', () => {
+        const botClass = bottombar.classList;
+        if(!botClass.contains('hidden')){
+            botClass.toggle('conceal'); 
+            setTimeout(()=>{botClass.toggle('hidden')}, 300);
+        }else{
+            botClass.toggle('hidden');
+            setTimeout(()=>{botClass.toggle('conceal')}, 10);
+        }
+    });
 };
 
 // 异步加载单位列表

@@ -72,7 +72,7 @@
 <body>
     <header>
         <div class="priceNav"><i class="fas fa-bars" ></i></div>
-        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal"></nav>
+        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal hidden"></nav>
     </header>
     <main>
         <div id="userInfo" class="user-info">
@@ -146,7 +146,6 @@
                 const response = await fetch(`${API_URL}/manage/getalluser`, {
                     method: 'GET',
                     headers: {'authorization': currentToken }
-                    // body: JSON.stringify({ token: currentToken })
                 });
 
                 const result = await response.json();
@@ -240,7 +239,6 @@
         
         // 退出登录
         async function logout() {
-            console.log('正在退出登录...')
             if (currentToken) {
                 try {
                     await fetch(`${API_URL}/user/logout`, {
@@ -284,17 +282,6 @@
         }
 
 
-        // 输入框聚焦时隐藏底部导航栏，失去焦点时显示
-        function addInputListener(){
-            document.querySelector('.managepanel').querySelectorAll('input').forEach(input => {
-                input.addEventListener('focus', ()=>{
-                    document.querySelector('#bottom-tab-bar').style.display = 'none';
-                });
-                input.addEventListener('blur', ()=>{
-                    document.querySelector('#bottom-tab-bar').style.display = 'flex';
-                });
-            })
-        }
         //每个按钮增加点击事件监听
         function addBtnListener(){
             document.querySelector('#getalluserBtn').addEventListener('click',getalluser);
@@ -303,6 +290,12 @@
         }
         // 页面加载时检查登录状态
         window.addEventListener('DOMContentLoaded', async ()=>{
+            const bottomTabBar = document.querySelector('#bottom-tab-bar');
+            const navBtn = document.querySelector('header .priceNav');
+            loadBottomBar(currentToken, navBtn, bottomTabBar);
+
+            const btn = document.querySelector('#logoutBtn');
+            btn.addEventListener('click',logout);
             // 验证token
             const isValid = await verifyToken();
             
@@ -311,16 +304,10 @@
                 localStorage.removeItem('token');
                 currentToken = '';
                 //刷新登录按钮
-                const btn = document.querySelector('#logoutBtn');
                 btn.innerText = '去登录';
                 btn.classList.remove('btn-danger');
-                btn.addEventListener('click',logout);
             }else{
-                const bottomTabBar = document.querySelector('#bottom-tab-bar');
-                loadBottomBar(currentToken, bottomTabBar);
-                document.querySelector('header .priceNav').addEventListener('click', ()=>{ bottomTabBar.classList.toggle('conceal'); });
                 showUserInfo();
-                addInputListener();
                 addBtnListener();
             }
         });
