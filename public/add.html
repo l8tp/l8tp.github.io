@@ -20,6 +20,7 @@
             margin-left: 10px; 
             cursor: pointer;
             width: 70px;
+            border-radius: 5px;
         }
         #unitList{
             border-radius: 10px;
@@ -328,7 +329,7 @@
 
         //调整单位列表的位置
         function adjustUnitList(list){
-            list.style.transform = `translateY(${(DOM.unitList.offsetHeight / -2)+(DOM.unit.offsetHeight / -2)}px)`;
+            list.style.transform = `translateY(${(DOM.unitList.offsetHeight / -2)+(DOM.unit.offsetHeight / -2) -2}px)`;
         }
 
         //页面加载完成时启动

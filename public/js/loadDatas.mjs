@@ -33,10 +33,11 @@ async function unitList(e, units) {
     const unit = e.target;
     const unitList = e.target.closest('div').querySelector('#unitList');
     if(unitList.style.display === 'flex'){
-        console.log('开始隐藏列表')
+        unit.removeAttribute('style');
         unitList.style.display = 'none';
-        return
+        return unitList;
     }
+    unit.style.color = '#3498db';
     unitList.style.display = 'flex';
     unitList.innerHTML = ''
     for (let i of units){
