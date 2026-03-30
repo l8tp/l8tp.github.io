@@ -1,5 +1,5 @@
 //加载列表和设置监听
-function LoadAndListenFilter(filterNode, bottomTabBarNode, wareData){
+function LoadAndListenFilter(filterNode, wareData){
     const marketLable = filterNode.querySelector('#marketLable');
     const marketInput = filterNode.querySelector('#marketInput');
     const marketList = filterNode.querySelector('#marketList');
@@ -23,7 +23,6 @@ function LoadAndListenFilter(filterNode, bottomTabBarNode, wareData){
     // 关闭按钮
     filterNode.querySelector('.Xwinpop').addEventListener('click', () => {
         filterNode.classList.add('hidden');
-        bottomTabBarNode.classList.remove('hidden');
     });
     
     // 清空标签按钮

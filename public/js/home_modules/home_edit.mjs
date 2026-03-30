@@ -1,5 +1,5 @@
 // 启动编辑弹窗
-function editAndListen(compressImage, market, ware, td, editNode, bottomTabBarNode, API_URL, currentToken, userIdTemp) {
+function editAndListen(compressImage, market, ware, td, editNode, API_URL, currentToken, userIdTemp) {
     
     // 编辑弹窗赋值
     let price, unit, imgSrc, theImg;
@@ -41,18 +41,6 @@ function editAndListen(compressImage, market, ware, td, editNode, bottomTabBarNo
         editNode.classList.add('hidden');
     });
     
-    //监听输入框焦点事件，隐藏底部导航栏
-    const inputs = editNode.querySelectorAll('input');
-    inputs.forEach(input => {
-        input.addEventListener('focus', () => {
-            bottomTabBarNode.classList.add('hidden');
-        });
-        
-        input.addEventListener('blur', () => {
-            bottomTabBarNode.classList.remove('hidden');
-        });
-    });
-
     // 监听图片输入
     imgInput.addEventListener('change', async (e)=>{
         const img = e.target.files[0];

@@ -7,13 +7,39 @@ p{
     text-indent: 2em;
     font-size: 20px;
 }
+
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 15px 10px 100px;
+}
+header{
+    position: relative;
+    margin-top: 0;
+    width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 20px 100px 20px;
+}
+.priceNav {
+    display: flex;
+    font-size: 30px;
+    text-shadow: 1px 1px 3px #f1cd83;
+    cursor: pointer;
+}
+.priceNav:hover {
+    color: #e4f7b4;
+}
+
+
+main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 label {
@@ -89,16 +115,18 @@ button:disabled {
 /* #底部导航栏样式 */
 /* 底部选项卡栏样式 */
 .bottom-tab-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
+    position: absolute;
+    left: 50px;
+    top: 0;
+    max-width: 250px;
+    border-radius: 15px;
     background-color: white;
     display: flex;
     gap: 20px;
     justify-content: space-around;
     padding: 6px;
-    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.7);
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
     z-index: 1000;
 }
 

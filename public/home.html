@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="/css/home_popwin.css">
 
     <style>
-        body {
-            padding: 15px 10px 100px;
-        }
         
         header{
             position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #message{
             width: 100%;
             display: flex;
             justify-content: center;
@@ -45,7 +48,9 @@
             display: block;
         }
 
-
+        .priceNav:hover {
+            color: #e4f7b4;
+        }
         .help {
             position: absolute;
             right: 0;
@@ -126,79 +131,89 @@
         .hidden {
             display: none;
         }
+        .conceal {
+            opacity: 0;
+            transform: translateY(-20px);
+            visibility: hidden;
+            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+        }
     </style>
 </head>
 <body>
     <header>
+        <div class="priceNav"><i class="fas fa-bars" ></i></div>
+        <nav id="bottom-tab-bar" class="bottom-tab-bar conceal"></nav>
         <div class="help"><i class="fas fa-question-circle" ></i></div>
         <div id="message"></div>
     </header>
-    <div id="helpPage" class="helpPage hidden">
-        <button class="Xwinpop">×</button>
-        <article>
-            <h1>使用说明</h1>
-            <p>点击左侧：显示价格时间。</p>
-            <p>双击单元格：编辑价格。</p>
-            <p>点击筛选：弹窗筛选窗格。</p>
-            <p>点击问号：弹窗帮助窗格。</p>
-        </article>
-    </div>
-    <div id="tablecontainer">
-        <table>
-            <thead>
-                <tr></tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    <div id="filter" class="winpop hidden">
-        <button id="Xfilter" class="Xwinpop">×</button>
-        <h1>从输入框下方的列表选择</h1>
-        <div id="marketArea" class="popSubArea">
-            <div class="inputarea">
-                <label id="marketLable">超市: </label>
-                <div>
-                    <button id="clearMarketLabel" type="button">清空标签</button>
-                    <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市↓">
+    <main>
+        <div id="helpPage" class="helpPage hidden">
+            <button class="Xwinpop">×</button>
+            <article>
+                <h1>使用说明</h1>
+                <p>点击左侧：显示价格时间。</p>
+                <p>双击单元格：编辑价格。</p>
+                <p>点击筛选：弹窗筛选窗格。</p>
+                <p>点击问号：弹窗帮助窗格。</p>
+            </article>
+        </div>
+        <div id="tablecontainer">
+            <table>
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="filter" class="winpop hidden">
+            <button id="Xfilter" class="Xwinpop">×</button>
+            <h1>从输入框下方的列表选择</h1>
+            <div id="marketArea" class="popSubArea">
+                <div class="inputarea">
+                    <label id="marketLable">超市: </label>
+                    <div>
+                        <button id="clearMarketLabel" type="button">清空标签</button>
+                        <input type="text" id="marketInput" name="marketInput" placeholder="选择三个以下的超市↓">
+                    </div>
                 </div>
+                <div id="marketList" class="bluelist"></div>
             </div>
-            <div id="marketList" class="bluelist"></div>
-        </div>
-        <div id="wareArea" class="popSubArea">
-            <div class="inputarea">
-                <label id="wareLable">商品: </label>
-                <div>
-                    <button id="clearWareLabel" type="button">清空标签</button>
-                    <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品↓">
+            <div id="wareArea" class="popSubArea">
+                <div class="inputarea">
+                    <label id="wareLable">商品: </label>
+                    <div>
+                        <button id="clearWareLabel" type="button">清空标签</button>
+                        <input type="text" id="wareInput" name="wareInput" placeholder="选择所需商品↓">
+                    </div>
                 </div>
+                <div id="wareList" class="bluelist"></div>
             </div>
-            <div id="wareList" class="bluelist"></div>
+            <button id="submitselect" >选择完成</button>
         </div>
-        <button id="submitselect" >选择完成</button>
-    </div>
-    <div id="edit" class="winpop hidden">
-        <button id="Xedit" class="Xwinpop">×</button>
-        <div class="priceEdit">
-            <label for="priceInput"></label>
-            <div class="unitarea">
-                <li id="unitList" class="bluelist">
-                    <!-- 此处加载单位列表 -->
-                </li>
-                <li class="popSubArea">
-                    <input type="number" id="priceInput" name="priceInput" placeholder="请输入价格">
-                    <a id="unit">元/斤 ▼</a>
-                </li>
+        <div id="edit" class="winpop hidden">
+            <button id="Xedit" class="Xwinpop">×</button>
+            <div class="priceEdit">
+                <label for="priceInput"></label>
+                <div class="unitarea">
+                    <li id="unitList" class="bluelist">
+                        <!-- 此处加载单位列表 -->
+                    </li>
+                    <li class="popSubArea">
+                        <input type="number" id="priceInput" name="priceInput" placeholder="请输入价格">
+                        <a id="unit">元/斤 ▼</a>
+                    </li>
+                </div>
+                <div class="popSubArea">
+                    <label for="imgInput">图片:</label>
+                    <input type="file" id="imgInput" name="image" accept="image/*">
+                </div>
+                <a id="editImgContainer" class="hidden"><img src="#"><p></p></a>
+                <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
             </div>
-            <div class="popSubArea">
-                <label for="imgInput">图片:</label>
-                <input type="file" id="imgInput" name="image" accept="image/*">
-            </div>
-            <a id="editImgContainer" class="hidden"><img src="#"><p></p></a>
-            <button id="submitEdit" style="background-color: #287e49;">提交修改</button>
         </div>
-    </div>
-    <nav id="bottom-tab-bar" class="bottom-tab-bar"></nav>
+    </main>
+    
     <script type="module">
         import { loadBottomBar } from './js/bottombar.mjs';
         import { unitList } from './js/showunitlist.mjs';
@@ -243,7 +258,7 @@
             const btn = document.createElement('button');
             btn.textContent = '筛选▼';
             btn.addEventListener('click', ()=>{
-                filter(DOM.filter, DOM.bottomTabBar);
+                filter(DOM.filter);
             } );
             theth.appendChild(btn);
             theadtr.appendChild(theth);
@@ -339,9 +354,8 @@
         }
 
         // 筛选超市和商品
-        async function filter(filterNode, bottomTabBarNode) {
+        async function filter(filterNode) {
             filterNode.classList.remove('hidden');
-            bottomTabBarNode.classList.add('hidden');
 
             if (filterNode.dataset.loading)  return ;
             filterNode.dataset.loading = true;
@@ -354,7 +368,6 @@
             // 选择完成按钮添加事件监听器
             submitBtn.addEventListener('click', () => {
                 filterNode.classList.add('hidden');
-                bottomTabBarNode.classList.remove('hidden');
                 const { markets, wares } = closeFilter(marketLable, wareLable);
                 if (markets && wares) {
                     renderTable(markets, wares);
@@ -364,7 +377,7 @@
             });
 
             //加载列表和设置其他监听
-            LoadAndListenFilter(filterNode, bottomTabBarNode, wareData)
+            LoadAndListenFilter(filterNode, wareData)
         }
 
         // 展开/隐藏时间信息
@@ -410,7 +423,7 @@
                 // 初始化单位列表点击事件
                 editNode.querySelector('#unit').addEventListener('click', (e)=>{unitList(e, wareData.unit)} );
                 //编辑窗口赋值和监听
-                editAndListen(compressImage, market, ware, td, editNode, DOM.bottomTabBar, API_URL, currentToken, userIdTemp);
+                editAndListen(compressImage, market, ware, td, editNode, API_URL, currentToken, userIdTemp);
             });
         }
 
@@ -435,6 +448,7 @@
 
             // 加载底部导航栏
             loadBottomBar(currentToken, DOM.bottomTabBar);
+            document.querySelector('header .priceNav').addEventListener('click', ()=>{ DOM.bottomTabBar.classList.toggle('conceal'); });
             
             // 渲染表格
             await renderTable(markets, wares);
