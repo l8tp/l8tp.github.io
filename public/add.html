@@ -64,12 +64,6 @@
             transform: translateY(60px);
         }
         .hidden{display: none;}
-        .conceal {
-            opacity: 0;
-            transform: translateY(-20px);
-            visibility: hidden;
-            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
-        }
     </style>
 </head>
 <body>
@@ -112,9 +106,7 @@
     </main>
     
     <script type="module">
-        import {loadBottomBar} from './js/bottombar.mjs';
-        import {unitList} from './js/showunitlist.mjs';
-        import {fetchWareData} from './js/getwaredata.mjs';
+        import {fetchWareData, loadBottomBar, unitList} from './js/loadDatas.mjs';
         import {compressImage} from './js/compressimage.mjs';
 
         const API_URL = window.location.origin + '/api';

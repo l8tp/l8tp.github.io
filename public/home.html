@@ -6,6 +6,7 @@
     <title>超市自助比价</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home_table.css">
     <link rel="stylesheet" href="/css/home_popwin.css">
 
     <style>
@@ -48,9 +49,6 @@
             display: block;
         }
 
-        .priceNav:hover {
-            color: #e4f7b4;
-        }
         .help {
             position: absolute;
             right: 0;
@@ -73,41 +71,6 @@
             font-size: 30px;
         }
         
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-            font-size: 18px;
-            min-width: 300px;
-            box-shadow: 0 0 20px #000;
-        }
-        
-        th, td {
-            padding: 2px;
-            border: 1px solid #000 #fff;
-        }
-        
-        table thead tr {
-            background-color: #f1cd83;
-            text-align: left;
-            font-size: 20px;
-            line-height: 22px;
-            height: 50px;
-        }
-        
-        table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-        
-        table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
-        }
-        table tbody tr:hover{
-            background-color: #e4f7b4;
-        }
         table p {
             text-indent: 0;
             font-size: 15px;
@@ -125,17 +88,11 @@
         }
         
         .xtitle button:hover {
-            color: #000;
+            color: #ffffff;
         }
                 
         .hidden {
             display: none;
-        }
-        .conceal {
-            opacity: 0;
-            transform: translateY(-20px);
-            visibility: hidden;
-            transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
         }
     </style>
 </head>
@@ -215,9 +172,7 @@
     </main>
     
     <script type="module">
-        import { loadBottomBar } from './js/bottombar.mjs';
-        import { unitList } from './js/showunitlist.mjs';
-        import {fetchWareData} from './js/getwaredata.mjs';
+        import {fetchWareData, loadBottomBar, unitList} from './js/loadDatas.mjs';
         import {compressImage} from './js/compressimage.mjs';
         import {LoadAndListenFilter, closeFilter, editAndListen} from './js/home_modules/modules.mjs';
 

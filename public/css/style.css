@@ -147,3 +147,46 @@ button:disabled {
     color: #3498db;
     background-color: rgba(52, 152, 219, 0.1);
 }
+
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+    font-size: 18px;
+    box-shadow: 0 0 20px #000;
+}
+
+th, td {
+    padding: 2px;
+    border: 1px solid #fff;
+}
+
+table thead tr {
+    background-color: #f1cd83;
+    font-size: 20px;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+table tbody tr:hover{
+    background-color: #e4f7b4;
+}
+
+
+.conceal {
+    opacity: 0;
+    transform: translateY(-20px);
+    visibility: hidden;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+}
+.hidden{display: none;}

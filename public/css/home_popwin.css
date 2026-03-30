@@ -1,3 +1,4 @@
+/* 弹窗样式 */
 .winpop {
     display: flex;
     flex-direction: column;
@@ -42,7 +43,7 @@
 }
 
 
-
+/* 筛选弹窗 */
 #filter .bluelist {
     background-color: transparent;
     border: 0 0 0 2px solid #3b3b3b;
@@ -92,7 +93,7 @@
 }
 
 
-
+/* 编辑弹窗 */
 #edit {
     min-height: auto;
     position: fixed;
