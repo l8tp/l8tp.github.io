@@ -26,6 +26,13 @@ async function loadBottomBar (token, bottombar) {
             bottombar.innerHTML += `<a href="${i}.html?name=${i}" class="${tabclass}"><i class="${bottomdata[i][1]}"></i>${bottomdata[i][0]}</a>`
         }
     }
+    const a = document.createElement('a');
+    a.className = "Xnav";
+    a.innerHTML = `<i class="fas fa-caret-up"></i>`;
+    a.addEventListener('click', ()=>{
+        bottombar.classList.toggle('conceal');
+    });
+    bottombar.appendChild(a);
 };
 
 // 异步加载单位列表
