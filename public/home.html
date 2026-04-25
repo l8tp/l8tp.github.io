@@ -272,10 +272,11 @@
                                 containware = true;
                                 wareCount++;
                                 const { price, unit, url, created_at: time } = priceJson;
+                                const localTime = new Date(time).toLocaleDateString('zh-CN');
                                 const td = document.createElement('td');
                                 td.innerHTML = `<span class="price">${price}</span><span class="unit">${unit}</span>`;
                                 const li = document.createElement('li');
-                                li.innerHTML = `<p>时间：${time.split('T')[0]}</p>`;
+                                li.innerHTML = `<p>时间：${localTime}</p>`;
                                 li.className = 'timeAndImg';
                                 if(url){
                                     const a = document.createElement('a');
