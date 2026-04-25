@@ -287,7 +287,7 @@
 
             const formData = new FormData();
             formData.append('image', theImg);
-            formData.append('jsonData', JSON.stringify({token:currentToken, userIdTemp, marketInput, wareInput, priceInput, unit }));
+            formData.append('jsonData', JSON.stringify({ userIdTemp, marketInput, wareInput, priceInput, unit }));
 
             if (!marketInput){
                 Message.innerHTML = '请输入超市'
@@ -304,6 +304,7 @@
             try {
                 const response = await fetch(`${API_URL}/products/user/submitprice`, {
                     method: 'POST',
+                    headers: { 'authorization': currentToken  },
                     body: formData
                 });
                 result = await response.json();

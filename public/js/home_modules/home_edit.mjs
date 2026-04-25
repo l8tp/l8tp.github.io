@@ -68,7 +68,6 @@ function editAndListen(compressImage, market, ware, td, editNode, API_URL, curre
         const formData = new FormData();
         formData.append('image', theImg);
         formData.append('jsonData', JSON.stringify({
-            token:currentToken, 
             userIdTemp, 
             marketInput:market, 
             wareInput:ware, 
@@ -79,6 +78,7 @@ function editAndListen(compressImage, market, ware, td, editNode, API_URL, curre
         try {
             const response = await fetch(`${API_URL}/products/user/submitprice`, {
                 method: 'POST',
+                headers: { 'authorization': currentToken  },
                 body: formData
             });
             

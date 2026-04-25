@@ -74,7 +74,8 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 router.post('/user/submitprice', upload.single('image'), async (req, res) => {
   const file = req.file;
   const jsonData = JSON.parse(req.body.jsonData);
-  const { token, userIdTemp, marketInput, wareInput, priceInput, unit } = jsonData;
+  const { userIdTemp, marketInput, wareInput, priceInput, unit } = jsonData;
+  const token = req.headers['authorization'] || '';
   let username = '';
   //跳过登录验证
   if (!token) {
@@ -121,6 +122,8 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
     // 使用 Base64 编码确保文件名安全，同时保持唯一性
     const safeFileName = Buffer.from(`${marketInput}_${wareInput}`).toString('base64');
     // 上传图片（如果有图片）
+    console.log('接收到文件'+ file)
+    let imgUrl = '';
     if (file && file.buffer) {
         const {data:imgdata, error:imgerr} = await supabase.storage
           .from('price_images')
@@ -128,10 +131,11 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
             contentType: file.mimetype,
             upsert: true
           });
+        const {data:{publicUrl}} = supabase.storage
+          .from('price_images')
+          .getPublicUrl(safeFileName);
+        imgUrl = publicUrl;
     }
-    const {data:{publicUrl}} = supabase.storage
-      .from('price_images')
-      .getPublicUrl(safeFileName);
       
     // 使用 upsert 实现存在则更新，不存在则插入
     const { data, error } = await supabase
@@ -141,7 +145,7 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
         ware: wareInput, 
         price: priceInput, 
         unit, 
-        url: publicUrl,
+        url: imgUrl,
         username,
         created_at: new Date().toISOString()
       }, {
@@ -155,7 +159,7 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
     res.json({ 
       success: true, 
       message: '提交成功！',
-      publicUrl
+      publicUrl: imgUrl
     });
 
 });
