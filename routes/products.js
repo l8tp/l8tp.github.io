@@ -12,8 +12,15 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// 去除#后面别名的函数
+function delAlias(data) {
+    return data.map(item => item.split('#')[0]);
+}
+
 // 读取 ware.json 文件
 const wareData = JSON.parse(fs.readFileSync(join(__dirname, '../public/json/ware.json'), 'utf8'));
+const marketData = delAlias(wareData.market);
+const wareDataList = delAlias(wareData.ware);
 const app = express();
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -104,7 +111,7 @@ router.post('/user/submitprice', upload.single('image'), async (req, res) => {
       });
     }
 
-    if(!wareData.market.includes(marketInput) || !wareData.ware.includes(wareInput)){
+    if(!marketData.includes(marketInput) || !wareDataList.includes(wareInput)){
       return res.json({
         success: false, 
         message: '提交的超市或商品不在列表内' 
